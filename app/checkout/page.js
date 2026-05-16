@@ -19,46 +19,42 @@ function CheckoutContent() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     const formData = new FormData(e.target);
-    const name = formData.get("Full_Name");
-    const phone = formData.get("Phone_Number");
-    const address = formData.get("Shipping_Address");
-    const txId = formData.get("FamApp_Transaction_ID") || "N/A";
-    
-    const subject = encodeURIComponent(`SYNAPSE LAB ORDER: ${item}`);
-    const body = encodeURIComponent(`
-=== SYNAPSE LAB ORDER PROTOCOL ===
+    const payload = {
+      Target_Asset: item,
+      Asset_Value: price,
+      Payment_Method: paymentMethod === 'qr' ? 'FamApp Transfer' : 'Cash on Delivery',
+      FamApp_Transaction_ID: formData.get("FamApp_Transaction_ID") || "N/A",
+      Full_Name: formData.get("Full_Name"),
+      Email_Address: formData.get("Email_Address"),
+      Phone_Number: formData.get("Phone_Number"),
+      Shipping_Address: formData.get("Shipping_Address")
+    };
 
-TARGET ASSET: ${item}
-ASSET VALUE: ${price}
-TRANSFER METHOD: ${paymentMethod === 'qr' ? 'FamApp Transfer' : 'Cash on Delivery'}
-TRANSACTION ID: ${txId}
-
-=== CLIENT IDENTIFICATION ===
-NAME: ${name}
-PHONE: ${phone}
-ADDRESS: ${address}
-
-// Do not modify the data above. Click Send to finalize your order. //
-    `);
-
-    // Open native email client
-    window.location.href = `mailto:kdhanvanth98@gmail.com?subject=${subject}&body=${body}`;
-    
-    // Show success screen
-    setIsSubmitted(true);
+    try {
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      
+      if (!response.ok) throw new Error("Server transmission failed.");
+      setIsSubmitted(true);
+    } catch (error) {
+      alert("Database connection failed. Please try again.");
+    }
   };
 
   if (isSubmitted) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '2rem' }}>
         <Shield size={80} color="var(--accent-secondary)" style={{ marginBottom: '2rem' }} />
-        <h1 style={{ fontSize: '4rem', fontFamily: 'Syncopate', marginBottom: '1rem' }}>ORDER INITIATED</h1>
+        <h1 style={{ fontSize: '4rem', fontFamily: 'Syncopate', marginBottom: '1rem' }}>ORDER SECURED</h1>
         <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', maxWidth: '600px' }}>
-          Your default email client has been opened. Please click <strong>Send</strong> on the email to finalize your request for <strong>{item}</strong>.
+          Your request for <strong>{item}</strong> has been securely logged to the Synapse Lab MongoDB server. Dhanvanth will verify your transaction and contact you.
         </p>
         <a href="/" style={{ padding: '1rem 2rem', marginTop: '3rem', fontSize: '1.1rem', background: '#FFD814', color: '#000', textDecoration: 'none', borderRadius: '100px', fontWeight: 'bold' }}>
            Return to Arsenal
