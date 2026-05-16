@@ -8,6 +8,14 @@
   --accent-secondary: #00f0ff; /* Neon Cyan */
 }
 
+[data-theme='light'] {
+  --bg-dark: #ffffff;
+  --text-main: #000000;
+  --text-muted: #888888;
+  --accent: #d4af37; /* Gold */
+  --accent-secondary: #e5c158; /* Lighter Gold */
+}
+
 * {
   box-sizing: border-box;
   padding: 0;

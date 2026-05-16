@@ -6,7 +6,16 @@ import { Terminal, Shield, Code, Search, Cpu, Wifi, Database, Activity, External
 export default function Home() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [theme, setTheme] = useState('dark');
+  const themeRef = useRef('dark');
   const canvasRef = useRef(null);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    themeRef.current = theme;
+  }, [theme]);
+
+  const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark');
 
   // Custom Cursor Logic
   useEffect(() => {
@@ -60,9 +69,10 @@ export default function Home() {
     };
 
     const draw = () => {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+      const currentTheme = themeRef.current;
+      ctx.fillStyle = currentTheme === 'light' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.15)';
       ctx.fillRect(0, 0, width, height);
-      ctx.fillStyle = 'rgba(0, 240, 255, 0.8)';
+      ctx.fillStyle = currentTheme === 'light' ? 'rgba(212, 175, 55, 0.8)' : 'rgba(0, 240, 255, 0.8)';
       ctx.beginPath();
       for (let i = 0; i < particles.length; i++) {
         let p = particles[i];
@@ -88,10 +98,13 @@ export default function Home() {
         const distance = Math.sqrt(dx * dx + dy * dy);
         
         if (distance < 120) {
+           const currentTheme = themeRef.current;
            p.x += (dx / distance) * 3;
            p.y += (dy / distance) * 3;
            ctx.beginPath();
-           ctx.strokeStyle = `rgba(0, 240, 255, ${0.8 - distance/120})`;
+           ctx.strokeStyle = currentTheme === 'light' 
+             ? `rgba(212, 175, 55, ${0.8 - distance/120})` 
+             : `rgba(0, 240, 255, ${0.8 - distance/120})`;
            ctx.moveTo(p.x, p.y);
            ctx.lineTo(mouseX, mouseY);
            ctx.stroke();
@@ -144,6 +157,11 @@ export default function Home() {
     { type: "HARDWARE", title: "Weather Station Logger", tech: "BME280 / SD Card", desc: "Compact weather station tracking temp/humidity/pressure.", icon: <Database size={48} color="var(--accent)"/>, price: "₹500", rating: 4.7, reviews: 22 }
   ];
 
+  const projects = [
+    { title: "MakeMyTrip Clone", url: "https://github.com/GREENMAN-source/MakeMyTrip-Clone", type: "INTERNSHIP PROJECT", desc: "Interactive seat/room selection, live flight status, and dynamic pricing engine." },
+    { title: "Synapse Lab", url: "https://synapslab.in", type: "AGENCY WEBSITE", desc: "Official website for Synapse Lab, showcasing high-performance security and development." }
+  ];
+
   const handlePurchase = (itemTitle, itemPrice) => {
     window.location.href = `/checkout?item=${encodeURIComponent(itemTitle)}&price=${encodeURIComponent(itemPrice)}`;
   };
@@ -161,10 +179,24 @@ export default function Home() {
       <nav style={{ position: 'fixed', top: 0, width: '100%', zIndex: 50, padding: '2rem 4rem', mixBlendMode: 'difference' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ fontWeight: 800, fontSize: '1.5rem', fontFamily: 'Syncopate, sans-serif' }}>SYNAPSE LAB</div>
-          <div style={{ display: 'flex', gap: '3rem', fontSize: '0.9rem', fontWeight: 600, letterSpacing: '2px' }}>
+          <div style={{ display: 'flex', gap: '3rem', fontSize: '0.9rem', fontWeight: 600, letterSpacing: '2px', alignItems: 'center' }}>
             <a href="#journey">JOURNEY</a>
+            <a href="#projects">PROJECTS</a>
             <a href="#store">STORE</a>
             <a href="#social">SOCIALS</a>
+            <button onClick={toggleTheme} style={{ 
+              background: 'transparent', 
+              border: '1px solid var(--text-main)', 
+              color: 'var(--text-main)', 
+              padding: '0.5rem 1rem', 
+              fontFamily: 'monospace',
+              fontSize: '0.8rem',
+              fontWeight: 'bold',
+              borderRadius: '20px',
+              transition: 'all 0.3s'
+            }}>
+              {theme === 'dark' ? 'LIGHT MODE' : 'DARK MODE'}
+            </button>
           </div>
         </div>
       </nav>
@@ -203,8 +235,8 @@ export default function Home() {
               height: '400px', 
               borderRadius: '50%', 
               padding: '8px',
-              background: 'linear-gradient(45deg, #00f2fe 0%, #ff003c 100%)',
-              boxShadow: '0 0 50px rgba(0, 242, 254, 0.4), inset 0 0 20px rgba(0,0,0,0.8)' 
+              background: theme === 'light' ? 'linear-gradient(45deg, #d4af37 0%, #ffffff 100%)' : 'linear-gradient(45deg, #00f2fe 0%, #ff003c 100%)',
+              boxShadow: theme === 'light' ? '0 0 50px rgba(212, 175, 55, 0.4), inset 0 0 20px rgba(255,255,255,0.8)' : '0 0 50px rgba(0, 242, 254, 0.4), inset 0 0 20px rgba(0,0,0,0.8)' 
             }}>
               <div style={{ 
                 width: '100%', 
@@ -249,10 +281,56 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Projects Section */}
+        <section id="projects" className="container" style={{ paddingTop: '15rem' }}>
+          <h2 className="section-title">02. PROJECTS</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            {projects.map((proj, i) => (
+              <motion.a 
+                href={proj.url}
+                target="_blank"
+                rel="noreferrer"
+                key={i}
+                className="shop-card"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+                whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(0, 240, 255, 0.1)', borderColor: 'var(--accent-secondary)' }}
+                style={{ 
+                  background: 'var(--bg-dark)', 
+                  border: '1px solid var(--text-muted)', 
+                  padding: '2rem', 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  justifyContent: 'space-between', 
+                  height: '280px',
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}
+              >
+                <div style={{ position: 'absolute', top: 0, right: 0, background: 'var(--accent)', color: '#000', padding: '0.2rem 1rem', fontSize: '0.8rem', fontWeight: 'bold', fontFamily: 'monospace' }}>
+                  {proj.type}
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem', lineHeight: 1.2, marginTop: '1.5rem' }}>{proj.title}</h3>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '1rem', lineHeight: 1.6 }}>{proj.desc}</p>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', paddingTop: '1.5rem', borderTop: '1px solid var(--text-muted)' }}>
+                  <span style={{ fontFamily: 'monospace', fontSize: '1rem', fontWeight: 'bold', color: 'var(--accent-secondary)' }}>VIEW LIVE</span>
+                  <ExternalLink size={24} />
+                </div>
+              </motion.a>
+            ))}
+          </div>
+        </section>
+
         {/* Amazon-Style Storefront */}
         <section id="store" className="container" style={{ paddingTop: '15rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderBottom: '2px solid var(--text-muted)', paddingBottom: '1rem', marginBottom: '3rem' }}>
-            <h2 style={{ fontSize: '4rem', fontWeight: 700, letterSpacing: '-2px', fontFamily: 'Syncopate', margin: 0 }}>02. SYNAPSE STORE</h2>
+            <h2 style={{ fontSize: '4rem', fontWeight: 700, letterSpacing: '-2px', fontFamily: 'Syncopate', margin: 0 }}>03. SYNAPSE STORE</h2>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--accent-secondary)', fontFamily: 'monospace', fontSize: '1.2rem' }}>
               <ShoppingCart size={32} />
               <span>SECURE CHECKOUT</span>
@@ -270,8 +348,8 @@ export default function Home() {
                 transition={{ duration: 0.4, delay: (i % 3) * 0.1 }}
                 whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(0, 240, 255, 0.1)', borderColor: 'var(--accent-secondary)' }}
                 style={{ 
-                  background: '#0a0a0a', 
-                  border: '1px solid #222', 
+                  background: 'var(--bg-dark)', 
+                  border: '1px solid var(--text-muted)', 
                   padding: '2rem', 
                   display: 'flex', 
                   flexDirection: 'column',
@@ -283,7 +361,7 @@ export default function Home() {
                   {item.type}
                 </div>
                 
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '150px', marginBottom: '1.5rem', background: '#050505', border: '1px solid #111', marginTop: '1rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '150px', marginBottom: '1.5rem', background: 'var(--bg-dark)', border: '1px solid var(--text-muted)', marginTop: '1rem' }}>
                   <motion.div whileHover={{ scale: 1.2, rotate: 10 }}>{item.icon}</motion.div>
                 </div>
                 
@@ -298,8 +376,8 @@ export default function Home() {
 
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '1.5rem', flexGrow: 1 }}>{item.desc}</p>
                 
-                <div style={{ borderTop: '1px solid #222', paddingTop: '1.5rem', marginTop: 'auto' }}>
-                  <div style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '1rem', color: '#fff' }}>
+                <div style={{ borderTop: '1px solid var(--text-muted)', paddingTop: '1.5rem', marginTop: 'auto' }}>
+                  <div style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--text-main)' }}>
                     {item.price}
                   </div>
                   <motion.button 
@@ -332,7 +410,7 @@ export default function Home() {
 
         {/* Shopping Style Social Links */}
         <section id="social" className="container" style={{ paddingTop: '15rem' }}>
-          <h2 className="section-title">03. SOCIAL NETWORK STORE</h2>
+          <h2 className="section-title">04. SOCIAL NETWORK STORE</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
             {socials.map((social, i) => (
               <motion.a 
