@@ -18,6 +18,7 @@ export default function RootLayout({ children }) {
     '@type': 'Person',
     name: 'Dhanvanth L P',
     jobTitle: 'Founder & Developer',
+  };
   const schemaMarkup = {
     "@context": "https://schema.org",
     "@graph": [
