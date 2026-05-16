@@ -1,7 +1,6 @@
-'use client';
 import { useEffect, useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring, useScroll } from 'framer-motion';
-import { Terminal, Shield, Code, Search, Cpu, Wifi, Database, Activity, ExternalLink, ShoppingCart, Star, Sun, Moon } from 'lucide-react';
+import { motion, useMotionValue, useSpring, useScroll, useVelocity, useTransform } from 'framer-motion';
+import { Terminal as TerminalIcon, Shield, Code, Search, Cpu, Wifi, Database, Activity, ExternalLink, ShoppingCart, Star, Sun, Moon, Zap, ChevronRight } from 'lucide-react';
 import { auth, googleProvider, githubProvider } from '../lib/firebase';
 import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
 
@@ -23,6 +22,48 @@ function MagneticWrapper({ children }) {
   );
 }
 
+function TiltWrapper({ children }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const rotateX = useTransform(y, [-100, 100], [10, -10]);
+  const rotateY = useTransform(x, [-100, 100], [-10, 10]);
+
+  return (
+    <motion.div
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      onMouseMove={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        x.set(e.clientX - rect.left - rect.width / 2);
+        y.set(e.clientY - rect.top - rect.height / 2);
+      }}
+      onMouseLeave={() => {
+        x.set(0);
+        y.set(0);
+      }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function Typewriter({ text, delay = 0 }) {
+  const [displayedText, setDisplayedText] = useState("");
+  useEffect(() => {
+    let i = 0;
+    const timer = setTimeout(() => {
+      const interval = setInterval(() => {
+        setDisplayedText(text.slice(0, i + 1));
+        i++;
+        if (i >= text.length) clearInterval(interval);
+      }, 50);
+      return () => clearInterval(interval);
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [text, delay]);
+  return <span>{displayedText}<span className="blink-cursor">_</span></span>;
+}
+
 export default function Home() {
   const [isHovering, setIsHovering] = useState(false);
   const [theme, setTheme] = useState('dark');
@@ -36,6 +77,15 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
   
+  // Extreme Features State
+  const [doomMode, setDoomMode] = useState(false);
+  const [spinMode, setSpinMode] = useState(false);
+  const [matrixMode, setMatrixMode] = useState(false);
+  const [flipMode, setFlipMode] = useState(false);
+  const [showTerminal, setShowTerminal] = useState(false);
+  const [terminalInput, setTerminalInput] = useState("");
+  const [bursts, setBursts] = useState([]);
+  
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
   const springConfig = { damping: 25, stiffness: 300, mass: 0.5 };
@@ -43,6 +93,10 @@ export default function Home() {
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   const { scrollYProgress } = useScroll();
+  const scrollVelocity = useVelocity(scrollYProgress);
+  const skewVelocity = useTransform(scrollVelocity, [-1, 1], [-5, 5]);
+  const skewSpring = useSpring(skewVelocity, { stiffness: 400, damping: 40 });
+  
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
@@ -122,13 +176,29 @@ export default function Home() {
     };
 
     const handleKeyDown = (e) => {
-      keysPressed.current = (keysPressed.current + e.key).slice(-4);
-      if (keysPressed.current.toLowerCase() === "hack") {
-        setHackerMode(prev => !prev);
+      keysPressed.current = (keysPressed.current + e.key).slice(-6);
+      const str = keysPressed.current.toLowerCase();
+      if (str.includes("hack")) setHackerMode(prev => !prev);
+      if (str.includes("doom")) setDoomMode(prev => !prev);
+      if (str.includes("spin")) setSpinMode(prev => !prev);
+      if (str.includes("matrix")) setMatrixMode(prev => !prev);
+      if (str.includes("flip")) {
+        setFlipMode(true);
+        setTimeout(() => setFlipMode(false), 2000);
+      }
+      
+      if (e.key === '`' || e.key === '~') {
+        setShowTerminal(prev => !prev);
       }
     };
     
-    const handleMouseDown = () => isMouseDown.current = true;
+    const handleMouseDown = (e) => {
+      isMouseDown.current = true;
+      setBursts(prev => [...prev, { id: Date.now(), x: e.clientX, y: e.clientY }]);
+      setTimeout(() => {
+        setBursts(prev => prev.filter(b => b.id !== Date.now()));
+      }, 500);
+    };
     const handleMouseUp = () => isMouseDown.current = false;
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -316,8 +386,18 @@ export default function Home() {
     window.location.href = `/checkout?item=${encodeURIComponent(itemTitle)}&price=${encodeURIComponent(itemPrice)}`;
   };
 
+      if (doomMode) document.body.classList.add('doom-mode');
+      else document.body.classList.remove('doom-mode');
+      
+      if (spinMode) document.body.classList.add('spin-mode');
+      else document.body.classList.remove('spin-mode');
+      
+      if (flipMode) document.body.classList.add('flip-mode');
+      else document.body.classList.remove('flip-mode');
+  }, [doomMode, spinMode, flipMode]);
+
   return (
-    <>
+    <motion.div style={{ skewY: skewSpring }}>
       <motion.div
         style={{
           position: 'fixed',
@@ -331,8 +411,71 @@ export default function Home() {
           zIndex: 999999
         }}
       />
-      <canvas id="starfield" ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, zIndex: -1, width: '100vw', height: '100vh', opacity: 0.6 }}></canvas>
-      <div className="noise"></div>
+      <canvas id="starfield" ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, zIndex: -1, width: '100vw', height: '100vh', opacity: doomMode ? 0.2 : 0.6 }}></canvas>
+      <div className="noise" style={{ opacity: doomMode ? 0.8 : undefined }}></div>
+      
+      {matrixMode && (
+        <div className="matrix-rain">
+          {Array.from({ length: 100 }).map((_, i) => (
+            <div key={i} style={{ 
+              position: 'absolute', 
+              left: `${Math.random() * 100}vw`, 
+              top: `${Math.random() * -100}vh`,
+              animation: `fall ${2 + Math.random() * 3}s linear infinite`
+            }}>
+              1010101011100110101
+            </div>
+          ))}
+        </div>
+      )}
+
+      {showTerminal && (
+        <motion.div 
+          initial={{ y: '-100%' }}
+          animate={{ y: 0 }}
+          style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '300px', background: 'rgba(0,0,0,0.95)', borderBottom: '2px solid var(--text-main)', zIndex: 999999, color: '#0f0', fontFamily: 'monospace', padding: '2rem' }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <div style={{ flex: 1, overflowY: 'auto' }}>
+              <p>SYNAPSE OS v9.0.1. Type 'help' for commands.</p>
+              <p>> {terminalInput}<span className="blink-cursor">_</span></p>
+            </div>
+            <input 
+              autoFocus
+              value={terminalInput}
+              onChange={(e) => setTerminalInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  if(terminalInput === 'clear') setTerminalInput('');
+                  setTerminalInput('');
+                }
+              }}
+              style={{ background: 'transparent', border: 'none', color: 'transparent', outline: 'none' }}
+            />
+          </div>
+        </motion.div>
+      )}
+
+      {/* Clicks Bursts */}
+      {bursts.map(burst => (
+        <motion.div
+          key={burst.id}
+          initial={{ scale: 0, opacity: 1 }}
+          animate={{ scale: 3, opacity: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          style={{
+            position: 'fixed',
+            left: burst.x - 25,
+            top: burst.y - 25,
+            width: '50px',
+            height: '50px',
+            borderRadius: '50%',
+            border: '2px solid var(--text-main)',
+            pointerEvents: 'none',
+            zIndex: 999998
+          }}
+        />
+      ))}
       
       {showAuthModal && (
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.85)', zIndex: 100000, display: 'flex', justifyContent: 'center', alignItems: 'center', backdropFilter: 'blur(10px)' }}>
@@ -357,11 +500,12 @@ export default function Home() {
         </div>
       )}
 
-      {/* Laptop Custom Cursor */}
+      {/* Thunder Cursor + Trail */}
       <motion.div 
-        className={`custom-cursor ${isHovering ? 'hovering' : ''}`} 
-        style={{ left: cursorXSpring, top: cursorYSpring, zIndex: 9999999 }}
-      />
+        style={{ position: 'fixed', left: cursorXSpring, top: cursorYSpring, zIndex: 9999999, pointerEvents: 'none', color: 'var(--text-main)', filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.8))' }}
+      >
+        <Zap size={32} fill="var(--text-main)" />
+      </motion.div>
 
       {/* Mobile Touch Ripple Effect */}
       {ripples.map(r => (
@@ -481,14 +625,16 @@ export default function Home() {
               WebkitTextFillColor: theme === 'light' ? 'initial' : 'transparent',
               color: theme === 'light' ? '#000' : 'transparent'
             }}>
-              BUILD<br/>
-              SHARP<br/>
+              <Typewriter text="BUILD" delay={500} /><br/>
+              <Typewriter text="SHARP" delay={1000} /><br/>
               <span style={{ 
                 color: 'transparent', 
                 WebkitTextStroke: theme === 'light' ? '2px #000' : '2px rgba(255,255,255,0.5)',
                 WebkitTextFillColor: 'transparent',
                 background: 'none'
-              }}>SECURE</span>
+              }}>
+                <Typewriter text="SECURE" delay={1500} />
+              </span>
             </h1>
           </motion.div>
 
@@ -731,6 +877,6 @@ export default function Home() {
         </section>
 
       </main>
-    </>
+    </motion.div>
   );
 }

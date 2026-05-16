@@ -1,5 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;600;800&display=swap');
 
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  cursor: none !important;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-main);
+}
+
+::selection {
+  background: var(--text-main);
+  color: var(--bg-dark);
+}
+::-moz-selection {
+  background: var(--text-main);
+  color: var(--bg-dark);
+}
 :root {
   --bg-dark: #000000;
   --text-main: #ffffff;
@@ -123,4 +153,84 @@ a, button {
   .shop-card, .amazon-card { height: auto; padding: 1.5rem !important; }
   h1 { font-size: 5rem !important; }
   .custom-cursor { display: none !important; }
+}
+
+/* Extreme Features CSS */
+@keyframes glitch-anim {
+  0% { clip-path: inset(10% 0 80% 0); transform: translate(-2px, 2px); }
+  20% { clip-path: inset(80% 0 5% 0); transform: translate(2px, -2px); }
+  40% { clip-path: inset(20% 0 50% 0); transform: translate(-2px, 0); }
+  60% { clip-path: inset(50% 0 20% 0); transform: translate(2px, 2px); }
+  80% { clip-path: inset(5% 0 80% 0); transform: translate(-2px, -2px); }
+  100% { clip-path: inset(40% 0 40% 0); transform: translate(0); }
+}
+
+.glitch-hover:hover {
+  position: relative;
+  display: inline-block;
+  color: var(--text-main) !important;
+}
+.glitch-hover:hover::before {
+  content: attr(data-text);
+  position: absolute;
+  left: -2px;
+  text-shadow: 2px 0 var(--accent);
+  top: 0;
+  color: var(--text-main);
+  background: var(--bg-dark);
+  overflow: hidden;
+  white-space: nowrap;
+  animation: glitch-anim 0.3s infinite linear alternate-reverse;
+}
+
+.doom-mode {
+  --bg-dark: #110000 !important;
+  --text-main: #ff0000 !important;
+  --text-muted: #aa0000 !important;
+  --accent: #ff0000 !important;
+  --accent-secondary: #ff0000 !important;
+  animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+.spin-mode img, .spin-mode .amazon-card, .spin-mode .shop-card {
+  animation: spin 4s infinite linear;
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.matrix-rain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 99990;
+  background: rgba(0,0,0,0.85);
+  color: #0f0;
+  font-family: monospace;
+  font-size: 14px;
+  overflow: hidden;
+  white-space: pre;
+}
+
+.flip-mode {
+  transform: rotateY(360deg) scale(0.9);
+  transition: transform 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
