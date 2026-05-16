@@ -88,11 +88,22 @@ function CheckoutContent() {
 
             {paymentMethod === 'qr' && (
               <div style={{ marginTop: '2rem', padding: '2rem', background: '#050505', border: '1px dashed var(--accent-secondary)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                 <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>
-                   To complete this order via FamApp, send exactly <strong style={{ color: '#fff' }}>{price}</strong> to:<br/><br/>
-                   <span style={{ fontSize: '1.5rem', color: 'var(--accent-secondary)', fontWeight: 'bold', fontFamily: 'monospace' }}>dhanvanth10@fam</span><br/><br/>
-                   The team will verify your transaction manually before shipping the asset.
+                 <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginBottom: '1.5rem' }}>
+                   To complete this order, open FamApp and send exactly <strong style={{ color: '#fff' }}>{price}</strong> to:<br/><br/>
+                   <span style={{ fontSize: '1.5rem', color: 'var(--accent-secondary)', fontWeight: 'bold', fontFamily: 'monospace' }}>dhanvanth10@fam</span>
                  </p>
+                 
+                 <div style={{ width: '100%', maxWidth: '400px', textAlign: 'left' }}>
+                   <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--accent-secondary)', fontFamily: 'monospace', fontSize: '0.9rem' }}>PAYMENT CONFIRMATION *</label>
+                   <input 
+                     required 
+                     type="text" 
+                     name="FamApp_Transaction_ID" 
+                     placeholder="Enter FamApp Transaction ID" 
+                     style={{ background: '#111', border: '1px solid var(--accent-secondary)', padding: '1rem', color: '#fff', fontSize: '1rem', width: '100%', outline: 'none' }} 
+                   />
+                   <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>You cannot submit this order without a valid transaction ID. Dhanvanth will manually verify this ID.</p>
+                 </div>
               </div>
             )}
           </section>
