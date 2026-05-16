@@ -86,6 +86,16 @@ export default function Home() {
   const [showTerminal, setShowTerminal] = useState(false);
   const [terminalInput, setTerminalInput] = useState("");
   const [bursts, setBursts] = useState([]);
+  const [barrelMode, setBarrelMode] = useState(false);
+  const [invertMode, setInvertMode] = useState(false);
+  const [quakeMode, setQuakeMode] = useState(false);
+  const [dvdMode, setDvdMode] = useState(false);
+  const [comicMode, setComicMode] = useState(false);
+  const [partyMode, setPartyMode] = useState(false);
+  const [discoMode, setDiscoMode] = useState(false);
+  const [nyanMode, setNyanMode] = useState(false);
+  const [dropMode, setDropMode] = useState(false);
+  const [confetti, setConfetti] = useState([]);
   
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
@@ -187,6 +197,32 @@ export default function Home() {
         setFlipMode(true);
         setTimeout(() => setFlipMode(false), 2000);
       }
+      
+      if (str.includes("barrel")) {
+        setBarrelMode(true);
+        setTimeout(() => setBarrelMode(false), 2000);
+      }
+      if (str.includes("invert")) setInvertMode(prev => !prev);
+      if (str.includes("quake")) setQuakeMode(prev => !prev);
+      if (str.includes("dvd")) setDvdMode(prev => !prev);
+      if (str.includes("comic")) setComicMode(prev => !prev);
+      if (str.includes("party")) {
+        setPartyMode(true);
+        const newConfetti = Array.from({ length: 50 }).map((_, i) => ({
+          id: Date.now() + i,
+          left: Math.random() * 100,
+          color: `hsl(${Math.random() * 360}, 100%, 50%)`
+        }));
+        setConfetti(newConfetti);
+        setTimeout(() => setPartyMode(false), 3000);
+      }
+      if (str.includes("disco")) setDiscoMode(prev => !prev);
+      if (str.includes("nyan")) {
+        setNyanMode(true);
+        setTimeout(() => setNyanMode(false), 3000);
+      }
+      if (str.includes("rick")) window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+      if (str.includes("drop")) setDropMode(prev => !prev);
       
       if (e.key === '`' || e.key === '~') {
         setShowTerminal(prev => !prev);
@@ -402,7 +438,25 @@ export default function Home() {
     
     if (flipMode) document.body.classList.add('flip-mode');
     else document.body.classList.remove('flip-mode');
-  }, [doomMode, spinMode, flipMode]);
+
+    if (barrelMode) document.body.classList.add('barrel-mode');
+    else document.body.classList.remove('barrel-mode');
+    
+    if (invertMode) document.body.classList.add('invert-mode');
+    else document.body.classList.remove('invert-mode');
+    
+    if (quakeMode) document.body.classList.add('quake-mode');
+    else document.body.classList.remove('quake-mode');
+    
+    if (comicMode) document.body.classList.add('comic-mode');
+    else document.body.classList.remove('comic-mode');
+    
+    if (discoMode) document.body.classList.add('disco-mode');
+    else document.body.classList.remove('disco-mode');
+    
+    if (dropMode) document.body.classList.add('drop-mode');
+    else document.body.classList.remove('drop-mode');
+  }, [doomMode, spinMode, flipMode, barrelMode, invertMode, quakeMode, comicMode, discoMode, dropMode]);
 
   return (
     <motion.div>
@@ -436,6 +490,27 @@ export default function Home() {
           ))}
         </div>
       )}
+
+      {dvdMode && (
+        <img 
+          src="https://upload.wikimedia.org/wikipedia/commons/9/9b/DVD_logo.svg" 
+          className="dvd-logo" 
+          alt="DVD Logo" 
+          style={{ filter: 'invert(1)' }} 
+        />
+      )}
+
+      {nyanMode && (
+        <img 
+          src="https://upload.wikimedia.org/wikipedia/en/e/ed/Nyan_cat_250px_frame.PNG" 
+          className="nyan-cat" 
+          alt="Nyan Cat" 
+        />
+      )}
+
+      {partyMode && confetti.map(c => (
+        <div key={c.id} className="confetti" style={{ left: `${c.left}vw`, backgroundColor: c.color }} />
+      ))}
 
       {showTerminal && (
         <motion.div 
