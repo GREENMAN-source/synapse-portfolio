@@ -1,14 +1,45 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'Synapse Lab | Dhanvanth L P',
-  description: '10th-grade founder engineering high-performance web apps and offensive security.',
+  title: 'Dhanvanth L P | Founder of Synapse Lab | Security Researcher',
+  description: 'Dhanvanth L P is a 10th-grade founder engineering high-performance web apps, offensive security, and bug bounty hunting. Founder of Synapse Lab.',
+  keywords: ['Dhanvanth L P', 'Synapse Lab', 'Full-Stack Developer', 'Security Researcher', 'Bug Bounty', 'React', 'Next.js', 'Cybersecurity', 'Founder'],
+  authors: [{ name: 'Dhanvanth L P' }],
+  creator: 'Dhanvanth L P',
+  publisher: 'Synapse Lab',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   openGraph: {
-    title: 'Synapse Lab | Dhanvanth L P',
-    description: '10th-grade founder engineering high-performance web apps and offensive security.',
+    title: 'Dhanvanth L P | Synapse Lab',
+    description: 'Dhanvanth L P is a 10th-grade founder engineering high-performance web apps and offensive security.',
     url: 'https://dhanvanth.pages.dev',
     siteName: 'Synapse Lab',
+    images: [
+      {
+        url: 'https://dhanvanth.pages.dev/assets/media__1778900000709.jpg',
+        width: 800,
+        height: 600,
+        alt: 'Dhanvanth L P Profile',
+      },
+    ],
+    locale: 'en_US',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Dhanvanth L P | Synapse Lab',
+    description: '10th-grade founder engineering high-performance web apps and offensive security.',
+    creator: '@5kDhanvant8844',
+    images: ['https://dhanvanth.pages.dev/assets/media__1778900000709.jpg'],
   },
 };
 
@@ -20,9 +51,17 @@ export default function RootLayout({ children }) {
         "@type": "Person",
         "@id": "https://dhanvanth.pages.dev/#person",
         "name": "Dhanvanth L P",
+        "givenName": "Dhanvanth",
+        "familyName": "L P",
         "jobTitle": "Security Researcher & Full-Stack Developer",
         "description": "10th-grade founder of Synapse Lab, specializing in high-performance web applications, offensive security, and bug bounty hunting.",
+        "image": "https://dhanvanth.pages.dev/assets/media__1778900000709.jpg",
         "url": "https://dhanvanth.pages.dev",
+        "nationality": {
+          "@type": "Country",
+          "name": "India"
+        },
+        "gender": "Male",
         "sameAs": [
           "https://github.com/GREENMAN-source",
           "https://x.com/5kDhanvant8844",
@@ -44,11 +83,14 @@ export default function RootLayout({ children }) {
         },
         "hasOccupation": {
           "@type": "Occupation",
-          "name": "Founder",
+          "name": "Founder and Lead Developer",
           "occupationLocation": {
             "@type": "Place",
             "name": "Synapse Lab"
           }
+        },
+        "worksFor": {
+          "@id": "https://dhanvanth.pages.dev/#organization"
         }
       },
       {

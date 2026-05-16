@@ -386,14 +386,15 @@ export default function Home() {
     window.location.href = `/checkout?item=${encodeURIComponent(itemTitle)}&price=${encodeURIComponent(itemPrice)}`;
   };
 
-      if (doomMode) document.body.classList.add('doom-mode');
-      else document.body.classList.remove('doom-mode');
-      
-      if (spinMode) document.body.classList.add('spin-mode');
-      else document.body.classList.remove('spin-mode');
-      
-      if (flipMode) document.body.classList.add('flip-mode');
-      else document.body.classList.remove('flip-mode');
+  useEffect(() => {
+    if (doomMode) document.body.classList.add('doom-mode');
+    else document.body.classList.remove('doom-mode');
+    
+    if (spinMode) document.body.classList.add('spin-mode');
+    else document.body.classList.remove('spin-mode');
+    
+    if (flipMode) document.body.classList.add('flip-mode');
+    else document.body.classList.remove('flip-mode');
   }, [doomMode, spinMode, flipMode]);
 
   return (
