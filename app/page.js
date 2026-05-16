@@ -405,7 +405,7 @@ export default function Home() {
   }, [doomMode, spinMode, flipMode]);
 
   return (
-    <motion.div style={{ skewY: skewSpring }}>
+    <motion.div>
       <motion.div
         style={{
           position: 'fixed',
@@ -677,8 +677,8 @@ export default function Home() {
               style={{ position: 'relative', zIndex: 2, height: '100%', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', paddingBottom: '0' }}
             >
               <img 
-                src="/assets/3d_avatar_transparent.png" 
-                alt="Dhanvanth 3D Avatar" 
+                src="/assets/cyber_avatar_transparent.png" 
+                alt="Dhanvanth Cyber Hacker Avatar" 
                 style={{ 
                   width: '220%', // Massive scale up to create a portrait bust
                   height: 'auto', 
