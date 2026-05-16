@@ -439,7 +439,7 @@ export default function Home() {
           <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
             <div style={{ flex: 1, overflowY: 'auto' }}>
               <p>SYNAPSE OS v9.0.1. Type 'help' for commands.</p>
-              <p>> {terminalInput}<span className="blink-cursor">_</span></p>
+              <p>&gt; {terminalInput}<span className="blink-cursor">_</span></p>
             </div>
             <input 
               autoFocus
