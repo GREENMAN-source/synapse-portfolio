@@ -122,4 +122,5 @@ a, button {
   nav div { font-size: 0.8rem !important; gap: 1.5rem !important; }
   .shop-card, .amazon-card { height: auto; padding: 1.5rem !important; }
   h1 { font-size: 5rem !important; }
+  .custom-cursor { display: none !important; }
 }

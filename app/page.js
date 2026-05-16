@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Terminal, Shield, Code, Search, Cpu, Wifi, Database, Activity, ExternalLink, ShoppingCart, Star } from 'lucide-react';
+import { Terminal, Shield, Code, Search, Cpu, Wifi, Database, Activity, ExternalLink, ShoppingCart, Star, Sun, Moon } from 'lucide-react';
 
 export default function Home() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -9,6 +9,7 @@ export default function Home() {
   const [theme, setTheme] = useState('dark');
   const themeRef = useRef('dark');
   const canvasRef = useRef(null);
+  const [ripples, setRipples] = useState([]);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -17,12 +18,26 @@ export default function Home() {
 
   const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark');
 
-  // Custom Cursor Logic
+  // Custom Cursor & Mobile Ripple Logic
   useEffect(() => {
     const handleMouseMove = (e) => {
       setMousePos({ x: e.clientX, y: e.clientY });
     };
+    
+    const handleTouch = (e) => {
+      if (window.innerWidth <= 768) {
+        const touch = e.touches ? e.touches[0] : e;
+        const newRipple = { id: Date.now(), x: touch.clientX, y: touch.clientY };
+        setRipples(prev => [...prev, newRipple]);
+        setTimeout(() => {
+          setRipples(prev => prev.filter(r => r.id !== newRipple.id));
+        }, 1000);
+      }
+    };
+
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchstart', handleTouch);
+    window.addEventListener('click', handleTouch);
     
     // Add hover states to interactive elements
     const interactiveElements = document.querySelectorAll('a, button, .shop-card, .amazon-card');
@@ -33,6 +48,8 @@ export default function Home() {
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchstart', handleTouch);
+      window.removeEventListener('click', handleTouch);
       interactiveElements.forEach(el => {
         el.removeEventListener('mouseenter', () => setIsHovering(true));
         el.removeEventListener('mouseleave', () => setIsHovering(false));
@@ -170,10 +187,33 @@ export default function Home() {
     <>
       <canvas id="starfield" ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, zIndex: -1, width: '100vw', height: '100vh', opacity: 0.6 }}></canvas>
       <div className="noise"></div>
+      
+      {/* Laptop Custom Cursor */}
       <div 
         className={`custom-cursor ${isHovering ? 'hovering' : ''}`} 
         style={{ left: `${mousePos.x}px`, top: `${mousePos.y}px` }}
       ></div>
+
+      {/* Mobile Touch Ripple Effect */}
+      {ripples.map(r => (
+        <motion.div 
+          key={r.id}
+          initial={{ scale: 0, opacity: 0.8 }}
+          animate={{ scale: 4, opacity: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          style={{
+            position: 'fixed',
+            left: r.x - 20,
+            top: r.y - 20,
+            width: 40,
+            height: 40,
+            border: '2px solid var(--accent-secondary)',
+            borderRadius: '50%',
+            pointerEvents: 'none',
+            zIndex: 9999
+          }}
+        />
+      ))}
       
       {/* Brutalist Nav */}
       <nav style={{ position: 'fixed', top: 0, width: '100%', zIndex: 50, padding: '2rem 4rem', mixBlendMode: 'difference' }}>
@@ -184,18 +224,42 @@ export default function Home() {
             <a href="#projects">PROJECTS</a>
             <a href="#store">STORE</a>
             <a href="#social">SOCIALS</a>
-            <button onClick={toggleTheme} style={{ 
-              background: 'transparent', 
-              border: '1px solid var(--text-main)', 
-              color: 'var(--text-main)', 
-              padding: '0.5rem 1rem', 
-              fontFamily: 'monospace',
-              fontSize: '0.8rem',
-              fontWeight: 'bold',
-              borderRadius: '20px',
-              transition: 'all 0.3s'
-            }}>
-              {theme === 'dark' ? 'LIGHT MODE' : 'DARK MODE'}
+            <button 
+              onClick={toggleTheme} 
+              aria-label="Toggle Theme"
+              style={{ 
+                background: theme === 'dark' ? '#222' : '#ddd', 
+                border: '1px solid var(--text-muted)', 
+                borderRadius: '30px',
+                display: 'flex',
+                alignItems: 'center',
+                width: '60px',
+                height: '32px',
+                padding: '2px',
+                position: 'relative',
+                cursor: 'none'
+              }}
+            >
+              <motion.div 
+                layout
+                initial={false}
+                animate={{ 
+                  x: theme === 'dark' ? 26 : 0,
+                  backgroundColor: theme === 'dark' ? '#000' : '#fff'
+                }}
+                transition={{ type: "spring", stiffness: 700, damping: 30 }}
+                style={{
+                  width: '26px',
+                  height: '26px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                }}
+              >
+                {theme === 'dark' ? <Moon size={14} color="#fff" /> : <Sun size={14} color="#000" />}
+              </motion.div>
             </button>
           </div>
         </div>
