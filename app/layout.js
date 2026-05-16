@@ -75,11 +75,12 @@ export default function RootLayout({ children }) {
           "React.js",
           "Next.js",
           "Hardware Engineering (Arduino/Raspberry Pi)",
-          "Cybersecurity"
+          "Cybersecurity",
+          "Artificial Intelligence"
         ],
         "alumniOf": {
           "@type": "EducationalOrganization",
-          "name": "10th Grade Developer"
+          "name": "10th Grade"
         },
         "hasOccupation": {
           "@type": "Occupation",
@@ -110,7 +111,7 @@ export default function RootLayout({ children }) {
             "itemOffered": {
               "@type": "Service",
               "name": "Custom Web Application",
-              "description": "Full-stack web application development."
+              "description": "Full-stack web application development tailored to your business needs."
             },
             "price": "3000",
             "priceCurrency": "INR"
@@ -120,10 +121,35 @@ export default function RootLayout({ children }) {
             "itemOffered": {
               "@type": "Service",
               "name": "Security VAPT Testing",
-              "description": "Deep vulnerability assessment and penetration testing."
+              "description": "Deep vulnerability assessment and penetration testing for your infrastructure."
             },
             "price": "2500",
             "priceCurrency": "INR"
+          }
+        ]
+      },
+      {
+        "@type": "ItemList",
+        "@id": "https://dhanvanth.pages.dev/#hardware",
+        "name": "Hardware Projects & Store",
+        "itemListElement": [
+          {
+            "@type": "Product",
+            "name": "LifeFlow IV Monitor",
+            "description": "Fully assembled IoT medical monitoring system. Alerts nurses before IV bags empty.",
+            "offers": { "@type": "Offer", "price": "1500", "priceCurrency": "INR" }
+          },
+          {
+            "@type": "Product",
+            "name": "Smart Home Hub",
+            "description": "Facial recognition door lock system. Built, configured, and shipped to you.",
+            "offers": { "@type": "Offer", "price": "3500", "priceCurrency": "INR" }
+          },
+          {
+            "@type": "Product",
+            "name": "Automated Plant Care",
+            "description": "Automated irrigation system with moisture sensing and LCD display.",
+            "offers": { "@type": "Offer", "price": "800", "priceCurrency": "INR" }
           }
         ]
       },
@@ -135,6 +161,30 @@ export default function RootLayout({ children }) {
         "publisher": {
           "@id": "https://dhanvanth.pages.dev/#organization"
         }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://dhanvanth.pages.dev/#breadcrumbs",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://dhanvanth.pages.dev"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Projects",
+            "item": "https://dhanvanth.pages.dev/#projects"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Store",
+            "item": "https://dhanvanth.pages.dev/#store"
+          }
+        ]
       },
       {
         "@type": "SoftwareSourceCode",

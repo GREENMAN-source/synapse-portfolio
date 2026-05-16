@@ -640,22 +640,24 @@ export default function Home() {
             </h1>
           </motion.div>
 
-          {/* Standing 3D Avatar */}
+          {/* Standing 3D Avatar with 360 Rotation */}
           <motion.div 
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.2, type: "spring", stiffness: 100 }}
-            style={{ position: 'absolute', right: '5%', bottom: '0', height: '85vh', zIndex: 1 }}
-            whileHover={{ scale: 1.02 }}
+            style={{ position: 'absolute', right: '5%', bottom: '0', height: '85vh', zIndex: 1, perspective: '1000px' }}
           >
-            <img 
+            <motion.img 
               src="/assets/3d_avatar_transparent.png" 
               alt="Dhanvanth 3D Avatar" 
+              animate={{ rotateY: [0, 360] }}
+              transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
               style={{ 
                 height: '100%', 
                 width: 'auto', 
                 objectFit: 'contain',
-                filter: theme === 'light' ? 'drop-shadow(0px 0px 20px rgba(0,0,0,0.2))' : 'drop-shadow(0px 0px 30px rgba(255,255,255,0.1)) brightness(0.9) contrast(1.1)'
+                filter: theme === 'light' ? 'drop-shadow(0px 0px 20px rgba(0,0,0,0.2))' : 'drop-shadow(0px 0px 30px rgba(255,255,255,0.1)) brightness(0.9) contrast(1.1)',
+                transformStyle: "preserve-3d"
               }} 
             />
           </motion.div>
