@@ -19,7 +19,53 @@ function CheckoutContent() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // We no longer need custom handleSubmit or isSubmitted state because FormSubmit handles it natively.
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const name = formData.get("Full_Name");
+    const phone = formData.get("Phone_Number");
+    const address = formData.get("Shipping_Address");
+    const txId = formData.get("FamApp_Transaction_ID") || "N/A";
+    
+    const subject = encodeURIComponent(`SYNAPSE LAB ORDER: ${item}`);
+    const body = encodeURIComponent(`
+=== SYNAPSE LAB ORDER PROTOCOL ===
+
+TARGET ASSET: ${item}
+ASSET VALUE: ${price}
+TRANSFER METHOD: ${paymentMethod === 'qr' ? 'FamApp Transfer' : 'Cash on Delivery'}
+TRANSACTION ID: ${txId}
+
+=== CLIENT IDENTIFICATION ===
+NAME: ${name}
+PHONE: ${phone}
+ADDRESS: ${address}
+
+// Do not modify the data above. Click Send to finalize your order. //
+    `);
+
+    // Open native email client
+    window.location.href = `mailto:kdhanvanth98@gmail.com?subject=${subject}&body=${body}`;
+    
+    // Show success screen
+    setIsSubmitted(true);
+  };
+
+  if (isSubmitted) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '2rem' }}>
+        <Shield size={80} color="var(--accent-secondary)" style={{ marginBottom: '2rem' }} />
+        <h1 style={{ fontSize: '4rem', fontFamily: 'Syncopate', marginBottom: '1rem' }}>ORDER INITIATED</h1>
+        <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', maxWidth: '600px' }}>
+          Your default email client has been opened. Please click <strong>Send</strong> on the email to finalize your request for <strong>{item}</strong>.
+        </p>
+        <a href="/" style={{ padding: '1rem 2rem', marginTop: '3rem', fontSize: '1.1rem', background: '#FFD814', color: '#000', textDecoration: 'none', borderRadius: '100px', fontWeight: 'bold' }}>
+           Return to Arsenal
+        </a>
+      </div>
+    );
+  }
 
   return (
     <main style={{ minHeight: '100vh', padding: '4rem 2rem', position: 'relative' }}>
@@ -44,19 +90,8 @@ function CheckoutContent() {
           </div>
         </div>
 
-        <form action="https://formsubmit.co/kdhanvanth98@gmail.com" method="POST" style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
           
-          {/* Hidden Config Fields for FormSubmit */}
-          <input type="hidden" name="_next" value="https://dhanvanth.pages.dev" />
-          <input type="hidden" name="_subject" value={`New Order Request: ${item}`} />
-          <input type="hidden" name="_template" value="box" />
-          <input type="hidden" name="_captcha" value="true" />
-          
-          {/* Hidden Order Data */}
-          <input type="hidden" name="Target_Asset" value={item} />
-          <input type="hidden" name="Asset_Value" value={price} />
-
-          {/* Shipping Info */}
           <section>
             <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--text-muted)', fontFamily: 'monospace' }}>1. DESTINATION PROTOCOL</h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
@@ -67,7 +102,6 @@ function CheckoutContent() {
             </div>
           </section>
 
-          {/* Payment Info */}
           <section>
             <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--text-muted)', fontFamily: 'monospace' }}>2. TRANSFER METHOD</h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
@@ -102,7 +136,7 @@ function CheckoutContent() {
                      placeholder="Enter FamApp Transaction ID" 
                      style={{ background: '#111', border: '1px solid var(--accent-secondary)', padding: '1rem', color: '#fff', fontSize: '1rem', width: '100%', outline: 'none' }} 
                    />
-                   <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>You cannot submit this order without a valid transaction ID. Dhanvanth will manually verify this ID.</p>
+                   <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>You cannot submit this order without a valid transaction ID.</p>
                  </div>
               </div>
             )}
