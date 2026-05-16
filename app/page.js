@@ -2,6 +2,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useScroll } from 'framer-motion';
 import { Terminal, Shield, Code, Search, Cpu, Wifi, Database, Activity, ExternalLink, ShoppingCart, Star, Sun, Moon } from 'lucide-react';
+import { auth, googleProvider, githubProvider } from '../lib/firebase';
+import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
 
 function MagneticWrapper({ children }) {
   const ref = useRef(null);
@@ -31,6 +33,8 @@ export default function Home() {
   const [hackerMode, setHackerMode] = useState(false);
   const keysPressed = useRef("");
   const isMouseDown = useRef(false);
+  const [user, setUser] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
@@ -44,6 +48,27 @@ export default function Home() {
     damping: 30,
     restDelta: 0.001
   });
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleSignIn = async (provider) => {
+    try {
+      await signInWithPopup(auth, provider);
+      setShowAuthModal(false);
+    } catch (error) {
+      console.error(error);
+      alert("Auth Error: " + error.message);
+    }
+  };
+
+  const handleSignOut = () => {
+    signOut(auth);
+  };
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -309,6 +334,29 @@ export default function Home() {
       <canvas id="starfield" ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, zIndex: -1, width: '100vw', height: '100vh', opacity: 0.6 }}></canvas>
       <div className="noise"></div>
       
+      {showAuthModal && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.85)', zIndex: 100000, display: 'flex', justifyContent: 'center', alignItems: 'center', backdropFilter: 'blur(10px)' }}>
+          <motion.div 
+            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            style={{ background: 'var(--bg-dark)', border: '1px solid var(--text-muted)', padding: '3rem', width: '90%', maxWidth: '400px', display: 'flex', flexDirection: 'column', gap: '1.5rem', position: 'relative' }}
+          >
+            <button onClick={() => setShowAuthModal(false)} style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'none', border: 'none', color: 'var(--text-main)', fontSize: '1.5rem', cursor: 'pointer' }}>×</button>
+            <h2 style={{ fontSize: '2rem', fontFamily: 'Syncopate', textAlign: 'center', marginBottom: '1rem' }}>ACCESS</h2>
+            
+            <button onClick={() => handleSignIn(googleProvider)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', background: '#fff', color: '#000', padding: '1rem', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style={{ width: '24px' }} alt="Google" />
+              Sign in with Google
+            </button>
+
+            <button onClick={() => handleSignIn(githubProvider)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', background: '#333', color: '#fff', padding: '1rem', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/github.svg" style={{ width: '24px', filter: 'invert(1)' }} alt="GitHub" />
+              Sign in with GitHub
+            </button>
+          </motion.div>
+        </div>
+      )}
+
       {/* Laptop Custom Cursor */}
       <motion.div 
         className={`custom-cursor ${isHovering ? 'hovering' : ''}`} 
@@ -359,6 +407,16 @@ export default function Home() {
             <MagneticWrapper><a href="#projects" style={{ display: 'block', padding: '0.5rem' }}>PROJECTS</a></MagneticWrapper>
             <MagneticWrapper><a href="#store" style={{ display: 'block', padding: '0.5rem' }}>STORE</a></MagneticWrapper>
             <MagneticWrapper><a href="#social" style={{ display: 'block', padding: '0.5rem' }}>SOCIALS</a></MagneticWrapper>
+            
+            {user ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <img src={user.photoURL} alt={user.displayName || 'User'} style={{ width: '28px', height: '28px', borderRadius: '50%', border: '1px solid var(--text-main)' }} />
+                <button onClick={handleSignOut} style={{ background: 'transparent', border: '1px solid var(--text-main)', color: 'var(--text-main)', padding: '0.3rem 0.8rem', borderRadius: '30px', fontSize: '0.7rem', fontWeight: 'bold', fontFamily: 'monospace', cursor: 'pointer' }}>LOGOUT</button>
+              </div>
+            ) : (
+              <button onClick={() => setShowAuthModal(true)} style={{ background: 'var(--text-main)', border: 'none', color: 'var(--bg-dark)', padding: '0.3rem 0.8rem', borderRadius: '30px', fontSize: '0.7rem', fontWeight: 'bold', fontFamily: 'monospace', cursor: 'pointer' }}>LOGIN</button>
+            )}
+
             <button 
               onClick={toggleTheme} 
               aria-label="Toggle Theme"
