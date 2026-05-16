@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useScroll } from 'framer-motion';
 import { Terminal, Shield, Code, Search, Cpu, Wifi, Database, Activity, ExternalLink, ShoppingCart, Star, Sun, Moon } from 'lucide-react';
 
 function MagneticWrapper({ children }) {
@@ -37,6 +37,13 @@ export default function Home() {
   const springConfig = { damping: 25, stiffness: 300, mass: 0.5 };
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
+
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -107,6 +114,15 @@ export default function Home() {
     window.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mouseup', handleMouseUp);
     
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        document.title = "Come back! 🚀 | Synapse Lab";
+      } else {
+        document.title = "Synapse Lab | Dhanvanth L P";
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    
     // Add hover states to interactive elements
     const interactiveElements = document.querySelectorAll('a, button, .shop-card, .amazon-card');
     interactiveElements.forEach(el => {
@@ -122,6 +138,7 @@ export default function Home() {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       interactiveElements.forEach(el => {
         el.removeEventListener('mouseenter', () => setIsHovering(true));
         el.removeEventListener('mouseleave', () => setIsHovering(false));
@@ -276,6 +293,19 @@ export default function Home() {
 
   return (
     <>
+      <motion.div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '4px',
+          background: 'var(--text-main)',
+          transformOrigin: '0%',
+          scaleX,
+          zIndex: 999999
+        }}
+      />
       <canvas id="starfield" ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, zIndex: -1, width: '100vw', height: '100vh', opacity: 0.6 }}></canvas>
       <div className="noise"></div>
       
