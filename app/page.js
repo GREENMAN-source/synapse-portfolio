@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useScroll, useVelocity, useTransform } from 'framer-motion';
 import { Terminal as TerminalIcon, Shield, Code, Search, Cpu, Wifi, Database, Activity, ExternalLink, ShoppingCart, Star, Sun, Moon, Zap, ChevronRight } from 'lucide-react';
