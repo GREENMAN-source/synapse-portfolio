@@ -640,29 +640,82 @@ export default function Home() {
             </h1>
           </motion.div>
 
-          {/* Standing 3D Avatar (Floating + Parallax) */}
-          <motion.div 
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, delay: 0.2, type: "spring", stiffness: 100 }}
-            style={{ position: 'absolute', right: '5%', bottom: '0', height: '85vh', zIndex: 1, perspective: '1000px' }}
-          >
-            <TiltWrapper>
-              <motion.img 
+          {/* Hacker Style Blob Avatar */}
+          <div style={{ position: 'absolute', right: '10%', top: '15%', height: '70vh', width: '500px', zIndex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            
+            {/* Morphing Background Blob */}
+            <motion.div
+              animate={{
+                borderRadius: [
+                  "60% 40% 30% 70% / 60% 30% 70% 40%",
+                  "30% 70% 70% 30% / 30% 30% 70% 70%",
+                  "60% 40% 30% 70% / 60% 30% 70% 40%"
+                ]
+              }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+              style={{
+                position: 'absolute',
+                width: '380px',
+                height: '380px',
+                background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
+                boxShadow: '0 0 50px rgba(37, 117, 252, 0.4)',
+                zIndex: 0
+              }}
+            />
+
+            {/* Avatar Image Layered on top */}
+            <motion.div
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              style={{ position: 'relative', zIndex: 2, height: '120%', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', overflow: 'hidden', paddingBottom: '0' }}
+            >
+              <img 
                 src="/assets/3d_avatar_transparent.png" 
                 alt="Dhanvanth 3D Avatar" 
-                animate={{ y: [0, -20, 0] }}
-                transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
                 style={{ 
-                  height: '100%', 
+                  height: '110%', 
                   width: 'auto', 
-                  objectFit: 'contain',
-                  filter: theme === 'light' ? 'drop-shadow(20px 20px 30px rgba(0,0,0,0.3))' : 'drop-shadow(20px 20px 40px rgba(0,0,0,0.8)) brightness(0.9) contrast(1.1)',
-                  transform: "translateZ(50px)"
+                  objectFit: 'cover',
+                  objectPosition: 'top',
+                  filter: theme === 'light' ? 'drop-shadow(0px 10px 20px rgba(0,0,0,0.3))' : 'drop-shadow(0px 10px 30px rgba(0,0,0,0.8)) brightness(0.95) contrast(1.1)',
+                  maskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)',
+                  WebkitMaskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)'
                 }} 
               />
-            </TiltWrapper>
-          </motion.div>
+            </motion.div>
+
+            {/* Floating Tech Icons */}
+            {[
+              { Icon: Code, color: '#f7df1e', top: '10%', left: '-10%', delay: 0 },
+              { Icon: TerminalIcon, color: '#4af626', top: '30%', left: '90%', delay: 1 },
+              { Icon: Shield, color: '#ff4b4b', top: '70%', left: '-5%', delay: 2 },
+              { Icon: Database, color: '#336791', top: '80%', left: '80%', delay: 3 },
+              { Icon: Cpu, color: '#ff9900', top: '-5%', left: '70%', delay: 1.5 },
+              { Icon: Activity, color: '#ff00ff', top: '95%', left: '30%', delay: 2.5 }
+            ].map((item, idx) => (
+              <motion.div
+                key={idx}
+                animate={{ y: [0, -15, 0], rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 4 + idx, delay: item.delay, repeat: Infinity, ease: "easeInOut" }}
+                style={{
+                  position: 'absolute',
+                  top: item.top,
+                  left: item.left,
+                  background: 'var(--bg-dark)',
+                  border: `2px solid ${item.color}`,
+                  borderRadius: '12px',
+                  padding: '12px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  boxShadow: `0 10px 20px rgba(0,0,0,0.5), 0 0 15px ${item.color}40`,
+                  zIndex: 3
+                }}
+              >
+                <item.Icon size={28} color={item.color} />
+              </motion.div>
+            ))}
+          </div>
         </section>
 
         {/* The Journey (Timeline) */}
