@@ -640,39 +640,24 @@ export default function Home() {
             </h1>
           </motion.div>
 
-          {/* Hacker Style Profile Photo */}
+          {/* Standing 3D Avatar */}
           <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            style={{ position: 'absolute', right: '10%', top: '25%', zIndex: 1 }}
-            whileHover={{ scale: 1.05, rotate: 5 }}
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, delay: 0.2, type: "spring", stiffness: 100 }}
+            style={{ position: 'absolute', right: '5%', bottom: '0', height: '85vh', zIndex: 1 }}
+            whileHover={{ scale: 1.02 }}
           >
-            <div style={{ 
-              position: 'relative', 
-              width: '400px', 
-              height: '400px', 
-              borderRadius: '50%', 
-              padding: '8px',
-              background: theme === 'light' ? 'linear-gradient(45deg, #d4af37 0%, #ffffff 100%)' : 'linear-gradient(45deg, #ffffff 0%, #888888 100%)',
-              boxShadow: theme === 'light' ? '0 0 50px rgba(212, 175, 55, 0.4), inset 0 0 20px rgba(255,255,255,0.8)' : '0 0 50px rgba(255, 255, 255, 0.2), inset 0 0 20px rgba(0,0,0,0.8)' 
-            }}>
-              <div style={{ 
-                width: '100%', 
+            <img 
+              src="/assets/3d_avatar_transparent.png" 
+              alt="Dhanvanth 3D Avatar" 
+              style={{ 
                 height: '100%', 
-                borderRadius: '50%', 
-                overflow: 'hidden',
-                background: 'var(--bg-dark)',
-                border: '4px solid #000'
-              }}>
-                 <img src="/assets/media__1778900000709.jpg" alt="Dhanvanth L P" style={{ 
-                   width: '100%', 
-                   height: '100%', 
-                   objectFit: 'cover',
-                   filter: 'contrast(1.2) brightness(0.8) grayscale(0.5)'
-                 }} onError={(e) => { e.target.src = '/assets/media__1778900000683.jpg'; }} />
-              </div>
-            </div>
+                width: 'auto', 
+                objectFit: 'contain',
+                filter: theme === 'light' ? 'drop-shadow(0px 0px 20px rgba(0,0,0,0.2))' : 'drop-shadow(0px 0px 30px rgba(255,255,255,0.1)) brightness(0.9) contrast(1.1)'
+              }} 
+            />
           </motion.div>
         </section>
 
