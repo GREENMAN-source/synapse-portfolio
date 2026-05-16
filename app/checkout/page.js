@@ -19,9 +19,27 @@ function CheckoutContent() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitted(true);
+    
+    // Package up the order details
+    const formData = new FormData(e.target);
+    formData.append("Target_Asset", item);
+    formData.append("Asset_Value", price);
+    formData.append("Payment_Method", paymentMethod === 'qr' ? 'FamApp QR' : 'Cash on Delivery');
+    formData.append("_subject", `New Order: ${item}`);
+    formData.append("_template", "box"); // Sleek email template
+
+    try {
+      await fetch("https://formsubmit.co/ajax/kdhanvanth98@gmail.com", {
+        method: "POST",
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+      setIsSubmitted(true);
+    } catch (error) {
+      alert("Transmission failed. Please check connection and try again.");
+    }
   };
 
   if (isSubmitted) {
@@ -68,10 +86,10 @@ function CheckoutContent() {
           <section>
             <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--text-muted)', fontFamily: 'monospace' }}>1. DESTINATION PROTOCOL</h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-              <input required type="text" placeholder="Full Name" style={{ background: '#050505', border: '1px solid #333', padding: '1rem', color: '#fff', fontSize: '1rem', width: '100%', outline: 'none' }} />
-              <input required type="email" placeholder="Email Address" style={{ background: '#050505', border: '1px solid #333', padding: '1rem', color: '#fff', fontSize: '1rem', width: '100%', outline: 'none' }} />
-              <input required type="text" placeholder="Phone Number" style={{ background: '#050505', border: '1px solid #333', padding: '1rem', color: '#fff', fontSize: '1rem', width: '100%', outline: 'none', gridColumn: '1 / -1' }} />
-              <textarea required placeholder="Full Shipping Address" rows="3" style={{ background: '#050505', border: '1px solid #333', padding: '1rem', color: '#fff', fontSize: '1rem', width: '100%', outline: 'none', gridColumn: '1 / -1', resize: 'vertical' }}></textarea>
+              <input required type="text" name="Full_Name" placeholder="Full Name" style={{ background: '#050505', border: '1px solid #333', padding: '1rem', color: '#fff', fontSize: '1rem', width: '100%', outline: 'none' }} />
+              <input required type="email" name="Email_Address" placeholder="Email Address" style={{ background: '#050505', border: '1px solid #333', padding: '1rem', color: '#fff', fontSize: '1rem', width: '100%', outline: 'none' }} />
+              <input required type="text" name="Phone_Number" placeholder="Phone Number" style={{ background: '#050505', border: '1px solid #333', padding: '1rem', color: '#fff', fontSize: '1rem', width: '100%', outline: 'none', gridColumn: '1 / -1' }} />
+              <textarea required name="Shipping_Address" placeholder="Full Shipping Address" rows="3" style={{ background: '#050505', border: '1px solid #333', padding: '1rem', color: '#fff', fontSize: '1rem', width: '100%', outline: 'none', gridColumn: '1 / -1', resize: 'vertical' }}></textarea>
             </div>
           </section>
 
