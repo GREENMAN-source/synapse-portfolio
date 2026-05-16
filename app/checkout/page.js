@@ -19,43 +19,7 @@ function CheckoutContent() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Package up the order details
-    const formData = new FormData(e.target);
-    formData.append("Target_Asset", item);
-    formData.append("Asset_Value", price);
-    formData.append("Payment_Method", paymentMethod === 'qr' ? 'FamApp QR' : 'Cash on Delivery');
-    formData.append("_subject", `New Order: ${item}`);
-    formData.append("_template", "box"); // Sleek email template
-
-    try {
-      await fetch("https://formsubmit.co/ajax/kdhanvanth98@gmail.com", {
-        method: "POST",
-        body: formData,
-        headers: { 'Accept': 'application/json' }
-      });
-      setIsSubmitted(true);
-    } catch (error) {
-      alert("Transmission failed. Please check connection and try again.");
-    }
-  };
-
-  if (isSubmitted) {
-    return (
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '2rem' }}>
-        <Shield size={80} color="var(--accent-secondary)" style={{ marginBottom: '2rem' }} />
-        <h1 style={{ fontSize: '4rem', fontFamily: 'Syncopate', marginBottom: '1rem' }}>ORDER SECURED</h1>
-        <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', maxWidth: '600px' }}>
-          Your request for <strong>{item}</strong> has been received by Synapse Lab. Dhanvanth will review the details and contact you shortly.
-        </p>
-        <a href="/" className="btn-primary" style={{ padding: '1rem 2rem', marginTop: '3rem', fontSize: '1.1rem', background: '#FFD814', color: '#000', textDecoration: 'none', borderRadius: '100px', fontWeight: 'bold' }}>
-           Return to Arsenal
-        </a>
-      </div>
-    );
-  }
+  // We no longer need custom handleSubmit or isSubmitted state because FormSubmit handles it natively.
 
   return (
     <main style={{ minHeight: '100vh', padding: '4rem 2rem', position: 'relative' }}>
@@ -80,8 +44,18 @@ function CheckoutContent() {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+        <form action="https://formsubmit.co/kdhanvanth98@gmail.com" method="POST" style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
           
+          {/* Hidden Config Fields for FormSubmit */}
+          <input type="hidden" name="_next" value="https://dhanvanth.pages.dev" />
+          <input type="hidden" name="_subject" value={`New Order Request: ${item}`} />
+          <input type="hidden" name="_template" value="box" />
+          <input type="hidden" name="_captcha" value="true" />
+          
+          {/* Hidden Order Data */}
+          <input type="hidden" name="Target_Asset" value={item} />
+          <input type="hidden" name="Asset_Value" value={price} />
+
           {/* Shipping Info */}
           <section>
             <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--text-muted)', fontFamily: 'monospace' }}>1. DESTINATION PROTOCOL</h3>
@@ -99,13 +73,13 @@ function CheckoutContent() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
               
               <label style={{ background: paymentMethod === 'qr' ? 'rgba(0, 240, 255, 0.1)' : '#050505', border: `1px solid ${paymentMethod === 'qr' ? 'var(--accent-secondary)' : '#333'}`, padding: '1.5rem', cursor: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', transition: 'all 0.3s' }}>
-                <input type="radio" name="payment" value="qr" checked={paymentMethod === 'qr'} onChange={() => setPaymentMethod('qr')} style={{ display: 'none' }} />
+                <input type="radio" name="Payment_Method" value="FamApp QR" checked={paymentMethod === 'qr'} onChange={() => setPaymentMethod('qr')} style={{ display: 'none' }} />
                 <QrCode size={40} color={paymentMethod === 'qr' ? 'var(--accent-secondary)' : '#666'} />
-                <span style={{ fontWeight: 'bold' }}>FamApp QR Code</span>
+                <span style={{ fontWeight: 'bold' }}>FamApp Transfer</span>
               </label>
 
               <label style={{ background: paymentMethod === 'cod' ? 'rgba(255, 0, 60, 0.1)' : '#050505', border: `1px solid ${paymentMethod === 'cod' ? 'var(--accent)' : '#333'}`, padding: '1.5rem', cursor: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', transition: 'all 0.3s' }}>
-                <input type="radio" name="payment" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} style={{ display: 'none' }} />
+                <input type="radio" name="Payment_Method" value="Cash on Delivery" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} style={{ display: 'none' }} />
                 <Truck size={40} color={paymentMethod === 'cod' ? 'var(--accent)' : '#666'} />
                 <span style={{ fontWeight: 'bold' }}>Cash on Delivery</span>
               </label>
@@ -114,10 +88,11 @@ function CheckoutContent() {
 
             {paymentMethod === 'qr' && (
               <div style={{ marginTop: '2rem', padding: '2rem', background: '#050505', border: '1px dashed var(--accent-secondary)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                 <div style={{ width: '200px', height: '200px', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
-                   <span style={{ color: '#000', fontWeight: 'bold' }}>[FAMAPP QR CODE]</span>
-                 </div>
-                 <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Scan this QR code or send to <strong>dhanvanth10@fam</strong> using FamApp to complete the payment of <strong>{price}</strong>.<br/>(Note: You can replace this placeholder with your actual QR image in the code later!)</p>
+                 <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>
+                   To complete this order via FamApp, send exactly <strong style={{ color: '#fff' }}>{price}</strong> to:<br/><br/>
+                   <span style={{ fontSize: '1.5rem', color: 'var(--accent-secondary)', fontWeight: 'bold', fontFamily: 'monospace' }}>dhanvanth10@fam</span><br/><br/>
+                   The team will verify your transaction manually before shipping the asset.
+                 </p>
               </div>
             )}
           </section>
