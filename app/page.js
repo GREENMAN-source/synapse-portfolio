@@ -1,15 +1,37 @@
-'use client';
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { Terminal, Shield, Code, Search, Cpu, Wifi, Database, Activity, ExternalLink, ShoppingCart, Star, Sun, Moon } from 'lucide-react';
 
+function MagneticWrapper({ children }) {
+  const ref = useRef(null);
+  const [position, setPosition] = useState({ x:0, y:0 });
+  const handleMouse = (e) => {
+    const { clientX, clientY } = e;
+    const { height, width, left, top } = ref.current.getBoundingClientRect();
+    const middleX = clientX - (left + width/2);
+    const middleY = clientY - (top + height/2);
+    setPosition({ x: middleX * 0.2, y: middleY * 0.2 });
+  };
+  const reset = () => setPosition({ x:0, y:0 });
+  return (
+    <motion.div ref={ref} onMouseMove={handleMouse} onMouseLeave={reset} animate={{ x: position.x, y: position.y }} transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}>
+      {children}
+    </motion.div>
+  );
+}
+
 export default function Home() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [theme, setTheme] = useState('dark');
   const themeRef = useRef('dark');
   const canvasRef = useRef(null);
   const [ripples, setRipples] = useState([]);
+  
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+  const springConfig = { damping: 25, stiffness: 300, mass: 0.5 };
+  const cursorXSpring = useSpring(cursorX, springConfig);
+  const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -21,7 +43,8 @@ export default function Home() {
   // Custom Cursor & Mobile Ripple Logic
   useEffect(() => {
     const handleMouseMove = (e) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
     };
     
     const handleTouch = (e) => {
@@ -89,7 +112,7 @@ export default function Home() {
       const currentTheme = themeRef.current;
       ctx.fillStyle = currentTheme === 'light' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.15)';
       ctx.fillRect(0, 0, width, height);
-      ctx.fillStyle = currentTheme === 'light' ? 'rgba(212, 175, 55, 0.8)' : 'rgba(0, 240, 255, 0.8)';
+      ctx.fillStyle = currentTheme === 'light' ? 'rgba(212, 175, 55, 0.8)' : 'rgba(255, 255, 255, 0.8)';
       ctx.beginPath();
       for (let i = 0; i < particles.length; i++) {
         let p = particles[i];
@@ -121,7 +144,7 @@ export default function Home() {
            ctx.beginPath();
            ctx.strokeStyle = currentTheme === 'light' 
              ? `rgba(212, 175, 55, ${0.8 - distance/120})` 
-             : `rgba(0, 240, 255, ${0.8 - distance/120})`;
+             : `rgba(255, 255, 255, ${0.8 - distance/120})`;
            ctx.moveTo(p.x, p.y);
            ctx.lineTo(mouseX, mouseY);
            ctx.stroke();
@@ -175,8 +198,22 @@ export default function Home() {
   ];
 
   const projects = [
-    { title: "MakeMyTrip Clone", url: "https://github.com/GREENMAN-source/MakeMyTrip-Clone", type: "INTERNSHIP PROJECT", desc: "Interactive seat/room selection, live flight status, and dynamic pricing engine." },
-    { title: "Synapse Lab", url: "https://synapslab.in", type: "AGENCY WEBSITE", desc: "Official website for Synapse Lab, showcasing high-performance security and development." }
+    { 
+      title: "MakeMyTrip Clone", 
+      url: "https://github.com/GREENMAN-source/MakeMyTrip-Clone", 
+      type: "INTERNSHIP PROJECT", 
+      desc: "A fully responsive travel booking platform featuring interactive seat/room selection, live flight status tracking, and a dynamic pricing engine to handle real-time fluctuations.",
+      features: ["Interactive Seat Map", "Live Flight Tracking", "Dynamic Pricing Engine"],
+      tech: ["Next.js", "Spring Boot", "PostgreSQL", "Redis"]
+    },
+    { 
+      title: "Synapse Lab", 
+      url: "https://synapslab.in", 
+      type: "AGENCY WEBSITE", 
+      desc: "Official website for Synapse Lab, showcasing high-performance security auditing and full-stack development. Optimized for sub-second load times and immersive 3D aesthetics.",
+      features: ["Custom WebGL", "SEO Optimized", "CMS Integration"],
+      tech: ["React", "Three.js", "Tailwind CSS", "Node.js"]
+    }
   ];
 
   const handlePurchase = (itemTitle, itemPrice) => {
@@ -189,10 +226,10 @@ export default function Home() {
       <div className="noise"></div>
       
       {/* Laptop Custom Cursor */}
-      <div 
+      <motion.div 
         className={`custom-cursor ${isHovering ? 'hovering' : ''}`} 
-        style={{ left: `${mousePos.x}px`, top: `${mousePos.y}px` }}
-      ></div>
+        style={{ left: cursorXSpring, top: cursorYSpring }}
+      />
 
       {/* Mobile Touch Ripple Effect */}
       {ripples.map(r => (
@@ -220,10 +257,10 @@ export default function Home() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ fontWeight: 800, fontSize: '1.5rem', fontFamily: 'Syncopate, sans-serif' }}>SYNAPSE LAB</div>
           <div style={{ display: 'flex', gap: '3rem', fontSize: '0.9rem', fontWeight: 600, letterSpacing: '2px', alignItems: 'center' }}>
-            <a href="#journey">JOURNEY</a>
-            <a href="#projects">PROJECTS</a>
-            <a href="#store">STORE</a>
-            <a href="#social">SOCIALS</a>
+            <MagneticWrapper><a href="#journey" style={{ display: 'block', padding: '0.5rem' }}>JOURNEY</a></MagneticWrapper>
+            <MagneticWrapper><a href="#projects" style={{ display: 'block', padding: '0.5rem' }}>PROJECTS</a></MagneticWrapper>
+            <MagneticWrapper><a href="#store" style={{ display: 'block', padding: '0.5rem' }}>STORE</a></MagneticWrapper>
+            <MagneticWrapper><a href="#social" style={{ display: 'block', padding: '0.5rem' }}>SOCIALS</a></MagneticWrapper>
             <button 
               onClick={toggleTheme} 
               aria-label="Toggle Theme"
@@ -278,10 +315,24 @@ export default function Home() {
             <p style={{ color: 'var(--accent)', fontWeight: 600, letterSpacing: '4px', marginBottom: '1rem', fontFamily: 'monospace' }}>
               DHANVANTH L P [10TH GRADE FOUNDER]
             </p>
-            <h1 style={{ fontSize: 'clamp(3rem, 10vw, 12rem)', lineHeight: 0.9, letterSpacing: '-5px', margin: 0 }}>
+            <h1 style={{ 
+              fontSize: 'clamp(3rem, 10vw, 12rem)', 
+              lineHeight: 0.9, 
+              letterSpacing: '-5px', 
+              margin: 0,
+              background: theme === 'light' ? 'none' : 'linear-gradient(180deg, #FFFFFF 0%, #888888 100%)',
+              WebkitBackgroundClip: theme === 'light' ? 'initial' : 'text',
+              WebkitTextFillColor: theme === 'light' ? 'initial' : 'transparent',
+              color: theme === 'light' ? '#000' : 'transparent'
+            }}>
               BUILD<br/>
               SHARP<br/>
-              <span style={{ color: 'transparent', WebkitTextStroke: '2px white' }}>SECURE</span>
+              <span style={{ 
+                color: 'transparent', 
+                WebkitTextStroke: theme === 'light' ? '2px #000' : '2px rgba(255,255,255,0.5)',
+                WebkitTextFillColor: 'transparent',
+                background: 'none'
+              }}>SECURE</span>
             </h1>
           </motion.div>
 
@@ -299,8 +350,8 @@ export default function Home() {
               height: '400px', 
               borderRadius: '50%', 
               padding: '8px',
-              background: theme === 'light' ? 'linear-gradient(45deg, #d4af37 0%, #ffffff 100%)' : 'linear-gradient(45deg, #00f2fe 0%, #ff003c 100%)',
-              boxShadow: theme === 'light' ? '0 0 50px rgba(212, 175, 55, 0.4), inset 0 0 20px rgba(255,255,255,0.8)' : '0 0 50px rgba(0, 242, 254, 0.4), inset 0 0 20px rgba(0,0,0,0.8)' 
+              background: theme === 'light' ? 'linear-gradient(45deg, #d4af37 0%, #ffffff 100%)' : 'linear-gradient(45deg, #ffffff 0%, #888888 100%)',
+              boxShadow: theme === 'light' ? '0 0 50px rgba(212, 175, 55, 0.4), inset 0 0 20px rgba(255,255,255,0.8)' : '0 0 50px rgba(255, 255, 255, 0.2), inset 0 0 20px rgba(0,0,0,0.8)' 
             }}>
               <div style={{ 
                 width: '100%', 
@@ -375,14 +426,25 @@ export default function Home() {
                   overflow: 'hidden'
                 }}
               >
-                <div style={{ position: 'absolute', top: 0, right: 0, background: 'var(--accent)', color: '#000', padding: '0.2rem 1rem', fontSize: '0.8rem', fontWeight: 'bold', fontFamily: 'monospace' }}>
+                <div style={{ position: 'absolute', top: 0, right: 0, background: 'var(--accent)', color: '#000', padding: '0.2rem 1rem', fontSize: '0.8rem', fontWeight: 'bold', fontFamily: 'monospace', zIndex: 2 }}>
                   {proj.type}
                 </div>
-                <div>
+                <div style={{ flexGrow: 1 }}>
                   <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem', lineHeight: 1.2, marginTop: '1.5rem' }}>{proj.title}</h3>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '1rem', lineHeight: 1.6 }}>{proj.desc}</p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>{proj.desc}</p>
+                  
+                  <div style={{ marginTop: '1.5rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    {proj.features.map((f, idx) => (
+                      <span key={idx} style={{ fontSize: '0.7rem', padding: '0.3rem 0.8rem', border: '1px solid var(--text-muted)', borderRadius: '20px', color: 'var(--text-main)', fontFamily: 'monospace' }}>{f}</span>
+                    ))}
+                  </div>
+                  <div style={{ marginTop: '1rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    {proj.tech.map((t, idx) => (
+                      <span key={idx} style={{ fontSize: '0.7rem', padding: '0.3rem 0.8rem', background: 'var(--text-main)', color: 'var(--bg-dark)', borderRadius: '4px', fontWeight: 'bold', fontFamily: 'monospace' }}>{t}</span>
+                    ))}
+                  </div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', paddingTop: '1.5rem', borderTop: '1px solid var(--text-muted)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--text-muted)' }}>
                   <span style={{ fontFamily: 'monospace', fontSize: '1rem', fontWeight: 'bold', color: 'var(--accent-secondary)' }}>VIEW LIVE</span>
                   <ExternalLink size={24} />
                 </div>
