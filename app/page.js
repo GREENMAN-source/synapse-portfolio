@@ -27,6 +27,10 @@ export default function Home() {
   const themeRef = useRef('dark');
   const canvasRef = useRef(null);
   const [ripples, setRipples] = useState([]);
+  const [thunder, setThunder] = useState(false);
+  const [hackerMode, setHackerMode] = useState(false);
+  const keysPressed = useRef("");
+  const isMouseDown = useRef(false);
   
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
@@ -39,9 +43,25 @@ export default function Home() {
     themeRef.current = theme;
   }, [theme]);
 
+  useEffect(() => {
+    if (hackerMode) {
+      document.documentElement.style.setProperty('--accent', '#00ff00');
+      document.documentElement.style.setProperty('--accent-secondary', '#00ff00');
+      document.documentElement.style.setProperty('--text-main', '#00ff00');
+      document.documentElement.style.setProperty('--text-muted', '#00aa00');
+      document.documentElement.style.fontFamily = 'monospace';
+    } else {
+      document.documentElement.style.removeProperty('--accent');
+      document.documentElement.style.removeProperty('--accent-secondary');
+      document.documentElement.style.removeProperty('--text-main');
+      document.documentElement.style.removeProperty('--text-muted');
+      document.documentElement.style.removeProperty('font-family');
+    }
+  }, [hackerMode]);
+
   const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark');
 
-  // Custom Cursor & Mobile Ripple Logic
+  // Custom Cursor & Mobile Ripple & Fun Logic
   useEffect(() => {
     const handleMouseMove = (e) => {
       cursorX.set(e.clientX);
@@ -59,9 +79,33 @@ export default function Home() {
       }
     };
 
+    const handleRightClick = (e) => {
+      e.preventDefault();
+      setThunder(true);
+      setTimeout(() => setThunder(false), 150);
+      setTimeout(() => {
+        setThunder(true);
+        setTimeout(() => setThunder(false), 100);
+      }, 250);
+    };
+
+    const handleKeyDown = (e) => {
+      keysPressed.current = (keysPressed.current + e.key).slice(-4);
+      if (keysPressed.current.toLowerCase() === "hack") {
+        setHackerMode(prev => !prev);
+      }
+    };
+    
+    const handleMouseDown = () => isMouseDown.current = true;
+    const handleMouseUp = () => isMouseDown.current = false;
+
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('touchstart', handleTouch);
     window.addEventListener('click', handleTouch);
+    window.addEventListener('contextmenu', handleRightClick);
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mouseup', handleMouseUp);
     
     // Add hover states to interactive elements
     const interactiveElements = document.querySelectorAll('a, button, .shop-card, .amazon-card');
@@ -74,6 +118,10 @@ export default function Home() {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('touchstart', handleTouch);
       window.removeEventListener('click', handleTouch);
+      window.removeEventListener('contextmenu', handleRightClick);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mouseup', handleMouseUp);
       interactiveElements.forEach(el => {
         el.removeEventListener('mouseenter', () => setIsHovering(true));
         el.removeEventListener('mouseleave', () => setIsHovering(false));
@@ -140,8 +188,13 @@ export default function Home() {
         
         if (distance < 120) {
            const currentTheme = themeRef.current;
-           p.x += (dx / distance) * 3;
-           p.y += (dy / distance) * 3;
+           if (isMouseDown.current) {
+             p.x -= (dx / distance) * 5;
+             p.y -= (dy / distance) * 5;
+           } else {
+             p.x += (dx / distance) * 3;
+             p.y += (dy / distance) * 3;
+           }
            ctx.beginPath();
            ctx.strokeStyle = currentTheme === 'light' 
              ? `rgba(212, 175, 55, ${0.8 - distance/120})` 
@@ -252,6 +305,20 @@ export default function Home() {
           }}
         />
       ))}
+
+      {thunder && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          backgroundColor: '#ffffff',
+          zIndex: 99999,
+          pointerEvents: 'none',
+          mixBlendMode: 'difference'
+        }} />
+      )}
       
       {/* Brutalist Nav */}
       <nav style={{ position: 'fixed', top: 0, width: '100%', zIndex: 50, padding: '2rem 4rem', mixBlendMode: 'difference' }}>

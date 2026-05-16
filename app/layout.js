@@ -13,12 +13,6 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: 'Dhanvanth L P',
-    jobTitle: 'Founder & Developer',
-  };
   const schemaMarkup = {
     "@context": "https://schema.org",
     "@graph": [
@@ -99,6 +93,16 @@ export default function RootLayout({ children }) {
         "publisher": {
           "@id": "https://dhanvanth.pages.dev/#organization"
         }
+      },
+      {
+        "@type": "SoftwareSourceCode",
+        "@id": "https://github.com/GREENMAN-source/MakeMyTrip-Clone",
+        "name": "MakeMyTrip Clone",
+        "description": "Full-stack travel booking platform with interactive seat selection, live flight status tracking, and dynamic pricing.",
+        "author": {
+          "@id": "https://dhanvanth.pages.dev/#person"
+        },
+        "programmingLanguage": ["Next.js", "Spring Boot", "PostgreSQL", "Redis"]
       }
     ]
   };
