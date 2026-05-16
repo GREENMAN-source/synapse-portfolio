@@ -360,7 +360,7 @@ export default function Home() {
       {/* Laptop Custom Cursor */}
       <motion.div 
         className={`custom-cursor ${isHovering ? 'hovering' : ''}`} 
-        style={{ left: cursorXSpring, top: cursorYSpring }}
+        style={{ left: cursorXSpring, top: cursorYSpring, zIndex: 9999999 }}
       />
 
       {/* Mobile Touch Ripple Effect */}
@@ -430,7 +430,7 @@ export default function Home() {
                 height: '32px',
                 padding: '2px',
                 position: 'relative',
-                cursor: 'none'
+                cursor: 'pointer'
               }}
             >
               <motion.div 
@@ -540,7 +540,7 @@ export default function Home() {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.6 }}
                 whileHover={{ x: 20, color: 'var(--accent-secondary)' }}
-                style={{ display: 'grid', gridTemplateColumns: '150px 1fr', gap: '2rem', borderBottom: '1px solid #333', paddingBottom: '2rem', cursor: 'none' }}
+                style={{ display: 'grid', gridTemplateColumns: '150px 1fr', gap: '2rem', borderBottom: '1px solid #333', paddingBottom: '2rem' }}
               >
                 <div style={{ fontSize: '3rem', fontFamily: 'Syncopate', color: 'inherit', transition: 'color 0.3s' }}>{item.year}</div>
                 <div>
@@ -679,7 +679,7 @@ export default function Home() {
                       justifyContent: 'center',
                       alignItems: 'center',
                       gap: '0.5rem',
-                      cursor: 'none'
+                      cursor: 'pointer'
                     }}
                   >
                     <ShoppingCart size={18} /> Add to Cart
