@@ -258,7 +258,11 @@ export default function Home() {
       canvas.width = width;
       canvas.height = height;
       particles = [];
-      const particleCount = width < 768 ? 40 : 150; // Massively reduce on mobile for performance
+      
+      // Disable particles entirely on mobile to instantly fix lag
+      if (width < 768) return;
+
+      const particleCount = 150;
       for (let i = 0; i < particleCount; i++) {
         particles.push({
           x: Math.random() * width,
@@ -271,6 +275,8 @@ export default function Home() {
     };
 
     const draw = () => {
+      if (window.innerWidth < 768) return; // Completely disable draw loop on mobile
+
       const currentTheme = themeRef.current;
       ctx.fillStyle = currentTheme === 'light' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.15)';
       ctx.fillRect(0, 0, width, height);
@@ -641,7 +647,7 @@ export default function Home() {
           </motion.div>
 
           {/* Hacker Style Blob Avatar */}
-          <div style={{ position: 'absolute', right: '10%', top: '15%', height: '70vh', width: '500px', zIndex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div className="blob-avatar-wrapper" style={{ position: 'absolute', right: '10%', top: '15%', height: '70vh', width: 'clamp(300px, 40vw, 500px)', zIndex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             
             {/* Morphing Background Blob */}
             <motion.div
@@ -655,8 +661,9 @@ export default function Home() {
               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
               style={{
                 position: 'absolute',
-                width: '380px',
-                height: '380px',
+                width: '100%',
+                maxWidth: '380px',
+                aspectRatio: '1',
                 background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
                 boxShadow: '0 0 50px rgba(37, 117, 252, 0.4)',
                 zIndex: 0
@@ -667,19 +674,20 @@ export default function Home() {
             <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              style={{ position: 'relative', zIndex: 2, height: '120%', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', overflow: 'hidden', paddingBottom: '0' }}
+              style={{ position: 'relative', zIndex: 2, height: '100%', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', paddingBottom: '0' }}
             >
               <img 
                 src="/assets/3d_avatar_transparent.png" 
                 alt="Dhanvanth 3D Avatar" 
                 style={{ 
-                  height: '110%', 
-                  width: 'auto', 
+                  width: '220%', // Massive scale up to create a portrait bust
+                  height: 'auto', 
                   objectFit: 'cover',
-                  objectPosition: 'top',
+                  objectPosition: 'top center',
+                  transform: 'translateY(15%)', // Push down to align shoulders with the blob perfectly
                   filter: theme === 'light' ? 'drop-shadow(0px 10px 20px rgba(0,0,0,0.3))' : 'drop-shadow(0px 10px 30px rgba(0,0,0,0.8)) brightness(0.95) contrast(1.1)',
-                  maskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)',
-                  WebkitMaskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)'
+                  maskImage: 'linear-gradient(to bottom, black 50%, transparent 80%)',
+                  WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 80%)'
                 }} 
               />
             </motion.div>
