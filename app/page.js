@@ -1003,6 +1003,30 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Easter Egg Cheat Sheet */}
+        <section className="container" style={{ paddingTop: '10rem', paddingBottom: '2rem', textAlign: 'center' }}>
+          <div style={{ 
+            border: '1px dashed var(--text-muted)', 
+            padding: '2rem', 
+            display: 'inline-block', 
+            background: 'var(--bg-dark)', 
+            boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '4px', background: 'var(--text-main)' }} />
+            <p style={{ fontFamily: 'monospace', color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1rem', letterSpacing: '2px' }}>
+              // CLASSIFIED SYSTEM CODES DETECTED //
+            </p>
+            <p style={{ fontFamily: 'monospace', color: 'var(--text-main)', fontSize: '1.1rem', lineHeight: '2' }}>
+              Try typing these keywords anywhere on the site:<br/>
+              <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>hack</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>matrix</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>doom</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>barrel</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>party</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>dvd</span><br/>
+              <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>comic</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>disco</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>quake</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>drop</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>invert</span><br/>
+              <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>nyan</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>spin</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>flip</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>rick</span>
+            </p>
+          </div>
+        </section>
+
       </main>
     </motion.div>
   );
