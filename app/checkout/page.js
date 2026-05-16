@@ -1,0 +1,122 @@
+'use client';
+import { useEffect, useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Shield, QrCode, Truck, ArrowLeft } from 'lucide-react';
+
+function CheckoutContent() {
+  const searchParams = useSearchParams();
+  const item = searchParams.get('item') || 'Custom Project';
+  const price = searchParams.get('price') || 'Custom Quote';
+
+  const [paymentMethod, setPaymentMethod] = useState('qr');
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Custom Cursor
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    const handleMouseMove = (e) => setMousePos({ x: e.clientX, y: e.clientY });
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitted(true);
+  };
+
+  if (isSubmitted) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '2rem' }}>
+        <Shield size={80} color="var(--accent-secondary)" style={{ marginBottom: '2rem' }} />
+        <h1 style={{ fontSize: '4rem', fontFamily: 'Syncopate', marginBottom: '1rem' }}>ORDER SECURED</h1>
+        <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', maxWidth: '600px' }}>
+          Your request for <strong>{item}</strong> has been received by Synapse Lab. Dhanvanth will review the details and contact you shortly.
+        </p>
+        <a href="/" className="btn-primary" style={{ padding: '1rem 2rem', marginTop: '3rem', fontSize: '1.1rem', background: '#FFD814', color: '#000', textDecoration: 'none', borderRadius: '100px', fontWeight: 'bold' }}>
+           Return to Arsenal
+        </a>
+      </div>
+    );
+  }
+
+  return (
+    <main style={{ minHeight: '100vh', padding: '4rem 2rem', position: 'relative' }}>
+      <div className="noise"></div>
+      <div className="custom-cursor" style={{ left: `${mousePos.x}px`, top: `${mousePos.y}px`, width: '20px', height: '20px' }}></div>
+      
+      <div style={{ maxWidth: '800px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <a href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', textDecoration: 'none', marginBottom: '2rem', fontFamily: 'monospace' }}>
+          <ArrowLeft size={16} /> ABORT CHECKOUT
+        </a>
+
+        <h1 style={{ fontSize: '3rem', fontFamily: 'Syncopate', marginBottom: '1rem', borderBottom: '2px solid #333', paddingBottom: '1rem' }}>SECURE CHECKOUT</h1>
+        
+        <div style={{ background: '#111', border: '1px solid #333', padding: '2rem', marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <div style={{ color: 'var(--accent-secondary)', fontFamily: 'monospace', marginBottom: '0.5rem' }}>TARGET ASSET</div>
+            <h2 style={{ fontSize: '1.5rem' }}>{item}</h2>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ color: 'var(--text-muted)', fontFamily: 'monospace', marginBottom: '0.5rem' }}>VALUE</div>
+            <h2 style={{ fontSize: '1.8rem', color: '#fff' }}>{price}</h2>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+          
+          {/* Shipping Info */}
+          <section>
+            <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--text-muted)', fontFamily: 'monospace' }}>1. DESTINATION PROTOCOL</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+              <input required type="text" placeholder="Full Name" style={{ background: '#050505', border: '1px solid #333', padding: '1rem', color: '#fff', fontSize: '1rem', width: '100%', outline: 'none' }} />
+              <input required type="email" placeholder="Email Address" style={{ background: '#050505', border: '1px solid #333', padding: '1rem', color: '#fff', fontSize: '1rem', width: '100%', outline: 'none' }} />
+              <input required type="text" placeholder="Phone Number" style={{ background: '#050505', border: '1px solid #333', padding: '1rem', color: '#fff', fontSize: '1rem', width: '100%', outline: 'none', gridColumn: '1 / -1' }} />
+              <textarea required placeholder="Full Shipping Address" rows="3" style={{ background: '#050505', border: '1px solid #333', padding: '1rem', color: '#fff', fontSize: '1rem', width: '100%', outline: 'none', gridColumn: '1 / -1', resize: 'vertical' }}></textarea>
+            </div>
+          </section>
+
+          {/* Payment Info */}
+          <section>
+            <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', color: 'var(--text-muted)', fontFamily: 'monospace' }}>2. TRANSFER METHOD</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+              
+              <label style={{ background: paymentMethod === 'qr' ? 'rgba(0, 240, 255, 0.1)' : '#050505', border: `1px solid ${paymentMethod === 'qr' ? 'var(--accent-secondary)' : '#333'}`, padding: '1.5rem', cursor: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', transition: 'all 0.3s' }}>
+                <input type="radio" name="payment" value="qr" checked={paymentMethod === 'qr'} onChange={() => setPaymentMethod('qr')} style={{ display: 'none' }} />
+                <QrCode size={40} color={paymentMethod === 'qr' ? 'var(--accent-secondary)' : '#666'} />
+                <span style={{ fontWeight: 'bold' }}>FamApp QR Code</span>
+              </label>
+
+              <label style={{ background: paymentMethod === 'cod' ? 'rgba(255, 0, 60, 0.1)' : '#050505', border: `1px solid ${paymentMethod === 'cod' ? 'var(--accent)' : '#333'}`, padding: '1.5rem', cursor: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', transition: 'all 0.3s' }}>
+                <input type="radio" name="payment" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} style={{ display: 'none' }} />
+                <Truck size={40} color={paymentMethod === 'cod' ? 'var(--accent)' : '#666'} />
+                <span style={{ fontWeight: 'bold' }}>Cash on Delivery</span>
+              </label>
+
+            </div>
+
+            {paymentMethod === 'qr' && (
+              <div style={{ marginTop: '2rem', padding: '2rem', background: '#050505', border: '1px dashed var(--accent-secondary)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+                 <div style={{ width: '200px', height: '200px', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                   <span style={{ color: '#000', fontWeight: 'bold' }}>[FAMAPP QR CODE]</span>
+                 </div>
+                 <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Scan this QR code or send to <strong>dhanvanth10@fam</strong> using FamApp to complete the payment of <strong>{price}</strong>.<br/>(Note: You can replace this placeholder with your actual QR image in the code later!)</p>
+              </div>
+            )}
+          </section>
+
+          <button type="submit" style={{ padding: '1.5rem', background: '#FFD814', color: '#000', fontSize: '1.2rem', fontWeight: 800, border: 'none', fontFamily: 'Syncopate', cursor: 'none', marginTop: '2rem' }}>
+             CONFIRM ORDER // SUBMIT
+          </button>
+        </form>
+      </div>
+    </main>
+  );
+}
+
+export default function Checkout() {
+  return (
+    <Suspense fallback={<div style={{ padding: '4rem', color: '#fff' }}>Loading Checkout...</div>}>
+      <CheckoutContent />
+    </Suspense>
+  );
+}

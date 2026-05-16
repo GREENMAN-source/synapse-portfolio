@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;600;800&display=swap');
+
+:root {
+  --bg-dark: #000000;
+  --text-main: #ffffff;
+  --text-muted: #666666;
+  --accent: #ff003c; /* Cyberpunk Red */
+  --accent-secondary: #00f0ff; /* Neon Cyan */
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  cursor: none !important; /* Hide default cursor for Active Theory feel */
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Syncopate', sans-serif; /* Brutalist wide font */
+  text-transform: uppercase;
+}
+
+a, button {
+  cursor: none !important;
+}
+
+/* Custom Cursor */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--text-main);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, background-color 0.2s;
+  mix-blend-mode: difference;
+}
+
+.custom-cursor.hovering {
+  width: 60px;
+  height: 60px;
+  background-color: var(--text-main);
+  border: none;
+}
+
+.section-title {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  letter-spacing: -2px;
+  border-bottom: 2px solid var(--text-muted);
+  padding-bottom: 1rem;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 4rem;
+}
+
+/* Shopping Item Card */
+.shop-card {
+  border: 1px solid var(--text-muted);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 300px;
+  transition: background-color 0.3s, border-color 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.shop-card:hover {
+  background-color: var(--text-main);
+  color: var(--bg-dark);
+}
+
+.shop-card .price-tag {
+  font-family: monospace;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Noise overlay for glitch vibe */
+.noise {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.05;
+  background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 1.5rem !important; }
+  .section-title { font-size: 2.5rem !important; margin-bottom: 2rem !important; }
+  nav { padding: 1rem 1.5rem !important; flex-direction: column; gap: 1rem; align-items: center; }
+  nav div { font-size: 0.8rem !important; gap: 1.5rem !important; }
+  .shop-card, .amazon-card { height: auto; padding: 1.5rem !important; }
+  h1 { font-size: 5rem !important; }
+}
