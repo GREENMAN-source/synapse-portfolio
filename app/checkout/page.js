@@ -2,6 +2,8 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Shield, QrCode, Truck, ArrowLeft } from 'lucide-react';
+import { db } from '../../lib/firebase';
+import { collection, addDoc } from 'firebase/firestore';
 
 function CheckoutContent() {
   const searchParams = useSearchParams();
@@ -35,16 +37,14 @@ function CheckoutContent() {
     };
 
     try {
-      const response = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+      await addDoc(collection(db, "orders"), {
+        ...payload,
+        createdAt: new Date()
       });
-      
-      if (!response.ok) throw new Error("Server transmission failed.");
       setIsSubmitted(true);
     } catch (error) {
-      alert("Database connection failed. Please try again.");
+      console.error("Firestore Error:", error);
+      alert("Database connection failed. Please check your internet connection and try again.");
     }
   };
 
