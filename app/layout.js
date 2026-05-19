@@ -181,6 +181,12 @@ export default function RootLayout({ children }) {
           {
             "@type": "ListItem",
             "position": 3,
+            "name": "Samples",
+            "item": "https://dhanvanth.pages.dev/#samples"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
             "name": "Store",
             "item": "https://dhanvanth.pages.dev/#store"
           }
@@ -188,26 +194,103 @@ export default function RootLayout({ children }) {
       },
       {
         "@type": "SoftwareSourceCode",
-        "@id": "https://github.com/GREENMAN-source/MakeMyTrip-Clone",
-        "name": "MakeMyTrip Clone",
-        "description": "Full-stack travel booking platform with interactive seat selection, live flight status tracking, and dynamic pricing.",
+        "@id": "https://github.com/GREENMAN-source/makemytrip-frontend",
+        "name": "MakeMyTrip Frontend",
+        "description": "Frontend for the travel booking platform clone built using Next.js, TypeScript, and Tailwind CSS.",
         "author": {
           "@id": "https://dhanvanth.pages.dev/#person"
         },
-        "programmingLanguage": ["Next.js", "Spring Boot", "PostgreSQL", "Redis"]
+        "programmingLanguage": ["Next.js", "TypeScript", "Tailwind CSS"]
+      },
+      {
+        "@type": "SoftwareSourceCode",
+        "@id": "https://github.com/GREENMAN-source/makemytrip-backend",
+        "name": "MakeMyTrip Backend",
+        "description": "Spring Boot API service powering flights, hotels, and seat reservations for the MakeMyTrip clone.",
+        "author": {
+          "@id": "https://dhanvanth.pages.dev/#person"
+        },
+        "programmingLanguage": ["Spring Boot", "Java", "PostgreSQL", "Redis"]
       },
       {
         "@type": "SoftwareSourceCode",
         "@id": "https://github.com/GREENMAN-source/tyrepro",
-        "name": "TyrePro ERP Suite",
-        "description": "High-end, enterprise-grade tyre shop management system with real-time inventory tracking, GST-compliant invoicing, and appointment scheduling.",
+        "name": "TyrePro ERP Suite Source",
+        "description": "Source repository of the enterprise Tyre shop ERP suite.",
         "author": {
           "@id": "https://dhanvanth.pages.dev/#person"
         },
         "programmingLanguage": ["Next.js", "Express", "Prisma", "PostgreSQL", "TypeScript"]
+      },
+      {
+        "@type": "SoftwareSourceCode",
+        "@id": "https://github.com/GREENMAN-source/makemytour-fullstack",
+        "name": "MakeMyTour Fullstack",
+        "description": "Full-stack travel booking application featuring packages, itineraries, and payment integration.",
+        "author": {
+          "@id": "https://dhanvanth.pages.dev/#person"
+        },
+        "programmingLanguage": ["TypeScript", "Next.js", "Node.js", "PostgreSQL"]
+      },
+      {
+        "@type": "SoftwareSourceCode",
+        "@id": "https://github.com/GREENMAN-source/-live-flow-hospital-iv-master-hub-indian-model",
+        "name": "LifeFlow IV Monitor",
+        "description": "IoT healthcare monitoring system using ESP32 and load cells to track IV fluid levels in real-time.",
+        "author": {
+          "@id": "https://dhanvanth.pages.dev/#person"
+        },
+        "programmingLanguage": ["C++", "Arduino"]
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://tyrepro-opal.vercel.app/#application",
+        "name": "TyrePro ERP Live",
+        "operatingSystem": "All",
+        "applicationCategory": "BusinessApplication",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "url": "https://tyrepro-opal.vercel.app",
+        "author": {
+          "@id": "https://dhanvanth.pages.dev/#person"
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://makemytrip-frontend-ten.vercel.app/#application",
+        "name": "MakeMyTrip Client Live",
+        "operatingSystem": "All",
+        "applicationCategory": "TravelApplication",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "url": "https://makemytrip-frontend-ten.vercel.app",
+        "author": {
+          "@id": "https://dhanvanth.pages.dev/#person"
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://makemytrip-backend-030l.onrender.com/#application",
+        "name": "MakeMyTrip API Service",
+        "operatingSystem": "All",
+        "applicationCategory": "DeveloperApplication",
+        "url": "https://makemytrip-backend-030l.onrender.com",
+        "author": {
+          "@id": "https://dhanvanth.pages.dev/#person"
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://synapslab.in/#application",
+        "name": "Synapse Lab Portal",
+        "operatingSystem": "All",
+        "applicationCategory": "BusinessApplication",
+        "url": "https://synapslab.in",
+        "author": {
+          "@id": "https://dhanvanth.pages.dev/#person"
+        }
       }
     ]
   };
+
 
   return (
     <html lang="en">

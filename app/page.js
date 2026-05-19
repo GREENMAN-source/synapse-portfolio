@@ -676,6 +676,7 @@ export default function Home() {
           <div style={{ display: 'flex', gap: '3rem', fontSize: '0.9rem', fontWeight: 600, letterSpacing: '2px', alignItems: 'center' }}>
             <MagneticWrapper><a href="#journey" style={{ display: 'block', padding: '0.5rem' }}>JOURNEY</a></MagneticWrapper>
             <MagneticWrapper><a href="#projects" style={{ display: 'block', padding: '0.5rem' }}>PROJECTS</a></MagneticWrapper>
+            <MagneticWrapper><a href="#samples" style={{ display: 'block', padding: '0.5rem' }}>SAMPLES</a></MagneticWrapper>
             <MagneticWrapper><a href="#store" style={{ display: 'block', padding: '0.5rem' }}>STORE</a></MagneticWrapper>
             <MagneticWrapper><a href="#social" style={{ display: 'block', padding: '0.5rem' }}>SOCIALS</a></MagneticWrapper>
 
@@ -934,10 +935,86 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Samples Section */}
+        <section id="samples" className="container" style={{ paddingTop: '15rem' }}>
+          <h2 className="section-title">03. LIVE SAMPLES</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem' }}>
+            {projects.filter(p => p.liveDemo).map((proj, i) => (
+              <motion.div
+                key={i}
+                className="shop-card"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+                whileHover={{ y: -10, boxShadow: '0 25px 50px rgba(0, 240, 255, 0.15)', borderColor: 'var(--accent)' }}
+                style={{
+                  background: 'var(--bg-dark)',
+                  border: '2px solid var(--text-muted)',
+                  padding: '2.5rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  minHeight: '320px',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}
+              >
+                <div style={{ position: 'absolute', top: 0, right: 0, background: 'var(--accent-secondary)', color: '#000', padding: '0.3rem 1.2rem', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'monospace', zIndex: 2, letterSpacing: '1px' }}>
+                  ACTIVE DEMO
+                </div>
+                <div>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--accent)', fontFamily: 'monospace', fontWeight: 'bold', letterSpacing: '2px' }}>{proj.type}</span>
+                  <h3 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '1rem', lineHeight: 1.2, marginTop: '0.5rem', letterSpacing: '-1px' }}>{proj.title}</h3>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>{proj.desc}</p>
+                  
+                  <div style={{ marginTop: '1.5rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    {proj.tech.map((t, idx) => (
+                      <span key={idx} style={{ fontSize: '0.7rem', padding: '0.3rem 0.8rem', background: 'var(--text-main)', color: 'var(--bg-dark)', borderRadius: '4px', fontWeight: 'bold', fontFamily: 'monospace' }}>{t}</span>
+                    ))}
+                  </div>
+                </div>
+                <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--text-muted)' }}>
+                  <a 
+                    href={proj.liveDemo} 
+                    target="_blank" 
+                    rel="noreferrer" 
+                    style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      gap: '0.75rem', 
+                      fontFamily: 'monospace', 
+                      fontSize: '1rem', 
+                      fontWeight: 'bold', 
+                      color: 'var(--bg-dark)', 
+                      backgroundColor: 'var(--text-main)', 
+                      padding: '0.8rem 1.5rem', 
+                      textDecoration: 'none',
+                      transition: 'all 0.3s ease',
+                      boxShadow: '4px 4px 0px var(--accent)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translate(-2px, -2px)';
+                      e.currentTarget.style.boxShadow = '6px 6px 0px var(--accent)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translate(0px, 0px)';
+                      e.currentTarget.style.boxShadow = '4px 4px 0px var(--accent)';
+                    }}
+                  >
+                    LAUNCH PROJECT <ExternalLink size={18} />
+                  </a>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
         {/* Amazon-Style Storefront */}
         <section id="store" className="container" style={{ paddingTop: '15rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderBottom: '2px solid var(--text-muted)', paddingBottom: '1rem', marginBottom: '3rem' }}>
-            <h2 style={{ fontSize: '4rem', fontWeight: 700, letterSpacing: '-2px', fontFamily: 'Syncopate', margin: 0 }}>03. SYNAPSE STORE</h2>
+            <h2 style={{ fontSize: '4rem', fontWeight: 700, letterSpacing: '-2px', fontFamily: 'Syncopate', margin: 0 }}>04. SYNAPSE STORE</h2>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--accent-secondary)', fontFamily: 'monospace', fontSize: '1.2rem' }}>
               <ShoppingCart size={32} />
               <span>SECURE CHECKOUT</span>
@@ -1017,7 +1094,7 @@ export default function Home() {
 
         {/* Shopping Style Social Links */}
         <section id="social" className="container" style={{ paddingTop: '15rem' }}>
-          <h2 className="section-title">04. SOCIAL NETWORK STORE</h2>
+          <h2 className="section-title">05. SOCIAL NETWORK STORE</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
             {socials.map((social, i) => (
               <motion.a
