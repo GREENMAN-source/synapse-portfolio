@@ -411,7 +411,7 @@ export default function Home() {
       title: "TyrePro ERP Suite", 
       url: "https://github.com/GREENMAN-source/tyrepro", 
       liveDemo: "https://tyrepro-opal.vercel.app",
-      type: "INTERNSHIP PROJECT", 
+      type: "ENTERPRISE SYSTEM", 
       desc: "High-end, enterprise-grade tyre shop management system architected and developed entirely by me. Features real-time inventory tracking, GST-compliant invoicing, appointment scheduling, and a complete admin dashboard.",
       features: ["Inventory Management", "GST Invoicing", "Appointment Booking", "Analytics Dashboard"],
       tech: ["Next.js", "Express", "Prisma", "PostgreSQL", "TypeScript"]
@@ -420,7 +420,7 @@ export default function Home() {
       title: "MakeMyTrip Frontend", 
       url: "https://github.com/GREENMAN-source/makemytrip-frontend", 
       liveDemo: "https://makemytrip-frontend-ten.vercel.app",
-      type: "INTERNSHIP PROJECT", 
+      type: "WEB APPLICATION", 
       desc: "Premium, fully responsive travel booking platform engineered and designed by me. Features interactive seat/room selection, live flight status tracking, and a dynamic pricing engine.",
       features: ["Interactive Seat Map", "Live Flight Tracking", "Dynamic Pricing Engine"],
       tech: ["Next.js", "TypeScript", "Tailwind CSS", "REST API"]
@@ -429,7 +429,7 @@ export default function Home() {
       title: "MakeMyTrip Backend", 
       url: "https://github.com/GREENMAN-source/makemytrip-backend", 
       liveDemo: "https://makemytrip-backend-030l.onrender.com",
-      type: "INTERNSHIP PROJECT", 
+      type: "BACKEND API SERVICE", 
       desc: "High-performance Spring Boot backend custom-built by me to power the MakeMyTrip clone, providing robust RESTful APIs for flights, hotels, seat booking, and recommendations.",
       features: ["REST API", "JWT Auth", "Dynamic Pricing", "Recommendations"],
       tech: ["Spring Boot", "Java", "PostgreSQL", "Redis"]
@@ -940,7 +940,10 @@ export default function Home() {
           <h2 className="section-title">03. LIVE SAMPLES</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem' }}>
             {projects.filter(p => p.liveDemo).map((proj, i) => (
-              <motion.div
+              <motion.a
+                href={proj.liveDemo}
+                target="_blank"
+                rel="noreferrer"
                 key={i}
                 className="shop-card"
                 initial={{ opacity: 0, y: 50 }}
@@ -957,7 +960,10 @@ export default function Home() {
                   justifyContent: 'space-between',
                   minHeight: '320px',
                   position: 'relative',
-                  overflow: 'hidden'
+                  overflow: 'hidden',
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  cursor: 'pointer'
                 }}
               >
                 <div style={{ position: 'absolute', top: 0, right: 0, background: 'var(--accent-secondary)', color: '#000', padding: '0.3rem 1.2rem', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'monospace', zIndex: 2, letterSpacing: '1px' }}>
@@ -975,10 +981,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div style={{ marginTop: '2.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--text-muted)' }}>
-                  <a 
-                    href={proj.liveDemo} 
-                    target="_blank" 
-                    rel="noreferrer" 
+                  <div 
                     style={{ 
                       display: 'flex', 
                       alignItems: 'center', 
@@ -990,23 +993,14 @@ export default function Home() {
                       color: 'var(--bg-dark)', 
                       backgroundColor: 'var(--text-main)', 
                       padding: '0.8rem 1.5rem', 
-                      textDecoration: 'none',
                       transition: 'all 0.3s ease',
                       boxShadow: '4px 4px 0px var(--accent)'
                     }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translate(-2px, -2px)';
-                      e.currentTarget.style.boxShadow = '6px 6px 0px var(--accent)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translate(0px, 0px)';
-                      e.currentTarget.style.boxShadow = '4px 4px 0px var(--accent)';
-                    }}
                   >
                     LAUNCH PROJECT <ExternalLink size={18} />
-                  </a>
+                  </div>
                 </div>
-              </motion.div>
+              </motion.a>
             ))}
           </div>
         </section>
