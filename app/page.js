@@ -7,15 +7,15 @@ import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
 
 function MagneticWrapper({ children }) {
   const ref = useRef(null);
-  const [position, setPosition] = useState({ x:0, y:0 });
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   const handleMouse = (e) => {
     const { clientX, clientY } = e;
     const { height, width, left, top } = ref.current.getBoundingClientRect();
-    const middleX = clientX - (left + width/2);
-    const middleY = clientY - (top + height/2);
+    const middleX = clientX - (left + width / 2);
+    const middleY = clientY - (top + height / 2);
     setPosition({ x: middleX * 0.2, y: middleY * 0.2 });
   };
-  const reset = () => setPosition({ x:0, y:0 });
+  const reset = () => setPosition({ x: 0, y: 0 });
   return (
     <motion.div ref={ref} onMouseMove={handleMouse} onMouseLeave={reset} animate={{ x: position.x, y: position.y }} transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}>
       {children}
@@ -77,7 +77,7 @@ export default function Home() {
   const isMouseDown = useRef(false);
   const [user, setUser] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  
+
   // Extreme Features State
   const [doomMode, setDoomMode] = useState(false);
   const [spinMode, setSpinMode] = useState(false);
@@ -96,7 +96,7 @@ export default function Home() {
   const [nyanMode, setNyanMode] = useState(false);
   const [dropMode, setDropMode] = useState(false);
   const [confetti, setConfetti] = useState([]);
-  
+
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
   const springConfig = { damping: 25, stiffness: 300, mass: 0.5 };
@@ -107,7 +107,7 @@ export default function Home() {
   const scrollVelocity = useVelocity(scrollYProgress);
   const skewVelocity = useTransform(scrollVelocity, [-1, 1], [-5, 5]);
   const skewSpring = useSpring(skewVelocity, { stiffness: 400, damping: 40 });
-  
+
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
@@ -164,7 +164,7 @@ export default function Home() {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
     };
-    
+
     const handleTouch = (e) => {
       if (window.innerWidth <= 768) {
         const touch = e.touches ? e.touches[0] : e;
@@ -197,7 +197,7 @@ export default function Home() {
         setFlipMode(true);
         setTimeout(() => setFlipMode(false), 2000);
       }
-      
+
       if (str.includes("barrel")) {
         setBarrelMode(true);
         setTimeout(() => setBarrelMode(false), 2000);
@@ -223,12 +223,12 @@ export default function Home() {
       }
       if (str.includes("rick")) window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
       if (str.includes("drop")) setDropMode(prev => !prev);
-      
+
       if (e.key === '`' || e.key === '~') {
         setShowTerminal(prev => !prev);
       }
     };
-    
+
     const handleMouseDown = (e) => {
       isMouseDown.current = true;
       setBursts(prev => [...prev, { id: Date.now(), x: e.clientX, y: e.clientY }]);
@@ -245,7 +245,7 @@ export default function Home() {
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mouseup', handleMouseUp);
-    
+
     const handleVisibilityChange = () => {
       if (document.hidden) {
         document.title = "Come back! 🚀 | Synapse Lab";
@@ -254,7 +254,7 @@ export default function Home() {
       }
     };
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    
+
     // Add hover states to interactive elements
     const interactiveElements = document.querySelectorAll('a, button, .shop-card, .amazon-card');
     interactiveElements.forEach(el => {
@@ -294,7 +294,7 @@ export default function Home() {
       canvas.width = width;
       canvas.height = height;
       particles = [];
-      
+
       // Disable particles entirely on mobile to instantly fix lag
       if (width < 768) return;
 
@@ -340,23 +340,23 @@ export default function Home() {
         const dx = p.x - mouseX;
         const dy = p.y - mouseY;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        
+
         if (distance < 120) {
-           const currentTheme = themeRef.current;
-           if (isMouseDown.current) {
-             p.x -= (dx / distance) * 5;
-             p.y -= (dy / distance) * 5;
-           } else {
-             p.x += (dx / distance) * 3;
-             p.y += (dy / distance) * 3;
-           }
-           ctx.beginPath();
-           ctx.strokeStyle = currentTheme === 'light' 
-             ? `rgba(212, 175, 55, ${0.8 - distance/120})` 
-             : `rgba(255, 255, 255, ${0.8 - distance/120})`;
-           ctx.moveTo(p.x, p.y);
-           ctx.lineTo(mouseX, mouseY);
-           ctx.stroke();
+          const currentTheme = themeRef.current;
+          if (isMouseDown.current) {
+            p.x -= (dx / distance) * 5;
+            p.y -= (dy / distance) * 5;
+          } else {
+            p.x += (dx / distance) * 3;
+            p.y += (dy / distance) * 3;
+          }
+          ctx.beginPath();
+          ctx.strokeStyle = currentTheme === 'light'
+            ? `rgba(212, 175, 55, ${0.8 - distance / 120})`
+            : `rgba(255, 255, 255, ${0.8 - distance / 120})`;
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(mouseX, mouseY);
+          ctx.stroke();
         }
 
         if (p.x < 0 || p.x > width) p.vx = -p.vx;
@@ -389,39 +389,82 @@ export default function Home() {
   ];
 
   const socials = [
-    { name: "GITHUB", url: "https://github.com/GREENMAN-source", price: "FREE FOLLOW" },
-    { name: "X (TWITTER)", url: "https://x.com/5kDhanvant8844", price: "FREE FOLLOW" },
-    { name: "INSTAGRAM", url: "https://www.instagram.com/dhanvanth_l.p?igsh=MWQ1ZDBvNjJ5dDhreA==", price: "FREE FOLLOW" },
-    { name: "FACEBOOK", url: "https://www.facebook.com/share/17MSAoYYVG/", price: "FREE FOLLOW" },
-    { name: "DEV.TO", url: "https://dev.to/dhanvanth_l_p_", price: "FREE READS" }
+    { name: "INSTAGRAM", url: "https://www.instagram.com/dhanvanth_l.p?igsh=MWQ1ZDBvNjJ5dDhreA==", price: "PRIMARY CONTACT" },
+    { name: "GITHUB", url: "https://github.com/GREENMAN-source", price: "PRIMARY PORTFOLIO" },
+    { name: "X (TWITTER)", url: "https://x.com/5kDhanvant8844", price: "PRIMARY SOCIAL" },
+    { name: "FACEBOOK", url: "https://www.facebook.com/share/17MSAoYYVG/", price: "PRIMARY NETWORK" },
+    { name: "DEV.TO", url: "https://dev.to/dhanvanth_l_p_", price: "PRIMARY BLOG" }
   ];
 
   const storeItems = [
-    { type: "SERVICE", title: "Custom Web Application", tech: "React / Next.js / Node", desc: "Full-stack web application development tailored to your business needs.", icon: <Code size={48} color="var(--accent-secondary)"/>, price: "₹3,000", rating: 5, reviews: 12 },
-    { type: "SERVICE", title: "Security VAPT Testing", tech: "Penetration Testing", desc: "Deep vulnerability assessment and penetration testing for your infrastructure.", icon: <Shield size={48} color="var(--accent-secondary)"/>, price: "₹2,500", rating: 5, reviews: 8 },
-    { type: "HARDWARE", title: "LifeFlow IV Monitor", tech: "ESP32 / IoT", desc: "Fully assembled IoT medical monitoring system. Alerts nurses before IV bags empty.", icon: <Activity size={48} color="var(--accent)"/>, price: "₹1,500", rating: 4.8, reviews: 3 },
-    { type: "HARDWARE", title: "Smart Home Hub", tech: "Raspberry Pi / OpenCV", desc: "Facial recognition door lock system. Built, configured, and shipped to you.", icon: <TerminalIcon size={48} color="var(--accent)"/>, price: "₹3,500", rating: 5, reviews: 5 },
-    { type: "HARDWARE", title: "Automated Plant Care", tech: "Arduino", desc: "Automated irrigation system with moisture sensing and LCD display.", icon: <Cpu size={48} color="var(--accent)"/>, price: "₹800", rating: 4.5, reviews: 15 },
-    { type: "HARDWARE", title: "RFID Attendance Tracker", tech: "Arduino / Node.js", desc: "Tap-in attendance system with backend database tracking.", icon: <Wifi size={48} color="var(--accent)"/>, price: "₹1,200", rating: 4.9, reviews: 7 },
-    { type: "HARDWARE", title: "Weather Station Logger", tech: "BME280 / SD Card", desc: "Compact weather station tracking temp/humidity/pressure.", icon: <Database size={48} color="var(--accent)"/>, price: "₹500", rating: 4.7, reviews: 22 }
+    { type: "SERVICE", title: "Custom Web Application", tech: "React / Next.js / Node", desc: "Full-stack web application development tailored to your business needs.", icon: <Code size={48} color="var(--accent-secondary)" />, price: "₹3,000", rating: 5, reviews: 12 },
+    { type: "SERVICE", title: "Security VAPT Testing", tech: "Penetration Testing", desc: "Deep vulnerability assessment and penetration testing for your infrastructure.", icon: <Shield size={48} color="var(--accent-secondary)" />, price: "₹2,500", rating: 5, reviews: 8 },
+    { type: "HARDWARE", title: "LifeFlow IV Monitor", tech: "ESP32 / IoT", desc: "Fully assembled IoT medical monitoring system. Alerts nurses before IV bags empty.", icon: <Activity size={48} color="var(--accent)" />, price: "₹1,500", rating: 4.8, reviews: 3 },
+    { type: "HARDWARE", title: "Smart Home Hub", tech: "Raspberry Pi / OpenCV", desc: "Facial recognition door lock system. Built, configured, and shipped to you.", icon: <TerminalIcon size={48} color="var(--accent)" />, price: "₹3,500", rating: 5, reviews: 5 },
+    { type: "HARDWARE", title: "Automated Plant Care", tech: "Arduino", desc: "Automated irrigation system with moisture sensing and LCD display.", icon: <Cpu size={48} color="var(--accent)" />, price: "₹800", rating: 4.5, reviews: 15 },
+    { type: "HARDWARE", title: "RFID Attendance Tracker", tech: "Arduino / Node.js", desc: "Tap-in attendance system with backend database tracking.", icon: <Wifi size={48} color="var(--accent)" />, price: "₹1,200", rating: 4.9, reviews: 7 },
+    { type: "HARDWARE", title: "Weather Station Logger", tech: "BME280 / SD Card", desc: "Compact weather station tracking temp/humidity/pressure.", icon: <Database size={48} color="var(--accent)" />, price: "₹500", rating: 4.7, reviews: 22 }
   ];
 
   const projects = [
     { 
-      title: "MakeMyTrip Clone", 
-      url: "https://github.com/GREENMAN-source/MakeMyTrip-Clone", 
+      title: "TyrePro ERP Suite", 
+      url: "https://github.com/GREENMAN-source/tyrepro", 
+      liveDemo: "https://tyrepro-opal.vercel.app",
+      type: "FULL-STACK ERP", 
+      desc: "High-end, enterprise-grade tyre shop management system architected and developed entirely by me. Features real-time inventory tracking, GST-compliant invoicing, appointment scheduling, and a complete admin dashboard.",
+      features: ["Inventory Management", "GST Invoicing", "Appointment Booking", "Analytics Dashboard"],
+      tech: ["Next.js", "Express", "Prisma", "PostgreSQL", "TypeScript"]
+    },
+    { 
+      title: "MakeMyTrip Frontend", 
+      url: "https://github.com/GREENMAN-source/makemytrip-frontend", 
+      liveDemo: "https://makemytrip-frontend-ten.vercel.app",
       type: "INTERNSHIP PROJECT", 
-      desc: "A fully responsive travel booking platform featuring interactive seat/room selection, live flight status tracking, and a dynamic pricing engine to handle real-time fluctuations.",
+      desc: "Premium, fully responsive travel booking platform engineered and designed by me. Features interactive seat/room selection, live flight status tracking, and a dynamic pricing engine.",
       features: ["Interactive Seat Map", "Live Flight Tracking", "Dynamic Pricing Engine"],
-      tech: ["Next.js", "Spring Boot", "PostgreSQL", "Redis"]
+      tech: ["Next.js", "TypeScript", "Tailwind CSS", "REST API"]
+    },
+    { 
+      title: "MakeMyTrip Backend", 
+      url: "https://github.com/GREENMAN-source/makemytrip-backend", 
+      type: "INTERNSHIP PROJECT", 
+      desc: "High-performance Spring Boot backend custom-built by me to power the MakeMyTrip clone, providing robust RESTful APIs for flights, hotels, seat booking, and recommendations.",
+      features: ["REST API", "JWT Auth", "Dynamic Pricing", "Recommendations"],
+      tech: ["Spring Boot", "Java", "PostgreSQL", "Redis"]
+    },
+    { 
+      title: "MakeMyTour Fullstack", 
+      url: "https://github.com/GREENMAN-source/makemytour-fullstack", 
+      type: "WEB APPLICATION", 
+      desc: "A complete, premium full-stack travel tour booking application developed independently by me, featuring advanced tour packages, itinerary management, and seamless payment integration.",
+      features: ["Tour Packages", "Itinerary Builder", "Payment Integration"],
+      tech: ["TypeScript", "Next.js", "Node.js", "PostgreSQL"]
+    },
+    { 
+      title: "Synapse Portfolio", 
+      url: "https://github.com/GREENMAN-source/synapse-portfolio", 
+      type: "PORTFOLIO WEBSITE", 
+      desc: "This very portfolio — a high-end, brutalist, interaction-heavy personal website architected by me with 15+ easter eggs, particle physics backgrounds, and WebGL effects.",
+      features: ["15+ Easter Eggs", "Particle Physics", "Dark/Light Mode", "Firebase Auth"],
+      tech: ["Next.js", "Framer Motion", "Firebase", "JavaScript"]
     },
     { 
       title: "Synapse Lab", 
       url: "https://synapslab.in", 
+      liveDemo: "https://synapslab.in",
       type: "AGENCY WEBSITE", 
-      desc: "Official website for Synapse Lab, showcasing high-performance security auditing and full-stack development. Optimized for sub-second load times and immersive 3D aesthetics.",
+      desc: "Official, elite-tier website for Synapse Lab, custom-architected by me to showcase high-performance security auditing and full-stack development with immersive 3D aesthetics.",
       features: ["Custom WebGL", "SEO Optimized", "CMS Integration"],
       tech: ["React", "Three.js", "Tailwind CSS", "Node.js"]
+    },
+    { 
+      title: "LifeFlow IV Monitor", 
+      url: "https://github.com/GREENMAN-source/-live-flow-hospital-iv-master-hub-indian-model", 
+      type: "IoT / HARDWARE", 
+      desc: "A sophisticated, healthcare-oriented IoT system engineered entirely by me that monitors IV fluid levels in real-time using ESP32 and HX711 load cells, actively reducing patient risk.",
+      features: ["Real-time Monitoring", "Nurse Alerts", "Weight Sensing", "LCD Display"],
+      tech: ["ESP32", "C++", "HX711", "Arduino"]
     }
   ];
 
@@ -432,28 +475,28 @@ export default function Home() {
   useEffect(() => {
     if (doomMode) document.body.classList.add('doom-mode');
     else document.body.classList.remove('doom-mode');
-    
+
     if (spinMode) document.body.classList.add('spin-mode');
     else document.body.classList.remove('spin-mode');
-    
+
     if (flipMode) document.body.classList.add('flip-mode');
     else document.body.classList.remove('flip-mode');
 
     if (barrelMode) document.body.classList.add('barrel-mode');
     else document.body.classList.remove('barrel-mode');
-    
+
     if (invertMode) document.body.classList.add('invert-mode');
     else document.body.classList.remove('invert-mode');
-    
+
     if (quakeMode) document.body.classList.add('quake-mode');
     else document.body.classList.remove('quake-mode');
-    
+
     if (comicMode) document.body.classList.add('comic-mode');
     else document.body.classList.remove('comic-mode');
-    
+
     if (discoMode) document.body.classList.add('disco-mode');
     else document.body.classList.remove('disco-mode');
-    
+
     if (dropMode) document.body.classList.add('drop-mode');
     else document.body.classList.remove('drop-mode');
   }, [doomMode, spinMode, flipMode, barrelMode, invertMode, quakeMode, comicMode, discoMode, dropMode]);
@@ -475,13 +518,13 @@ export default function Home() {
       />
       <canvas id="starfield" ref={canvasRef} style={{ position: 'fixed', top: 0, left: 0, zIndex: -1, width: '100vw', height: '100vh', opacity: doomMode ? 0.2 : 0.6 }}></canvas>
       <div className="noise" style={{ opacity: doomMode ? 0.8 : undefined }}></div>
-      
+
       {matrixMode && (
         <div className="matrix-rain">
           {Array.from({ length: 100 }).map((_, i) => (
-            <div key={i} style={{ 
-              position: 'absolute', 
-              left: `${Math.random() * 100}vw`, 
+            <div key={i} style={{
+              position: 'absolute',
+              left: `${Math.random() * 100}vw`,
               top: `${Math.random() * -100}vh`,
               animation: `fall ${2 + Math.random() * 3}s linear infinite`
             }}>
@@ -492,19 +535,19 @@ export default function Home() {
       )}
 
       {dvdMode && (
-        <img 
-          src="https://upload.wikimedia.org/wikipedia/commons/9/9b/DVD_logo.svg" 
-          className="dvd-logo" 
-          alt="DVD Logo" 
-          style={{ filter: 'invert(1)' }} 
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/9/9b/DVD_logo.svg"
+          className="dvd-logo"
+          alt="DVD Logo"
+          style={{ filter: 'invert(1)' }}
         />
       )}
 
       {nyanMode && (
-        <img 
-          src="https://upload.wikimedia.org/wikipedia/en/e/ed/Nyan_cat_250px_frame.PNG" 
-          className="nyan-cat" 
-          alt="Nyan Cat" 
+        <img
+          src="https://upload.wikimedia.org/wikipedia/en/e/ed/Nyan_cat_250px_frame.PNG"
+          className="nyan-cat"
+          alt="Nyan Cat"
         />
       )}
 
@@ -513,7 +556,7 @@ export default function Home() {
       ))}
 
       {showTerminal && (
-        <motion.div 
+        <motion.div
           initial={{ y: '-100%' }}
           animate={{ y: 0 }}
           style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '300px', background: 'rgba(0,0,0,0.95)', borderBottom: '2px solid var(--text-main)', zIndex: 999999, color: '#0f0', fontFamily: 'monospace', padding: '2rem' }}
@@ -523,13 +566,13 @@ export default function Home() {
               <p>SYNAPSE OS v9.0.1. Type 'help' for commands.</p>
               <p>&gt; {terminalInput}<span className="blink-cursor">_</span></p>
             </div>
-            <input 
+            <input
               autoFocus
               value={terminalInput}
               onChange={(e) => setTerminalInput(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
-                  if(terminalInput === 'clear') setTerminalInput('');
+                  if (terminalInput === 'clear') setTerminalInput('');
                   setTerminalInput('');
                 }
               }}
@@ -559,17 +602,17 @@ export default function Home() {
           }}
         />
       ))}
-      
+
       {showAuthModal && (
         <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.85)', zIndex: 100000, display: 'flex', justifyContent: 'center', alignItems: 'center', backdropFilter: 'blur(10px)' }}>
-          <motion.div 
+          <motion.div
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             style={{ background: 'var(--bg-dark)', border: '1px solid var(--text-muted)', padding: '3rem', width: '90%', maxWidth: '400px', display: 'flex', flexDirection: 'column', gap: '1.5rem', position: 'relative' }}
           >
             <button onClick={() => setShowAuthModal(false)} style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'none', border: 'none', color: 'var(--text-main)', fontSize: '1.5rem', cursor: 'pointer' }}>×</button>
             <h2 style={{ fontSize: '2rem', fontFamily: 'Syncopate', textAlign: 'center', marginBottom: '1rem' }}>ACCESS</h2>
-            
+
             <button onClick={() => handleSignIn(googleProvider)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', background: '#fff', color: '#000', padding: '1rem', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>
               <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style={{ width: '24px' }} alt="Google" />
               Sign in with Google
@@ -584,7 +627,7 @@ export default function Home() {
       )}
 
       {/* Thunder Cursor + Trail */}
-      <motion.div 
+      <motion.div
         style={{ position: 'fixed', left: cursorXSpring, top: cursorYSpring, zIndex: 9999999, pointerEvents: 'none', color: 'var(--text-main)', filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.8))' }}
       >
         <Zap size={32} fill="var(--text-main)" />
@@ -592,7 +635,7 @@ export default function Home() {
 
       {/* Mobile Touch Ripple Effect */}
       {ripples.map(r => (
-        <motion.div 
+        <motion.div
           key={r.id}
           initial={{ scale: 0, opacity: 0.8 }}
           animate={{ scale: 4, opacity: 0 }}
@@ -624,7 +667,7 @@ export default function Home() {
           mixBlendMode: 'difference'
         }} />
       )}
-      
+
       {/* Brutalist Nav */}
       <nav style={{ position: 'fixed', top: 0, width: '100%', zIndex: 50, padding: '2rem 4rem', mixBlendMode: 'difference' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -634,7 +677,7 @@ export default function Home() {
             <MagneticWrapper><a href="#projects" style={{ display: 'block', padding: '0.5rem' }}>PROJECTS</a></MagneticWrapper>
             <MagneticWrapper><a href="#store" style={{ display: 'block', padding: '0.5rem' }}>STORE</a></MagneticWrapper>
             <MagneticWrapper><a href="#social" style={{ display: 'block', padding: '0.5rem' }}>SOCIALS</a></MagneticWrapper>
-            
+
             {user ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <img src={user.photoURL} alt={user.displayName || 'User'} style={{ width: '28px', height: '28px', borderRadius: '50%', border: '1px solid var(--text-main)' }} />
@@ -644,12 +687,12 @@ export default function Home() {
               <button onClick={() => setShowAuthModal(true)} style={{ background: 'var(--text-main)', border: 'none', color: 'var(--bg-dark)', padding: '0.3rem 0.8rem', borderRadius: '30px', fontSize: '0.7rem', fontWeight: 'bold', fontFamily: 'monospace', cursor: 'pointer' }}>LOGIN</button>
             )}
 
-            <button 
-              onClick={toggleTheme} 
+            <button
+              onClick={toggleTheme}
               aria-label="Toggle Theme"
-              style={{ 
-                background: theme === 'dark' ? '#222' : '#ddd', 
-                border: '1px solid var(--text-muted)', 
+              style={{
+                background: theme === 'dark' ? '#222' : '#ddd',
+                border: '1px solid var(--text-muted)',
                 borderRadius: '30px',
                 display: 'flex',
                 alignItems: 'center',
@@ -660,10 +703,10 @@ export default function Home() {
                 cursor: 'pointer'
               }}
             >
-              <motion.div 
+              <motion.div
                 layout
                 initial={false}
-                animate={{ 
+                animate={{
                   x: theme === 'dark' ? 26 : 0,
                   backgroundColor: theme === 'dark' ? '#000' : '#fff'
                 }}
@@ -686,10 +729,10 @@ export default function Home() {
       </nav>
 
       <main style={{ position: 'relative', zIndex: 1, paddingBottom: '10rem' }}>
-        
+
         {/* Massive Hero Section */}
         <section style={{ height: '100vh', display: 'flex', alignItems: 'center', padding: '0 4rem', position: 'relative', overflow: 'hidden' }}>
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -698,20 +741,20 @@ export default function Home() {
             <p style={{ color: 'var(--accent)', fontWeight: 600, letterSpacing: '4px', marginBottom: '1rem', fontFamily: 'monospace' }}>
               DHANVANTH L P [10TH GRADE FOUNDER]
             </p>
-            <h1 style={{ 
-              fontSize: 'clamp(3rem, 10vw, 12rem)', 
-              lineHeight: 0.9, 
-              letterSpacing: '-5px', 
+            <h1 style={{
+              fontSize: 'clamp(3rem, 10vw, 12rem)',
+              lineHeight: 0.9,
+              letterSpacing: '-5px',
               margin: 0,
               background: theme === 'light' ? 'none' : 'linear-gradient(180deg, #FFFFFF 0%, #888888 100%)',
               WebkitBackgroundClip: theme === 'light' ? 'initial' : 'text',
               WebkitTextFillColor: theme === 'light' ? 'initial' : 'transparent',
               color: theme === 'light' ? '#000' : 'transparent'
             }}>
-              <Typewriter text="BUILD" delay={500} /><br/>
-              <Typewriter text="SHARP" delay={1000} /><br/>
-              <span style={{ 
-                color: 'transparent', 
+              <Typewriter text="BUILD" delay={500} /><br />
+              <Typewriter text="SHARP" delay={1000} /><br />
+              <span style={{
+                color: 'transparent',
                 WebkitTextStroke: theme === 'light' ? '2px #000' : '2px rgba(255,255,255,0.5)',
                 WebkitTextFillColor: 'transparent',
                 background: 'none'
@@ -723,7 +766,7 @@ export default function Home() {
 
           {/* Hacker Style Blob Avatar */}
           <div className="blob-avatar-wrapper" style={{ position: 'absolute', right: '10%', top: '15%', height: '70vh', width: 'clamp(300px, 40vw, 500px)', zIndex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            
+
             {/* Morphing Background Blob */}
             <motion.div
               animate={{
@@ -751,19 +794,19 @@ export default function Home() {
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
               style={{ position: 'relative', zIndex: 2, height: '100%', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', paddingBottom: '0' }}
             >
-              <img 
-                src="/assets/cyber_avatar_transparent.png" 
-                alt="Dhanvanth Cyber Hacker Avatar" 
-                style={{ 
+              <img
+                src="/assets/cyber_avatar_transparent.png"
+                alt="Dhanvanth Cyber Hacker Avatar"
+                style={{
                   width: '220%', // Massive scale up to create a portrait bust
-                  height: 'auto', 
+                  height: 'auto',
                   objectFit: 'cover',
                   objectPosition: 'top center',
                   transform: 'translateY(15%)', // Push down to align shoulders with the blob perfectly
                   filter: theme === 'light' ? 'drop-shadow(0px 10px 20px rgba(0,0,0,0.3))' : 'drop-shadow(0px 10px 30px rgba(0,0,0,0.8)) brightness(0.95) contrast(1.1)',
                   maskImage: 'linear-gradient(to bottom, black 50%, transparent 80%)',
                   WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 80%)'
-                }} 
+                }}
               />
             </motion.div>
 
@@ -806,7 +849,7 @@ export default function Home() {
           <h2 className="section-title">01. TIMELINE</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
             {history.map((item, i) => (
-              <motion.div 
+              <motion.div
                 key={i}
                 initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -830,7 +873,7 @@ export default function Home() {
           <h2 className="section-title">02. PROJECTS</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
             {projects.map((proj, i) => (
-              <motion.a 
+              <motion.a
                 href={proj.url}
                 target="_blank"
                 rel="noreferrer"
@@ -841,13 +884,13 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.1 }}
                 whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(0, 240, 255, 0.1)', borderColor: 'var(--accent-secondary)' }}
-                style={{ 
-                  background: 'var(--bg-dark)', 
-                  border: '1px solid var(--text-muted)', 
-                  padding: '2rem', 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  justifyContent: 'space-between', 
+                style={{
+                  background: 'var(--bg-dark)',
+                  border: '1px solid var(--text-muted)',
+                  padding: '2rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
                   height: '280px',
                   textDecoration: 'none',
                   color: 'inherit',
@@ -861,7 +904,7 @@ export default function Home() {
                 <div style={{ flexGrow: 1 }}>
                   <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem', lineHeight: 1.2, marginTop: '1.5rem' }}>{proj.title}</h3>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>{proj.desc}</p>
-                  
+
                   <div style={{ marginTop: '1.5rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                     {proj.features.map((f, idx) => (
                       <span key={idx} style={{ fontSize: '0.7rem', padding: '0.3rem 0.8rem', border: '1px solid var(--text-muted)', borderRadius: '20px', color: 'var(--text-main)', fontFamily: 'monospace' }}>{f}</span>
@@ -873,9 +916,17 @@ export default function Home() {
                     ))}
                   </div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--text-muted)' }}>
-                  <span style={{ fontFamily: 'monospace', fontSize: '1rem', fontWeight: 'bold', color: 'var(--accent-secondary)' }}>VIEW LIVE</span>
-                  <ExternalLink size={24} />
+                <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--text-muted)' }}>
+                  <div style={{ display: 'flex', gap: '1rem', width: '100%', justifyContent: 'space-between' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: 'monospace', fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--text-main)', textDecoration: 'none' }}>
+                      GITHUB <ExternalLink size={16} />
+                    </span>
+                    {proj.liveDemo && (
+                      <a href={proj.liveDemo} target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: 'monospace', fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--accent-secondary)', textDecoration: 'none' }} onClick={(e) => e.stopPropagation()}>
+                        LIVE DEMO <ExternalLink size={16} />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </motion.a>
             ))}
@@ -891,10 +942,10 @@ export default function Home() {
               <span>SECURE CHECKOUT</span>
             </div>
           </div>
-          
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
             {storeItems.map((item, i) => (
-              <motion.div 
+              <motion.div
                 key={i}
                 className="amazon-card"
                 initial={{ opacity: 0, y: 50 }}
@@ -902,11 +953,11 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: (i % 3) * 0.1 }}
                 whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(0, 240, 255, 0.1)', borderColor: 'var(--accent-secondary)' }}
-                style={{ 
-                  background: 'var(--bg-dark)', 
-                  border: '1px solid var(--text-muted)', 
-                  padding: '2rem', 
-                  display: 'flex', 
+                style={{
+                  background: 'var(--bg-dark)',
+                  border: '1px solid var(--text-muted)',
+                  padding: '2rem',
+                  display: 'flex',
                   flexDirection: 'column',
                   position: 'relative',
                   overflow: 'hidden'
@@ -915,13 +966,13 @@ export default function Home() {
                 <div style={{ position: 'absolute', top: 0, left: 0, background: item.type === 'HARDWARE' ? 'var(--accent)' : 'var(--accent-secondary)', color: '#000', padding: '0.2rem 1rem', fontSize: '0.8rem', fontWeight: 'bold', fontFamily: 'monospace' }}>
                   {item.type}
                 </div>
-                
+
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '150px', marginBottom: '1.5rem', background: 'var(--bg-dark)', border: '1px solid var(--text-muted)', marginTop: '1rem' }}>
                   <motion.div whileHover={{ scale: 1.2, rotate: 10 }}>{item.icon}</motion.div>
                 </div>
-                
+
                 <h3 style={{ fontSize: '1.4rem', marginBottom: '0.5rem', lineHeight: 1.3 }}>{item.title}</h3>
-                
+
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', marginBottom: '1rem' }}>
                   {[...Array(5)].map((_, idx) => (
                     <Star key={idx} size={14} fill={idx < Math.floor(item.rating) ? "#ffa41c" : "transparent"} color={idx < Math.floor(item.rating) ? "#ffa41c" : "#555"} />
@@ -930,23 +981,23 @@ export default function Home() {
                 </div>
 
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '1.5rem', flexGrow: 1 }}>{item.desc}</p>
-                
+
                 <div style={{ borderTop: '1px solid var(--text-muted)', paddingTop: '1.5rem', marginTop: 'auto' }}>
                   <div style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--text-main)' }}>
                     {item.price}
                   </div>
-                  <motion.button 
+                  <motion.button
                     onClick={() => handlePurchase(item.title, item.price)}
                     whileHover={{ scale: 1.05, backgroundColor: '#ffd814' }}
                     whileTap={{ scale: 0.95 }}
-                    style={{ 
-                      width: '100%', 
-                      padding: '1rem', 
-                      background: '#FFD814', 
-                      border: 'none', 
-                      borderRadius: '100px', 
-                      color: '#0f1111', 
-                      fontWeight: 600, 
+                    style={{
+                      width: '100%',
+                      padding: '1rem',
+                      background: '#FFD814',
+                      border: 'none',
+                      borderRadius: '100px',
+                      color: '#0f1111',
+                      fontWeight: 600,
                       fontSize: '1rem',
                       display: 'flex',
                       justifyContent: 'center',
@@ -968,7 +1019,7 @@ export default function Home() {
           <h2 className="section-title">04. SOCIAL NETWORK STORE</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
             {socials.map((social, i) => (
-              <motion.a 
+              <motion.a
                 href={social.url}
                 target="_blank"
                 rel="noreferrer"
@@ -979,12 +1030,12 @@ export default function Home() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: i * 0.1 }}
                 whileHover={{ scale: 1.02, backgroundColor: '#fff', color: '#000' }}
-                style={{ 
-                  border: '1px solid var(--text-muted)', 
-                  padding: '2rem', 
-                  display: 'flex', 
-                  flexDirection: 'column', 
-                  justifyContent: 'space-between', 
+                style={{
+                  border: '1px solid var(--text-muted)',
+                  padding: '2rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
                   height: '250px',
                   textDecoration: 'none',
                   color: 'inherit'
@@ -1005,11 +1056,11 @@ export default function Home() {
 
         {/* Easter Egg Cheat Sheet */}
         <section className="container" style={{ paddingTop: '10rem', paddingBottom: '2rem', textAlign: 'center' }}>
-          <div style={{ 
-            border: '1px dashed var(--text-muted)', 
-            padding: '2rem', 
-            display: 'inline-block', 
-            background: 'var(--bg-dark)', 
+          <div style={{
+            border: '1px dashed var(--text-muted)',
+            padding: '2rem',
+            display: 'inline-block',
+            background: 'var(--bg-dark)',
             boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
             position: 'relative',
             overflow: 'hidden'
@@ -1019,9 +1070,9 @@ export default function Home() {
               // CLASSIFIED SYSTEM CODES DETECTED //
             </p>
             <p style={{ fontFamily: 'monospace', color: 'var(--text-main)', fontSize: '1.1rem', lineHeight: '2' }}>
-              Try typing these keywords anywhere on the site:<br/>
-              <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>hack</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>matrix</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>doom</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>barrel</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>party</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>dvd</span><br/>
-              <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>comic</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>disco</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>quake</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>drop</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>invert</span><br/>
+              Try typing these keywords anywhere on the site:<br />
+              <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>hack</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>matrix</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>doom</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>barrel</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>party</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>dvd</span><br />
+              <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>comic</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>disco</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>quake</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>drop</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>invert</span><br />
               <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>nyan</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>spin</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>flip</span> • <span style={{ color: 'var(--accent)', fontWeight: 'bold' }}>rick</span>
             </p>
           </div>
