@@ -642,7 +642,7 @@ export default function Home() {
           <div style={{ fontWeight: 800, fontSize: '1.5rem', fontFamily: 'Syncopate, sans-serif' }}>SYNAPSE LAB</div>
           <div style={{ display: 'flex', gap: '3rem', fontSize: '0.9rem', fontWeight: 600, letterSpacing: '2px', alignItems: 'center' }}>
             <MagneticWrapper><a href="#journey" style={{ display: 'block', padding: '0.5rem' }}>JOURNEY</a></MagneticWrapper>
-            <MagneticWrapper><a href="#projects" style={{ display: 'block', padding: '0.5rem' }}>PROJECTS</a></MagneticWrapper>
+            <MagneticWrapper><a href="#samples" style={{ display: 'block', padding: '0.5rem' }}>SAMPLES</a></MagneticWrapper>
             <MagneticWrapper><a href="#store" style={{ display: 'block', padding: '0.5rem' }}>STORE</a></MagneticWrapper>
             <MagneticWrapper><a href="#social" style={{ display: 'block', padding: '0.5rem' }}>SOCIALS</a></MagneticWrapper>
 
@@ -836,9 +836,9 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Projects Section */}
-        <section id="projects" className="container" style={{ paddingTop: '15rem' }}>
-          <h2 className="section-title">02. PROJECTS</h2>
+        {/* Samples Section */}
+        <section id="samples" className="container" style={{ paddingTop: '15rem' }}>
+          <h2 className="section-title">02. SAMPLES</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem' }}>
             {projects.map((proj, i) => (
               <motion.a
