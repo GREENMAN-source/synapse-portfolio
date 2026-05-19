@@ -874,7 +874,7 @@ export default function Home() {
         <section id="projects" className="container" style={{ paddingTop: '15rem' }}>
           <h2 className="section-title">02. PROJECTS</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-            {projects.map((proj, i) => (
+            {projects.filter(p => !p.liveDemo).map((proj, i) => (
               <motion.a
                 href={proj.url}
                 target="_blank"
