@@ -1,9 +1,16 @@
 import { MongoClient } from 'mongodb';
 
 const uri = "mongodb+srv://dhanvanthLP:dhanvanth@cluster0.vcpyknt.mongodb.net/?appName=Cluster0";
-const client = new MongoClient(uri);
 
 export async function onRequestPost(context) {
+  const client = new MongoClient(uri, {
+    maxPoolSize: 1,
+    minPoolSize: 0,
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 5000,
+    connectTimeoutMS: 5000,
+  });
+
   try {
     const request = context.request;
     const body = await request.json();
@@ -28,7 +35,8 @@ export async function onRequestPost(context) {
       headers: { "Content-Type": "application/json" }
     });
   } finally {
-    // Keep connection alive for Edge performance or close it
-    // await client.close(); 
+    // Ensure all sockets are closed and heartbeats stopped immediately
+    await client.close(); 
   }
 }
+
