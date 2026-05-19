@@ -181,12 +181,6 @@ export default function RootLayout({ children }) {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "Samples",
-            "item": "https://dhanvanth.pages.dev/#samples"
-          },
-          {
-            "@type": "ListItem",
-            "position": 4,
             "name": "Store",
             "item": "https://dhanvanth.pages.dev/#store"
           }

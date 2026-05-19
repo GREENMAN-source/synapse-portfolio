@@ -417,55 +417,22 @@ export default function Home() {
       tech: ["Next.js", "Express", "Prisma", "PostgreSQL", "TypeScript"]
     },
     { 
-      title: "MakeMyTrip Frontend", 
+      title: "MakeMyTrip", 
       url: "https://github.com/GREENMAN-source/makemytrip-frontend", 
       liveDemo: "https://makemytrip-frontend-ten.vercel.app",
-      type: "WEB APPLICATION", 
-      desc: "Premium, fully responsive travel booking platform engineered and designed by me. Features interactive seat/room selection, live flight status tracking, and a dynamic pricing engine.",
+      type: "FULLSTACK SYSTEM", 
+      desc: "Premium travel booking platform engineered with a high-performance Spring Boot backend and Next.js frontend. Features interactive seat selection, live flight status tracking, and a dynamic pricing engine.",
       features: ["Interactive Seat Map", "Live Flight Tracking", "Dynamic Pricing Engine"],
-      tech: ["Next.js", "TypeScript", "Tailwind CSS", "REST API"]
-    },
-    { 
-      title: "MakeMyTrip Backend", 
-      url: "https://github.com/GREENMAN-source/makemytrip-backend", 
-      liveDemo: "https://makemytrip-backend-030l.onrender.com",
-      type: "BACKEND API SERVICE", 
-      desc: "High-performance Spring Boot backend custom-built by me to power the MakeMyTrip clone, providing robust RESTful APIs for flights, hotels, seat booking, and recommendations.",
-      features: ["REST API", "JWT Auth", "Dynamic Pricing", "Recommendations"],
-      tech: ["Spring Boot", "Java", "PostgreSQL", "Redis"]
-    },
-    { 
-      title: "MakeMyTour Fullstack", 
-      url: "https://github.com/GREENMAN-source/makemytour-fullstack", 
-      type: "WEB APPLICATION", 
-      desc: "A complete, premium full-stack travel tour booking application developed independently by me, featuring advanced tour packages, itinerary management, and seamless payment integration.",
-      features: ["Tour Packages", "Itinerary Builder", "Payment Integration"],
-      tech: ["TypeScript", "Next.js", "Node.js", "PostgreSQL"]
-    },
-    { 
-      title: "Synapse Portfolio", 
-      url: "https://github.com/GREENMAN-source/synapse-portfolio", 
-      type: "PORTFOLIO WEBSITE", 
-      desc: "This very portfolio — a high-end, brutalist, interaction-heavy personal website architected by me with 15+ easter eggs, particle physics backgrounds, and WebGL effects.",
-      features: ["15+ Easter Eggs", "Particle Physics", "Dark/Light Mode", "Firebase Auth"],
-      tech: ["Next.js", "Framer Motion", "Firebase", "JavaScript"]
+      tech: ["Next.js", "Spring Boot", "Java", "PostgreSQL", "Redis", "TypeScript"]
     },
     { 
       title: "Synapse Lab", 
-      url: "https://synapslab.in", 
+      url: "https://github.com/GREENMAN-source/synapselab", 
       liveDemo: "https://synapslab.in",
       type: "AGENCY WEBSITE", 
-      desc: "Official, elite-tier website for Synapse Lab, custom-architected by me to showcase high-performance security auditing and full-stack development with immersive 3D aesthetics.",
-      features: ["Custom WebGL", "SEO Optimized", "CMS Integration"],
+      desc: "High-end development and cybersecurity studio landing page. Features stunning futuristic aesthetics, smooth micro-interactions, and responsive layouts.",
+      features: ["Cyberpunk Branding", "Interactive UI", "Lead Capture"],
       tech: ["React", "Three.js", "Tailwind CSS", "Node.js"]
-    },
-    { 
-      title: "LifeFlow IV Monitor", 
-      url: "https://github.com/GREENMAN-source/-live-flow-hospital-iv-master-hub-indian-model", 
-      type: "IoT / HARDWARE", 
-      desc: "A sophisticated, healthcare-oriented IoT system engineered entirely by me that monitors IV fluid levels in real-time using ESP32 and HX711 load cells, actively reducing patient risk.",
-      features: ["Real-time Monitoring", "Nurse Alerts", "Weight Sensing", "LCD Display"],
-      tech: ["ESP32", "C++", "HX711", "Arduino"]
     }
   ];
 
@@ -676,7 +643,6 @@ export default function Home() {
           <div style={{ display: 'flex', gap: '3rem', fontSize: '0.9rem', fontWeight: 600, letterSpacing: '2px', alignItems: 'center' }}>
             <MagneticWrapper><a href="#journey" style={{ display: 'block', padding: '0.5rem' }}>JOURNEY</a></MagneticWrapper>
             <MagneticWrapper><a href="#projects" style={{ display: 'block', padding: '0.5rem' }}>PROJECTS</a></MagneticWrapper>
-            <MagneticWrapper><a href="#samples" style={{ display: 'block', padding: '0.5rem' }}>SAMPLES</a></MagneticWrapper>
             <MagneticWrapper><a href="#store" style={{ display: 'block', padding: '0.5rem' }}>STORE</a></MagneticWrapper>
             <MagneticWrapper><a href="#social" style={{ display: 'block', padding: '0.5rem' }}>SOCIALS</a></MagneticWrapper>
 
@@ -873,73 +839,8 @@ export default function Home() {
         {/* Projects Section */}
         <section id="projects" className="container" style={{ paddingTop: '15rem' }}>
           <h2 className="section-title">02. PROJECTS</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-            {projects.filter(p => !p.liveDemo).map((proj, i) => (
-              <motion.a
-                href={proj.url}
-                target="_blank"
-                rel="noreferrer"
-                key={i}
-                className="shop-card"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(0, 240, 255, 0.1)', borderColor: 'var(--accent-secondary)' }}
-                style={{
-                  background: 'var(--bg-dark)',
-                  border: '1px solid var(--text-muted)',
-                  padding: '2rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  height: '280px',
-                  textDecoration: 'none',
-                  color: 'inherit',
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}
-              >
-                <div style={{ position: 'absolute', top: 0, right: 0, background: 'var(--accent)', color: '#000', padding: '0.2rem 1rem', fontSize: '0.8rem', fontWeight: 'bold', fontFamily: 'monospace', zIndex: 2 }}>
-                  {proj.type}
-                </div>
-                <div style={{ flexGrow: 1 }}>
-                  <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem', lineHeight: 1.2, marginTop: '1.5rem' }}>{proj.title}</h3>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6 }}>{proj.desc}</p>
-
-                  <div style={{ marginTop: '1.5rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                    {proj.features.map((f, idx) => (
-                      <span key={idx} style={{ fontSize: '0.7rem', padding: '0.3rem 0.8rem', border: '1px solid var(--text-muted)', borderRadius: '20px', color: 'var(--text-main)', fontFamily: 'monospace' }}>{f}</span>
-                    ))}
-                  </div>
-                  <div style={{ marginTop: '1rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                    {proj.tech.map((t, idx) => (
-                      <span key={idx} style={{ fontSize: '0.7rem', padding: '0.3rem 0.8rem', background: 'var(--text-main)', color: 'var(--bg-dark)', borderRadius: '4px', fontWeight: 'bold', fontFamily: 'monospace' }}>{t}</span>
-                    ))}
-                  </div>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--text-muted)' }}>
-                  <div style={{ display: 'flex', gap: '1rem', width: '100%', justifyContent: 'space-between' }}>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: 'monospace', fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--text-main)', textDecoration: 'none' }}>
-                      GITHUB <ExternalLink size={16} />
-                    </span>
-                    {proj.liveDemo && (
-                      <a href={proj.liveDemo} target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: 'monospace', fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--accent-secondary)', textDecoration: 'none' }} onClick={(e) => e.stopPropagation()}>
-                        LIVE DEMO <ExternalLink size={16} />
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </motion.a>
-            ))}
-          </div>
-        </section>
-
-        {/* Samples Section */}
-        <section id="samples" className="container" style={{ paddingTop: '15rem' }}>
-          <h2 className="section-title">03. LIVE SAMPLES</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem' }}>
-            {projects.filter(p => p.liveDemo).map((proj, i) => (
+            {projects.map((proj, i) => (
               <motion.a
                 href={proj.liveDemo}
                 target="_blank"
@@ -1008,7 +909,7 @@ export default function Home() {
         {/* Amazon-Style Storefront */}
         <section id="store" className="container" style={{ paddingTop: '15rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderBottom: '2px solid var(--text-muted)', paddingBottom: '1rem', marginBottom: '3rem' }}>
-            <h2 style={{ fontSize: '4rem', fontWeight: 700, letterSpacing: '-2px', fontFamily: 'Syncopate', margin: 0 }}>04. SYNAPSE STORE</h2>
+            <h2 style={{ fontSize: '4rem', fontWeight: 700, letterSpacing: '-2px', fontFamily: 'Syncopate', margin: 0 }}>03. SYNAPSE STORE</h2>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--accent-secondary)', fontFamily: 'monospace', fontSize: '1.2rem' }}>
               <ShoppingCart size={32} />
               <span>SECURE CHECKOUT</span>
@@ -1088,7 +989,7 @@ export default function Home() {
 
         {/* Shopping Style Social Links */}
         <section id="social" className="container" style={{ paddingTop: '15rem' }}>
-          <h2 className="section-title">05. SOCIAL NETWORK STORE</h2>
+          <h2 className="section-title">04. SOCIAL NETWORK STORE</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
             {socials.map((social, i) => (
               <motion.a
