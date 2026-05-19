@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 
-const uri = "mongodb+srv://dhanvanthLP:dhanvanth@cluster0.vcpyknt.mongodb.net/?appName=Cluster0";
+const uri = "mongodb://dhanvanthLP:dhanvanth@ac-mdreumi-shard-00-00.vcpyknt.mongodb.net:27017,ac-mdreumi-shard-00-01.vcpyknt.mongodb.net:27017,ac-mdreumi-shard-00-02.vcpyknt.mongodb.net:27017/synapse_lab?ssl=true&authSource=admin";
 
 export async function onRequestPost(context) {
   const client = new MongoClient(uri, {
