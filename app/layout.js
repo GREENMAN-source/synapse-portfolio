@@ -195,6 +195,16 @@ export default function RootLayout({ children }) {
           "@id": "https://dhanvanth.pages.dev/#person"
         },
         "programmingLanguage": ["Next.js", "Spring Boot", "PostgreSQL", "Redis"]
+      },
+      {
+        "@type": "SoftwareSourceCode",
+        "@id": "https://github.com/GREENMAN-source/tyrepro",
+        "name": "TyrePro ERP Suite",
+        "description": "High-end, enterprise-grade tyre shop management system with real-time inventory tracking, GST-compliant invoicing, and appointment scheduling.",
+        "author": {
+          "@id": "https://dhanvanth.pages.dev/#person"
+        },
+        "programmingLanguage": ["Next.js", "Express", "Prisma", "PostgreSQL", "TypeScript"]
       }
     ]
   };

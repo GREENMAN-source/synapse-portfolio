@@ -411,7 +411,7 @@ export default function Home() {
       title: "TyrePro ERP Suite", 
       url: "https://github.com/GREENMAN-source/tyrepro", 
       liveDemo: "https://tyrepro-opal.vercel.app",
-      type: "FULL-STACK ERP", 
+      type: "INTERNSHIP PROJECT", 
       desc: "High-end, enterprise-grade tyre shop management system architected and developed entirely by me. Features real-time inventory tracking, GST-compliant invoicing, appointment scheduling, and a complete admin dashboard.",
       features: ["Inventory Management", "GST Invoicing", "Appointment Booking", "Analytics Dashboard"],
       tech: ["Next.js", "Express", "Prisma", "PostgreSQL", "TypeScript"]
@@ -428,6 +428,7 @@ export default function Home() {
     { 
       title: "MakeMyTrip Backend", 
       url: "https://github.com/GREENMAN-source/makemytrip-backend", 
+      liveDemo: "https://makemytrip-backend-030l.onrender.com",
       type: "INTERNSHIP PROJECT", 
       desc: "High-performance Spring Boot backend custom-built by me to power the MakeMyTrip clone, providing robust RESTful APIs for flights, hotels, seat booking, and recommendations.",
       features: ["REST API", "JWT Auth", "Dynamic Pricing", "Recommendations"],
