@@ -1,11 +1,14 @@
 const { MongoClient } = require('mongodb');
 
-const uri = "mongodb+srv://dhanvanthLP:dhanvanth@cluster0.vcpyknt.mongodb.net/?appName=Cluster0";
+// Direct connection string to bypass SRV DNS lookups
+const uri = "mongodb://dhanvanthLP:dhanvanth@ac-mdreumi-shard-00-00.vcpyknt.mongodb.net:27017,ac-mdreumi-shard-00-01.vcpyknt.mongodb.net:27017,ac-mdreumi-shard-00-02.vcpyknt.mongodb.net:27017/synapse_lab?ssl=true&authSource=admin";
 const client = new MongoClient(uri);
 
 async function run() {
   try {
+    console.log("Connecting to MongoDB via direct hosts...");
     await client.connect();
+    console.log("Connected successfully!");
     const database = client.db('synapse_lab');
     const orders = database.collection('orders');
     
@@ -19,13 +22,8 @@ async function run() {
         console.log(`\nOrder #${index + 1}:`);
         console.log(`- Date: ${order.timestamp || order.createdAt || 'N/A'}`);
         console.log(`- Customer: ${order.Full_Name || 'N/A'}`);
-        console.log(`- Email: ${order.Email_Address || 'N/A'}`);
-        console.log(`- Phone: ${order.Phone_Number || 'N/A'}`);
         console.log(`- Item: ${order.Target_Asset || 'N/A'}`);
         console.log(`- Price: ${order.Asset_Value || 'N/A'}`);
-        console.log(`- Payment Method: ${order.Payment_Method || 'N/A'}`);
-        console.log(`- FamApp Transaction ID: ${order.FamApp_Transaction_ID || 'N/A'}`);
-        console.log(`- Address: ${order.Shipping_Address || 'N/A'}`);
       });
     }
   } catch (err) {

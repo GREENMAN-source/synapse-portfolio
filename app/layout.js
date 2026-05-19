@@ -136,20 +136,119 @@ export default function RootLayout({ children }) {
           {
             "@type": "Product",
             "name": "LifeFlow IV Monitor",
+            "image": "https://synapslab.in/assets/lifeflow_monitor.png",
             "description": "Fully assembled IoT medical monitoring system. Alerts nurses before IV bags empty.",
-            "offers": { "@type": "Offer", "price": "1500", "priceCurrency": "INR" }
+            "brand": {
+              "@type": "Brand",
+              "name": "Synapse Lab"
+            },
+            "sku": "SL-LIFELOW-01",
+            "offers": {
+              "@type": "Offer",
+              "price": "1500",
+              "priceCurrency": "INR",
+              "priceValidUntil": "2027-12-31",
+              "availability": "https://schema.org/InStock",
+              "url": "https://synapslab.in/#store",
+              "shippingDetails": {
+                "@type": "OfferShippingDetails",
+                "shippingRate": {
+                  "@type": "MonetaryAmount",
+                  "value": "0",
+                  "currency": "INR"
+                },
+                "shippingDestination": {
+                  "@type": "DefinedRegion",
+                  "addressCountry": "IN"
+                }
+              },
+              "hasMerchantReturnPolicy": {
+                "@type": "MerchantReturnPolicy",
+                "applicableCountry": "IN",
+                "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                "merchantReturnDays": 30,
+                "returnMethod": "https://schema.org/ReturnByMail",
+                "feesType": "https://schema.org/FreeReturn"
+              }
+            }
           },
           {
             "@type": "Product",
             "name": "Smart Home Hub",
+            "image": "https://synapslab.in/assets/smarthome_hub.png",
             "description": "Facial recognition door lock system. Built, configured, and shipped to you.",
-            "offers": { "@type": "Offer", "price": "3500", "priceCurrency": "INR" }
+            "brand": {
+              "@type": "Brand",
+              "name": "Synapse Lab"
+            },
+            "sku": "SL-SMARTHUB-01",
+            "offers": {
+              "@type": "Offer",
+              "price": "3500",
+              "priceCurrency": "INR",
+              "priceValidUntil": "2027-12-31",
+              "availability": "https://schema.org/InStock",
+              "url": "https://synapslab.in/#store",
+              "shippingDetails": {
+                "@type": "OfferShippingDetails",
+                "shippingRate": {
+                  "@type": "MonetaryAmount",
+                  "value": "0",
+                  "currency": "INR"
+                },
+                "shippingDestination": {
+                  "@type": "DefinedRegion",
+                  "addressCountry": "IN"
+                }
+              },
+              "hasMerchantReturnPolicy": {
+                "@type": "MerchantReturnPolicy",
+                "applicableCountry": "IN",
+                "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                "merchantReturnDays": 30,
+                "returnMethod": "https://schema.org/ReturnByMail",
+                "feesType": "https://schema.org/FreeReturn"
+              }
+            }
           },
           {
             "@type": "Product",
             "name": "Automated Plant Care",
+            "image": "https://synapslab.in/assets/automated_plant_care.png",
             "description": "Automated irrigation system with moisture sensing and LCD display.",
-            "offers": { "@type": "Offer", "price": "800", "priceCurrency": "INR" }
+            "brand": {
+              "@type": "Brand",
+              "name": "Synapse Lab"
+            },
+            "sku": "SL-PLANTCARE-01",
+            "offers": {
+              "@type": "Offer",
+              "price": "800",
+              "priceCurrency": "INR",
+              "priceValidUntil": "2027-12-31",
+              "availability": "https://schema.org/InStock",
+              "url": "https://synapslab.in/#store",
+              "shippingDetails": {
+                "@type": "OfferShippingDetails",
+                "shippingRate": {
+                  "@type": "MonetaryAmount",
+                  "value": "0",
+                  "currency": "INR"
+                },
+                "shippingDestination": {
+                  "@type": "DefinedRegion",
+                  "addressCountry": "IN"
+                }
+              },
+              "hasMerchantReturnPolicy": {
+                "@type": "MerchantReturnPolicy",
+                "applicableCountry": "IN",
+                "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                "merchantReturnDays": 30,
+                "returnMethod": "https://schema.org/ReturnByMail",
+                "feesType": "https://schema.org/FreeReturn"
+              }
+            }
           }
         ]
       },

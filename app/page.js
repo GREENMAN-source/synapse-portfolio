@@ -399,9 +399,9 @@ export default function Home() {
   const storeItems = [
     { type: "SERVICE", title: "Custom Web Application", tech: "React / Next.js / Node", desc: "Full-stack web application development tailored to your business needs.", icon: <Code size={48} color="var(--accent-secondary)" />, price: "₹3,000", rating: 5, reviews: 12 },
     { type: "SERVICE", title: "Security VAPT Testing", tech: "Penetration Testing", desc: "Deep vulnerability assessment and penetration testing for your infrastructure.", icon: <Shield size={48} color="var(--accent-secondary)" />, price: "₹2,500", rating: 5, reviews: 8 },
-    { type: "HARDWARE", title: "LifeFlow IV Monitor", tech: "ESP32 / IoT", desc: "Fully assembled IoT medical monitoring system. Alerts nurses before IV bags empty.", icon: <Activity size={48} color="var(--accent)" />, price: "₹1,500", rating: 4.8, reviews: 3 },
-    { type: "HARDWARE", title: "Smart Home Hub", tech: "Raspberry Pi / OpenCV", desc: "Facial recognition door lock system. Built, configured, and shipped to you.", icon: <TerminalIcon size={48} color="var(--accent)" />, price: "₹3,500", rating: 5, reviews: 5 },
-    { type: "HARDWARE", title: "Automated Plant Care", tech: "Arduino", desc: "Automated irrigation system with moisture sensing and LCD display.", icon: <Cpu size={48} color="var(--accent)" />, price: "₹800", rating: 4.5, reviews: 15 },
+    { type: "HARDWARE", title: "LifeFlow IV Monitor", tech: "ESP32 / IoT", desc: "Fully assembled IoT medical monitoring system. Alerts nurses before IV bags empty.", icon: <Activity size={48} color="var(--accent)" />, image: "/assets/lifeflow_monitor.png", price: "₹1,500", rating: 4.8, reviews: 3 },
+    { type: "HARDWARE", title: "Smart Home Hub", tech: "Raspberry Pi / OpenCV", desc: "Facial recognition door lock system. Built, configured, and shipped to you.", icon: <TerminalIcon size={48} color="var(--accent)" />, image: "/assets/smarthome_hub.png", price: "₹3,500", rating: 5, reviews: 5 },
+    { type: "HARDWARE", title: "Automated Plant Care", tech: "Arduino", desc: "Automated irrigation system with moisture sensing and LCD display.", icon: <Cpu size={48} color="var(--accent)" />, image: "/assets/automated_plant_care.png", price: "₹800", rating: 4.5, reviews: 15 },
     { type: "HARDWARE", title: "RFID Attendance Tracker", tech: "Arduino / Node.js", desc: "Tap-in attendance system with backend database tracking.", icon: <Wifi size={48} color="var(--accent)" />, price: "₹1,200", rating: 4.9, reviews: 7 },
     { type: "HARDWARE", title: "Weather Station Logger", tech: "BME280 / SD Card", desc: "Compact weather station tracking temp/humidity/pressure.", icon: <Database size={48} color="var(--accent)" />, price: "₹500", rating: 4.7, reviews: 22 }
   ];
@@ -940,8 +940,17 @@ export default function Home() {
                   {item.type}
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '150px', marginBottom: '1.5rem', background: 'var(--bg-dark)', border: '1px solid var(--text-muted)', marginTop: '1rem' }}>
-                  <motion.div whileHover={{ scale: 1.2, rotate: 10 }}>{item.icon}</motion.div>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '150px', marginBottom: '1.5rem', background: 'var(--bg-dark)', border: '1px solid var(--text-muted)', marginTop: '1rem', overflow: 'hidden' }}>
+                  {item.image ? (
+                    <motion.img 
+                      src={item.image} 
+                      alt={item.title} 
+                      whileHover={{ scale: 1.1 }} 
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }} 
+                    />
+                  ) : (
+                    <motion.div whileHover={{ scale: 1.2, rotate: 10 }}>{item.icon}</motion.div>
+                  )}
                 </div>
 
                 <h3 style={{ fontSize: '1.4rem', marginBottom: '0.5rem', lineHeight: 1.3 }}>{item.title}</h3>
