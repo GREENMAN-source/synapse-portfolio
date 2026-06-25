@@ -62,9 +62,31 @@ function BrainParticles() {
 
   useFrame((state, delta) => {
     if (ref.current) {
-      ref.current.rotation.y += delta * 0.2;
-      ref.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.5) * 0.05;
-      ref.current.rotation.z = Math.cos(state.clock.elapsedTime * 0.3) * 0.05;
+      // Calculate global scroll progress (0.0 to 1.0)
+      const scrollY = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      // Protect against maxScroll being 0 or very small before page loads
+      const progress = maxScroll > 0 ? Math.min(scrollY / maxScroll, 1) : 0;
+      
+      // Target rotation based on scroll (full 360 degree spin + some tilt)
+      const targetRotationY = progress * Math.PI * 2.5; 
+      const targetRotationX = (progress - 0.5) * Math.PI * 0.25;
+
+      // Zoom effect: Zoom in during the transition between the 6 sections
+      // 7 sections means 6 transitions. progress * Math.PI * 6 creates 5 arcs.
+      const zoomPulse = Math.abs(Math.sin(progress * Math.PI * 6));
+      const targetScale = 1 + zoomPulse * 0.8; // scales up to 1.8x during transition
+
+      // Smoothly lerp towards target rotation and scale
+      ref.current.rotation.y = THREE.MathUtils.lerp(ref.current.rotation.y, targetRotationY, 0.05);
+      ref.current.rotation.x = THREE.MathUtils.lerp(ref.current.rotation.x, targetRotationX, 0.05);
+      
+      ref.current.scale.x = THREE.MathUtils.lerp(ref.current.scale.x, targetScale, 0.05);
+      ref.current.scale.y = THREE.MathUtils.lerp(ref.current.scale.y, targetScale, 0.05);
+      ref.current.scale.z = THREE.MathUtils.lerp(ref.current.scale.z, targetScale, 0.05);
+      
+      // Keep a very subtle continuous ambient float
+      ref.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
     }
   });
 
@@ -97,7 +119,7 @@ function BrainParticles() {
 
 export default function Brain3D() {
   return (
-    <div className="w-full h-full absolute inset-0 z-0 pointer-events-none">
+    <div className="w-full h-full fixed inset-0 z-0 pointer-events-none bg-[#030408]">
       <Canvas camera={{ position: [0, 0, 4.5], fov: 50 }}>
         <ambientLight intensity={0.5} />
         <BrainParticles />

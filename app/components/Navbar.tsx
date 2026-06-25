@@ -102,12 +102,12 @@ export default function Navbar() {
         ref={navRef}
         className={`fixed top-0 left-0 right-0 h-[72px] px-6 md:px-12 flex justify-between items-center z-[1000] transition-all duration-400 ${
           scrolled 
-            ? 'bg-[#F8F9FA]/85 backdrop-blur-[20px] border-b border-slate-900/10' 
+            ? 'bg-[#030408]/90 backdrop-blur-[20px] border-b border-white/10' 
             : 'bg-transparent border-b border-transparent'
         }`}
       >
         {/* Left side: Logo + Pulsing dot */}
-        <a href="#hero" className="flex items-center gap-2 font-bold text-slate-900 text-lg tracking-tight select-none">
+        <a href="#hero" className="flex items-center gap-2 font-bold text-white text-lg tracking-tight select-none">
           <span className="pulsing-dot" />
           <span className="font-display">Synapse Lab</span>
         </a>
@@ -116,20 +116,20 @@ export default function Navbar() {
         <div className="flex items-center gap-8 font-medium text-[13px]">
           <a 
             href="#contact" 
-            className="hidden md:inline-block text-slate-600 hover:text-slate-900 transition-colors duration-200 relative group py-2"
+            className="hidden md:inline-block text-slate-300 hover:text-white transition-colors duration-200 relative group py-2"
           >
             let's talk
-            <span className="absolute bottom-1.5 left-0 w-0 h-[1px] bg-slate-900 group-hover:w-full transition-all duration-200" />
+            <span className="absolute bottom-1.5 left-0 w-0 h-[1px] bg-white group-hover:w-full transition-all duration-200" />
           </a>
 
           <button 
             onClick={toggleMenu}
-            className="flex items-center gap-3 text-slate-600 hover:text-slate-900 transition-all duration-200 cursor-pointer select-none group"
+            className="flex items-center gap-3 text-slate-300 hover:text-white transition-all duration-200 cursor-pointer select-none group"
             aria-label="Toggle menu"
           >
             <div className="flex flex-col gap-[4px] justify-center items-end">
-              <span className={`h-[1px] bg-slate-900 transition-all duration-200 ${isOpen ? 'w-[16px] translate-y-[5px] rotate-45' : 'w-[16px]'}`} />
-              <span className={`h-[1px] bg-slate-900 transition-all duration-200 ${isOpen ? 'w-[16px] -translate-y-[0px] -rotate-45' : 'w-[10px] group-hover:w-[16px]'}`} />
+              <span className={`h-[1px] bg-white transition-all duration-200 ${isOpen ? 'w-[16px] translate-y-[5px] rotate-45' : 'w-[16px]'}`} />
+              <span className={`h-[1px] bg-white transition-all duration-200 ${isOpen ? 'w-[16px] -translate-y-[0px] -rotate-45' : 'w-[10px] group-hover:w-[16px]'}`} />
             </div>
             <span className="font-body uppercase tracking-[0.1em] text-[11px] font-semibold">
               {isOpen ? 'Close' : 'Menu'}
@@ -141,7 +141,7 @@ export default function Navbar() {
       {/* OVERLAY NAVIGATION MENU */}
       <div 
         ref={overlayRef}
-        className="menu-overlay fixed inset-0 bg-[#FFFFFF] z-[999] flex flex-col justify-between pt-[100px] pb-12 px-8 md:px-[10vw]"
+        className="menu-overlay fixed inset-0 bg-[#030408] z-[999] flex flex-col justify-between pt-[100px] pb-12 px-8 md:px-[10vw]"
         style={{ clipPath: 'circle(0% at calc(100% - 80px) 36px)' }}
       >
         {/* Navigation List */}
@@ -160,7 +160,7 @@ export default function Navbar() {
                   onClick={() => setIsOpen(false)}
                   onMouseEnter={handleLinkMouseEnter}
                   onMouseLeave={handleLinkMouseLeave}
-                  className="overlay-link inline-block font-display font-extrabold text-[44px] md:text-[80px] leading-[1.0] text-slate-900 tracking-tighter transition-transform select-none"
+                  className="overlay-link inline-block font-display font-extrabold text-[44px] md:text-[80px] leading-[1.0] text-white tracking-tighter transition-transform select-none"
                 >
                   {link.label}
                 </a>
@@ -170,16 +170,16 @@ export default function Navbar() {
         </div>
 
         {/* Overlay Bottom Contacts info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-slate-900/5 pt-8 text-[13px] text-slate-500 font-body">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-white/10 pt-8 text-[13px] text-slate-400 font-body">
           <div>
             <span className="font-mono text-[9px] uppercase tracking-wider text-slate-400 block mb-1">EMAIL INQUIRIES</span>
-            <a href="mailto:hello@synapselab.in" className="text-slate-900 hover:text-[#10B981] transition-colors">
+            <a href="mailto:hello@synapselab.in" className="text-white hover:text-[#10B981] transition-colors">
               hello@synapselab.in
             </a>
           </div>
           <div>
             <span className="font-mono text-[9px] uppercase tracking-wider text-slate-400 block mb-1">HEADQUARTERS</span>
-            <span className="text-slate-900">Chennai, Tamil Nadu, India</span>
+            <span className="text-white">Chennai, Tamil Nadu, India</span>
           </div>
         </div>
       </div>

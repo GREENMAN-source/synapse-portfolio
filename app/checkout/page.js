@@ -24,14 +24,14 @@ function CheckoutContent() {
     
     const formData = new FormData(e.target);
     const payload = {
-      Target_Asset: item,
-      Asset_Value: price,
-      Payment_Method: paymentMethod === 'qr' ? 'FamApp Transfer' : 'Cash on Delivery',
-      FamApp_Transaction_ID: formData.get("FamApp_Transaction_ID") || "N/A",
-      Full_Name: formData.get("Full_Name"),
-      Email_Address: formData.get("Email_Address"),
-      Phone_Number: formData.get("Phone_Number"),
-      Shipping_Address: formData.get("Shipping_Address")
+      serviceName: item,
+      amount: price,
+      method: paymentMethod === 'qr' ? 'FamApp' : 'Cash on Delivery',
+      transactionId: formData.get("FamApp_Transaction_ID") || "N/A",
+      name: formData.get("Full_Name"),
+      email: formData.get("Email_Address"),
+      phone: formData.get("Phone_Number"),
+      address: formData.get("Shipping_Address")
     };
 
     try {
@@ -51,12 +51,6 @@ function CheckoutContent() {
         const text = await response.text();
         console.warn("Expected JSON response but received non-JSON content. Status:", response.status, text);
         
-        // Simulating success in local next dev server environment
-        if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
-          console.log("Local development environment detected. Bypassing /api/checkout 404/500 and simulating a successful order submission.");
-          setIsSubmitted(true);
-          return;
-        }
         throw new Error("Invalid server response format (expected JSON)");
       }
 

@@ -4,7 +4,7 @@ import CustomCursor from './components/CustomCursor';
 
 export const metadata = {
   title: 'Dhanvanth L P | Founder of Synapse Lab | Security Researcher',
-  description: 'Dhanvanth L P is a 10th-grade founder engineering high-performance web apps, offensive security, and bug bounty hunting. Founder of Synapse Lab.',
+  description: 'Dhanvanth L P is a recognized Tech Prodigy, 10th-grade founder of Synapse Lab, engineering high-performance web apps, offensive security, and bug bounty hunting.',
   keywords: ['Dhanvanth L P', 'Synapse Lab', 'Full-Stack Developer', 'Security Researcher', 'Bug Bounty', 'React', 'Next.js', 'Cybersecurity', 'Founder', 'SYNAPSE_LAB_IN', 'YouTube Content Creator', 'Tech Prodigy'],
   authors: [{ name: 'Dhanvanth L P' }],
   creator: 'Dhanvanth L P',
@@ -22,12 +22,12 @@ export const metadata = {
   },
   openGraph: {
     title: 'Dhanvanth L P | Synapse Lab',
-    description: 'Dhanvanth L P is a 10th-grade founder engineering high-performance web apps and offensive security.',
-    url: 'https://dhanvanth.pages.dev',
+    description: 'Dhanvanth L P is a recognized Tech Prodigy, 10th-grade founder engineering high-performance web apps and offensive security.',
+    url: 'https://synapselab.in',
     siteName: 'Synapse Lab',
     images: [
       {
-        url: 'https://dhanvanth.pages.dev/assets/media__1778900000709.jpg',
+        url: 'https://synapselab.in/assets/media__1778900000709.jpg',
         width: 800,
         height: 600,
         alt: 'Dhanvanth L P Profile',
@@ -41,7 +41,7 @@ export const metadata = {
     title: 'Dhanvanth L P | Synapse Lab',
     description: '10th-grade founder engineering high-performance web apps and offensive security.',
     creator: '@5kDhanvant8844',
-    images: ['https://dhanvanth.pages.dev/assets/media__1778900000709.jpg'],
+    images: ['https://synapselab.in/assets/media__1778900000709.jpg'],
   },
 };
 
@@ -51,14 +51,14 @@ export default function RootLayout({ children }) {
     "@graph": [
       {
         "@type": "Person",
-        "@id": "https://dhanvanth.pages.dev/#person",
+        "@id": "https://synapselab.in/#person",
         "name": "Dhanvanth L P",
         "givenName": "Dhanvanth",
         "familyName": "L P",
         "jobTitle": "Security Researcher & Full-Stack Developer",
-        "description": "10th-grade founder of Synapse Lab, specializing in high-performance web applications, offensive security, and bug bounty hunting.",
-        "image": "https://dhanvanth.pages.dev/assets/media__1778900000709.jpg",
-        "url": "https://dhanvanth.pages.dev",
+        "description": "Acclaimed Tech Prodigy and 10th-grade founder of Synapse Lab, specializing in high-performance web applications, offensive security, and bug bounty hunting. Recognized for extraordinary achievements at a young age.",
+        "image": "https://synapselab.in/assets/media__1778900000709.jpg",
+        "url": "https://synapselab.in",
         "nationality": {
           "@type": "Country",
           "name": "India"
@@ -94,17 +94,17 @@ export default function RootLayout({ children }) {
           }
         },
         "worksFor": {
-          "@id": "https://dhanvanth.pages.dev/#organization"
+          "@id": "https://synapselab.in/#organization"
         }
       },
       {
         "@type": "Organization",
-        "@id": "https://dhanvanth.pages.dev/#organization",
+        "@id": "https://synapselab.in/#organization",
         "name": "Synapse Lab",
-        "url": "https://dhanvanth.pages.dev",
-        "logo": "https://dhanvanth.pages.dev/assets/media__1778900000709.jpg",
+        "url": "https://synapselab.in",
+        "logo": "https://synapselab.in/assets/media__1778900000709.jpg",
         "founder": {
-          "@id": "https://dhanvanth.pages.dev/#person"
+          "@id": "https://synapselab.in/#person"
         },
         "sameAs": [
           "https://www.youtube.com/@SYNAPSE_LAB_IN",
@@ -137,7 +137,7 @@ export default function RootLayout({ children }) {
       },
       {
         "@type": "ItemList",
-        "@id": "https://dhanvanth.pages.dev/#hardware",
+        "@id": "https://synapselab.in/#hardware",
         "name": "Hardware Projects & Store",
         "itemListElement": [
           {
@@ -261,34 +261,34 @@ export default function RootLayout({ children }) {
       },
       {
         "@type": "WebSite",
-        "@id": "https://dhanvanth.pages.dev/#website",
-        "url": "https://dhanvanth.pages.dev",
+        "@id": "https://synapselab.in/#website",
+        "url": "https://synapselab.in",
         "name": "Synapse Lab | Dhanvanth L P",
         "publisher": {
-          "@id": "https://dhanvanth.pages.dev/#organization"
+          "@id": "https://synapselab.in/#organization"
         }
       },
       {
         "@type": "BreadcrumbList",
-        "@id": "https://dhanvanth.pages.dev/#breadcrumbs",
+        "@id": "https://synapselab.in/#breadcrumbs",
         "itemListElement": [
           {
             "@type": "ListItem",
             "position": 1,
             "name": "Home",
-            "item": "https://dhanvanth.pages.dev"
+            "item": "https://synapselab.in"
           },
           {
             "@type": "ListItem",
             "position": 2,
             "name": "Samples",
-            "item": "https://dhanvanth.pages.dev/#samples"
+            "item": "https://synapselab.in/#samples"
           },
           {
             "@type": "ListItem",
             "position": 3,
             "name": "Store",
-            "item": "https://dhanvanth.pages.dev/#store"
+            "item": "https://synapselab.in/#store"
           }
         ]
       },
@@ -298,7 +298,7 @@ export default function RootLayout({ children }) {
         "name": "MakeMyTrip Frontend",
         "description": "Frontend for the travel booking platform clone built using Next.js, TypeScript, and Tailwind CSS.",
         "author": {
-          "@id": "https://dhanvanth.pages.dev/#person"
+          "@id": "https://synapselab.in/#person"
         },
         "programmingLanguage": ["Next.js", "TypeScript", "Tailwind CSS"]
       },
@@ -308,7 +308,7 @@ export default function RootLayout({ children }) {
         "name": "MakeMyTrip Backend",
         "description": "Spring Boot API service powering flights, hotels, and seat reservations for the MakeMyTrip clone.",
         "author": {
-          "@id": "https://dhanvanth.pages.dev/#person"
+          "@id": "https://synapselab.in/#person"
         },
         "programmingLanguage": ["Spring Boot", "Java", "PostgreSQL", "Redis"]
       },
@@ -318,7 +318,7 @@ export default function RootLayout({ children }) {
         "name": "TyrePro ERP Suite Source",
         "description": "Source repository of the enterprise Tyre shop ERP suite.",
         "author": {
-          "@id": "https://dhanvanth.pages.dev/#person"
+          "@id": "https://synapselab.in/#person"
         },
         "programmingLanguage": ["Next.js", "Express", "Prisma", "PostgreSQL", "TypeScript"]
       },
@@ -328,7 +328,7 @@ export default function RootLayout({ children }) {
         "name": "MakeMyTour Fullstack",
         "description": "Full-stack travel booking application featuring packages, itineraries, and payment integration.",
         "author": {
-          "@id": "https://dhanvanth.pages.dev/#person"
+          "@id": "https://synapselab.in/#person"
         },
         "programmingLanguage": ["TypeScript", "Next.js", "Node.js", "PostgreSQL"]
       },
@@ -338,7 +338,7 @@ export default function RootLayout({ children }) {
         "name": "LifeFlow IV Monitor",
         "description": "IoT healthcare monitoring system using ESP32 and load cells to track IV fluid levels in real-time.",
         "author": {
-          "@id": "https://dhanvanth.pages.dev/#person"
+          "@id": "https://synapselab.in/#person"
         },
         "programmingLanguage": ["C++", "Arduino"]
       },
@@ -351,7 +351,7 @@ export default function RootLayout({ children }) {
         "browserRequirements": "Requires JavaScript. Requires HTML5.",
         "url": "https://tyrepro-opal.vercel.app",
         "author": {
-          "@id": "https://dhanvanth.pages.dev/#person"
+          "@id": "https://synapselab.in/#person"
         }
       },
       {
@@ -363,7 +363,7 @@ export default function RootLayout({ children }) {
         "browserRequirements": "Requires JavaScript. Requires HTML5.",
         "url": "https://makemytrip-frontend-ten.vercel.app",
         "author": {
-          "@id": "https://dhanvanth.pages.dev/#person"
+          "@id": "https://synapselab.in/#person"
         }
       },
       {
@@ -374,7 +374,7 @@ export default function RootLayout({ children }) {
         "applicationCategory": "DeveloperApplication",
         "url": "https://makemytrip-backend-030l.onrender.com",
         "author": {
-          "@id": "https://dhanvanth.pages.dev/#person"
+          "@id": "https://synapselab.in/#person"
         }
       },
       {
@@ -385,7 +385,7 @@ export default function RootLayout({ children }) {
         "applicationCategory": "BusinessApplication",
         "url": "https://synapslab.in",
         "author": {
-          "@id": "https://dhanvanth.pages.dev/#person"
+          "@id": "https://synapselab.in/#person"
         }
       }
     ]

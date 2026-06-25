@@ -41,7 +41,7 @@ export default function ProjectCard({
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onClick={onClick}
-      className="project-card relative bg-[#08090F] border border-white/5 hover:border-[#00E5FF]/25 rounded-[28px] p-8 md:p-12 overflow-hidden transition-all duration-500 cursor-pointer flex flex-col justify-between min-h-[360px] group"
+      className="project-card relative backdrop-blur-md bg-black/40 border border-white/5 hover:border-[#00E5FF]/25 rounded-[28px] p-8 md:p-12 overflow-hidden transition-all duration-500 cursor-pointer flex flex-col justify-between min-h-[360px] group"
     >
       {/* Decorative Ghost Project Number */}
       <span className="absolute top-6 right-8 font-display font-extrabold text-[96px] leading-none text-white/[0.03] group-hover:text-white/[0.08] transition-colors duration-500 select-none">
