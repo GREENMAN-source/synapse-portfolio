@@ -1,0 +1,188 @@
+'use client';
+
+import React, { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const linksRef = useRef<HTMLUListElement>(null);
+
+  // Monitor scroll to apply background blur
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 60) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Overlay Open/Close animation
+  useEffect(() => {
+    const overlay = overlayRef.current;
+    if (!overlay) return;
+
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+
+      // Open transition: Circle clip-path expands
+      gsap.fromTo(overlay, 
+        { clipPath: 'circle(0% at calc(100% - 80px) 36px)' },
+        { 
+          clipPath: 'circle(150% at calc(100% - 80px) 36px)',
+          duration: 0.65, 
+          ease: 'power3.inOut' 
+        }
+      );
+
+      // Stagger nav links slide up
+      if (linksRef.current) {
+        const items = linksRef.current.querySelectorAll('.overlay-nav-item');
+        gsap.fromTo(items,
+          { y: 50, opacity: 0 },
+          { 
+            y: 0, 
+            opacity: 1, 
+            duration: 0.5, 
+            stagger: 0.08, 
+            ease: 'power3.out',
+            delay: 0.3 
+          }
+        );
+      }
+    } else {
+      document.body.style.overflow = '';
+
+      // Close transition: Circle clip-path contracts
+      gsap.to(overlay, {
+        clipPath: 'circle(0% at calc(100% - 80px) 36px)',
+        duration: 0.6,
+        ease: 'power3.inOut'
+      });
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
+  const toggleMenu = () => setIsOpen(!isOpen);
+
+  // Links hover effect: reduce opacity of non-hovered siblings
+  const handleLinkMouseEnter = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!linksRef.current) return;
+    const links = linksRef.current.querySelectorAll('.overlay-link');
+    links.forEach((link) => {
+      if (link !== e.currentTarget) {
+        gsap.to(link, { opacity: 0.3, x: 0, duration: 0.25 });
+      } else {
+        gsap.to(link, { opacity: 1, x: 12, color: '#10B981', duration: 0.25 });
+      }
+    });
+  };
+
+  const handleLinkMouseLeave = () => {
+    if (!linksRef.current) return;
+    const links = linksRef.current.querySelectorAll('.overlay-link');
+    links.forEach((link) => {
+      gsap.to(link, { opacity: 1, x: 0, color: '#0F172A', duration: 0.25 });
+    });
+  };
+
+  return (
+    <>
+      {/* HEADER NAVBAR */}
+      <nav 
+        ref={navRef}
+        className={`fixed top-0 left-0 right-0 h-[72px] px-6 md:px-12 flex justify-between items-center z-[1000] transition-all duration-400 ${
+          scrolled 
+            ? 'bg-[#F8F9FA]/85 backdrop-blur-[20px] border-b border-slate-900/10' 
+            : 'bg-transparent border-b border-transparent'
+        }`}
+      >
+        {/* Left side: Logo + Pulsing dot */}
+        <a href="#hero" className="flex items-center gap-2 font-bold text-slate-900 text-lg tracking-tight select-none">
+          <span className="pulsing-dot" />
+          <span className="font-display">Synapse Lab</span>
+        </a>
+
+        {/* Right side: CTAs & Menu trigger */}
+        <div className="flex items-center gap-8 font-medium text-[13px]">
+          <a 
+            href="#contact" 
+            className="hidden md:inline-block text-slate-600 hover:text-slate-900 transition-colors duration-200 relative group py-2"
+          >
+            let's talk
+            <span className="absolute bottom-1.5 left-0 w-0 h-[1px] bg-slate-900 group-hover:w-full transition-all duration-200" />
+          </a>
+
+          <button 
+            onClick={toggleMenu}
+            className="flex items-center gap-3 text-slate-600 hover:text-slate-900 transition-all duration-200 cursor-pointer select-none group"
+            aria-label="Toggle menu"
+          >
+            <div className="flex flex-col gap-[4px] justify-center items-end">
+              <span className={`h-[1px] bg-slate-900 transition-all duration-200 ${isOpen ? 'w-[16px] translate-y-[5px] rotate-45' : 'w-[16px]'}`} />
+              <span className={`h-[1px] bg-slate-900 transition-all duration-200 ${isOpen ? 'w-[16px] -translate-y-[0px] -rotate-45' : 'w-[10px] group-hover:w-[16px]'}`} />
+            </div>
+            <span className="font-body uppercase tracking-[0.1em] text-[11px] font-semibold">
+              {isOpen ? 'Close' : 'Menu'}
+            </span>
+          </button>
+        </div>
+      </nav>
+
+      {/* OVERLAY NAVIGATION MENU */}
+      <div 
+        ref={overlayRef}
+        className="menu-overlay fixed inset-0 bg-[#FFFFFF] z-[999] flex flex-col justify-between pt-[100px] pb-12 px-8 md:px-[10vw]"
+        style={{ clipPath: 'circle(0% at calc(100% - 80px) 36px)' }}
+      >
+        {/* Navigation List */}
+        <div className="my-auto flex flex-col items-start justify-center">
+          <ul ref={linksRef} className="space-y-3">
+            {[
+              { label: 'Journey', href: '#journey' },
+              { label: 'Work', href: '#projects' },
+              { label: 'Stack', href: '#tech' },
+              { label: 'Community', href: '#community' },
+              { label: 'Contact', href: '#contact' }
+            ].map((link, idx) => (
+              <li key={idx} className="overlay-nav-item overflow-hidden block">
+                <a 
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  onMouseEnter={handleLinkMouseEnter}
+                  onMouseLeave={handleLinkMouseLeave}
+                  className="overlay-link inline-block font-display font-extrabold text-[44px] md:text-[80px] leading-[1.0] text-slate-900 tracking-tighter transition-transform select-none"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Overlay Bottom Contacts info */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-slate-900/5 pt-8 text-[13px] text-slate-500 font-body">
+          <div>
+            <span className="font-mono text-[9px] uppercase tracking-wider text-slate-400 block mb-1">EMAIL INQUIRIES</span>
+            <a href="mailto:hello@synapselab.in" className="text-slate-900 hover:text-[#10B981] transition-colors">
+              hello@synapselab.in
+            </a>
+          </div>
+          <div>
+            <span className="font-mono text-[9px] uppercase tracking-wider text-slate-400 block mb-1">HEADQUARTERS</span>
+            <span className="text-slate-900">Chennai, Tamil Nadu, India</span>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

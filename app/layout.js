@@ -1,9 +1,11 @@
 import './globals.css';
+import LenisProvider from './components/LenisProvider';
+import CustomCursor from './components/CustomCursor';
 
 export const metadata = {
   title: 'Dhanvanth L P | Founder of Synapse Lab | Security Researcher',
   description: 'Dhanvanth L P is a 10th-grade founder engineering high-performance web apps, offensive security, and bug bounty hunting. Founder of Synapse Lab.',
-  keywords: ['Dhanvanth L P', 'Synapse Lab', 'Full-Stack Developer', 'Security Researcher', 'Bug Bounty', 'React', 'Next.js', 'Cybersecurity', 'Founder'],
+  keywords: ['Dhanvanth L P', 'Synapse Lab', 'Full-Stack Developer', 'Security Researcher', 'Bug Bounty', 'React', 'Next.js', 'Cybersecurity', 'Founder', 'SYNAPSE_LAB_IN', 'YouTube Content Creator', 'Tech Prodigy'],
   authors: [{ name: 'Dhanvanth L P' }],
   creator: 'Dhanvanth L P',
   publisher: 'Synapse Lab',
@@ -66,6 +68,7 @@ export default function RootLayout({ children }) {
           "https://github.com/GREENMAN-source",
           "https://x.com/5kDhanvant8844",
           "https://www.instagram.com/dhanvanth_l.p",
+          "https://www.youtube.com/@SYNAPSE_LAB_IN",
           "https://www.facebook.com/share/17MSAoYYVG/",
           "https://dev.to/dhanvanth_l_p_"
         ],
@@ -103,6 +106,10 @@ export default function RootLayout({ children }) {
         "founder": {
           "@id": "https://dhanvanth.pages.dev/#person"
         },
+        "sameAs": [
+          "https://www.youtube.com/@SYNAPSE_LAB_IN",
+          "https://www.instagram.com/dhanvanth_l.p"
+        ],
         "foundingDate": "2026",
         "description": "A high-performance security and development studio founded by Dhanvanth L P.",
         "makesOffer": [
@@ -393,7 +400,19 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaMarkup) }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <svg style={{ position: 'absolute', width: 0, height: 0 }} aria-hidden="true">
+          <filter id="goo">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="20" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 30 -15" result="goo" />
+            <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+          </filter>
+        </svg>
+        <CustomCursor />
+        <LenisProvider>
+          {children}
+        </LenisProvider>
+      </body>
     </html>
   );
 }
