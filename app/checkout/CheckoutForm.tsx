@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CreditCard, Wallet, Fingerprint, Loader2, CheckCircle2 } from 'lucide-react';
+import { CreditCard, Wallet, Fingerprint, Loader2, CheckCircle2, Shield } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function CheckoutForm({ product }: { product: any }) {
