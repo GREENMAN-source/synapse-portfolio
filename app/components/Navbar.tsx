@@ -144,28 +144,43 @@ export default function Navbar() {
         className="menu-overlay fixed inset-0 bg-[#030408] z-[999] flex flex-col justify-between pt-[100px] pb-12 px-8 md:px-[10vw]"
         style={{ clipPath: 'circle(0% at calc(100% - 80px) 36px)' }}
       >
-        {/* Navigation List */}
-        <div className="my-auto flex flex-col items-start justify-center">
-          <ul ref={linksRef} className="space-y-3">
+        {/* Navigation List - DNA Synapse Structure */}
+        <div className="my-auto flex flex-col items-center justify-center w-full relative">
+          {/* The Neural Spine */}
+          <div className="absolute left-8 md:left-1/2 top-4 bottom-4 w-[2px] bg-gradient-to-b from-[#00E5FF] via-[#EC4899] to-transparent opacity-50 z-0"></div>
+          
+          <ul ref={linksRef} className="w-full max-w-4xl space-y-6 md:space-y-8 relative z-10">
             {[
               { label: 'Journey', href: '#journey' },
               { label: 'Work', href: '#projects' },
               { label: 'Stack', href: '#tech' },
               { label: 'Community', href: '#community' },
               { label: 'Contact', href: '#contact' }
-            ].map((link, idx) => (
-              <li key={idx} className="overlay-nav-item overflow-hidden block">
+            ].map((link, idx) => {
+              const isLeft = idx % 2 === 0;
+              return (
+              <li key={idx} className={`overlay-nav-item overflow-hidden w-full flex flex-col md:flex-row relative items-start md:items-center ${isLeft ? 'md:justify-start' : 'md:justify-end'}`}>
+                
+                {/* Mobile node dot */}
+                <div className="md:hidden absolute left-[31px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#00E5FF] shadow-[0_0_10px_#00E5FF]"></div>
+                
                 <a 
                   href={link.href}
                   onClick={() => setIsOpen(false)}
                   onMouseEnter={handleLinkMouseEnter}
                   onMouseLeave={handleLinkMouseLeave}
-                  className="overlay-link inline-block font-display font-extrabold text-[44px] md:text-[80px] leading-[1.0] text-white tracking-tighter transition-transform select-none"
+                  className={`overlay-link inline-block font-display font-extrabold text-[36px] md:text-[64px] leading-[1.0] text-white tracking-tighter transition-transform select-none pl-16 md:pl-0 ${isLeft ? 'md:pr-[10%]' : 'md:pl-[10%]'}`}
                 >
                   {link.label}
                 </a>
+
+                {/* Desktop DNA Synapse Connection */}
+                <div className={`hidden md:block absolute top-1/2 -translate-y-1/2 w-[15%] h-[2px] bg-white/20 ${isLeft ? 'right-[50%]' : 'left-[50%]'}`}>
+                  <div className={`absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full shadow-[0_0_15px_rgba(236,72,153,0.8)] ${isLeft ? 'right-0 bg-[#EC4899]' : 'left-0 bg-[#00E5FF]'}`}></div>
+                </div>
+
               </li>
-            ))}
+            )})}
           </ul>
         </div>
 

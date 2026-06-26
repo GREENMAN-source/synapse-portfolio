@@ -21,19 +21,21 @@ export default function AdminDashboard() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      // Fetch Orders
-      const resOrders = await fetch('/api/admin/orders');
-      const dataOrders = await resOrders.json();
+      // Fetch Orders, Updates, and Shorts concurrently
+      const [resOrders, resUpdates, resShorts] = await Promise.all([
+        fetch('/api/admin/orders'),
+        fetch('/api/admin/updates'),
+        fetch('/api/admin/shorts')
+      ]);
+
+      const [dataOrders, dataUpdates, dataShorts] = await Promise.all([
+        resOrders.json(),
+        resUpdates.json(),
+        resShorts.json()
+      ]);
+
       if (dataOrders.success) setOrders(dataOrders.orders);
-
-      // Fetch Updates
-      const resUpdates = await fetch('/api/admin/updates');
-      const dataUpdates = await resUpdates.json();
       if (dataUpdates.success) setUpdates(dataUpdates.updates);
-
-      // Fetch Shorts
-      const resShorts = await fetch('/api/admin/shorts');
-      const dataShorts = await resShorts.json();
       if (dataShorts.success) setShorts(dataShorts.shorts);
 
     } catch (error) {

@@ -4,51 +4,62 @@ import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-function BrainParticles() {
+function DNAParticles() {
   const ref = useRef<THREE.Points>(null);
 
-  // Generate a procedural brain-like point cloud
+  // Generate a procedural DNA-like point cloud
   const [positions, colors] = useMemo(() => {
-    const count = 5000;
+    const count = 8000;
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
     
     for (let i = 0; i < count; i++) {
-      // Create a two-hemisphere blob shape
-      const u = Math.random();
-      const v = Math.random();
-      const theta = 2 * Math.PI * u;
-      const phi = Math.acos(2 * v - 1);
-      
-      let x = Math.sin(phi) * Math.cos(theta);
-      let y = Math.sin(phi) * Math.sin(theta);
-      let z = Math.cos(phi);
-      
-      // Deform into brain shape (elongated, split hemispheres)
-      x *= 1.3; // length
-      y *= 0.9; // height
-      z *= 1.1; // width
-      
-      // Central fissure (gap between hemispheres)
-      if (z > 0) z += 0.15;
-      else z -= 0.15;
+      const type = Math.random();
+      let x, y, z;
 
-      // Add noise to make it look organic
-      const noiseX = (Math.random() - 0.5) * 0.25;
-      const noiseY = (Math.random() - 0.5) * 0.25;
-      const noiseZ = (Math.random() - 0.5) * 0.25;
-      x += noiseX;
-      y += noiseY;
-      z += noiseZ;
+      // 80% points for the two main strands
+      if (type < 0.8) {
+        const t = Math.random() * Math.PI * 40; // Length
+        const strand = Math.random() > 0.5 ? 1 : 0;
+        const radius = 2.0;
+        
+        x = Math.cos(t + strand * Math.PI) * radius;
+        z = Math.sin(t + strand * Math.PI) * radius;
+        y = (t - Math.PI * 20) * 0.3; // Spread along Y axis
+        
+        // Add organic noise to strands
+        x += (Math.random() - 0.5) * 0.4;
+        y += (Math.random() - 0.5) * 0.4;
+        z += (Math.random() - 0.5) * 0.4;
+      } else {
+        // 20% points for connecting bridges (synapses)
+        const t = Math.random() * Math.PI * 40;
+        const radius = 2.0 * Math.random(); // Random point between the two strands
+        const strandAngle = Math.random() > 0.5 ? 0 : Math.PI;
+        
+        // Sometimes interpolate between strands
+        const mix = Math.random();
+        const angle1 = t;
+        const angle2 = t + Math.PI;
+        
+        x = (Math.cos(angle1) * mix + Math.cos(angle2) * (1 - mix)) * radius;
+        z = (Math.sin(angle1) * mix + Math.sin(angle2) * (1 - mix)) * radius;
+        y = (t - Math.PI * 20) * 0.3;
+        
+        // Add more noise to bridges
+        x += (Math.random() - 0.5) * 0.6;
+        y += (Math.random() - 0.5) * 0.6;
+        z += (Math.random() - 0.5) * 0.6;
+      }
 
       positions[i * 3] = x;
       positions[i * 3 + 1] = y;
       positions[i * 3 + 2] = z;
 
-      // Colors: blend between cyan and pink
+      // Colors: Cyan and Pink DNA aesthetic
       const mix = Math.random();
       const c = new THREE.Color().lerpColors(
-        new THREE.Color('#06B6D4'), // Cyan
+        new THREE.Color('#00E5FF'), // Cyan
         new THREE.Color('#EC4899'), // Pink
         mix
       );
@@ -62,31 +73,29 @@ function BrainParticles() {
 
   useFrame((state, delta) => {
     if (ref.current) {
-      // Calculate global scroll progress (0.0 to 1.0)
       const scrollY = window.scrollY;
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      // Protect against maxScroll being 0 or very small before page loads
       const progress = maxScroll > 0 ? Math.min(scrollY / maxScroll, 1) : 0;
       
-      // Target rotation based on scroll (full 360 degree spin + some tilt)
-      const targetRotationY = progress * Math.PI * 2.5; 
-      const targetRotationX = (progress - 0.5) * Math.PI * 0.25;
+      // Cinematic Zoom: Move the DNA down so camera flies *up* through it
+      // progress 0 -> y = 10 (top of DNA)
+      // progress 1 -> y = -10 (bottom of DNA)
+      const targetPositionY = THREE.MathUtils.lerp(8, -8, progress);
+      
+      // Rotate as we fly through
+      const targetRotationY = progress * Math.PI * 4; 
+      
+      // 5-step scroll narrative: Zoom in deeply at the transition points
+      const zoomPulse = Math.abs(Math.sin(progress * Math.PI * 4)); // 4 transitions for 5 steps
+      const targetScale = 1 + zoomPulse * 0.8; 
 
-      // Zoom effect: Zoom in during the transition between the 6 sections
-      // 7 sections means 6 transitions. progress * Math.PI * 6 creates 5 arcs.
-      const zoomPulse = Math.abs(Math.sin(progress * Math.PI * 6));
-      const targetScale = 1 + zoomPulse * 0.8; // scales up to 1.8x during transition
-
-      // Smoothly lerp towards target rotation and scale
+      ref.current.position.y = THREE.MathUtils.lerp(ref.current.position.y, targetPositionY, 0.05);
       ref.current.rotation.y = THREE.MathUtils.lerp(ref.current.rotation.y, targetRotationY, 0.05);
-      ref.current.rotation.x = THREE.MathUtils.lerp(ref.current.rotation.x, targetRotationX, 0.05);
       
-      ref.current.scale.x = THREE.MathUtils.lerp(ref.current.scale.x, targetScale, 0.05);
-      ref.current.scale.y = THREE.MathUtils.lerp(ref.current.scale.y, targetScale, 0.05);
-      ref.current.scale.z = THREE.MathUtils.lerp(ref.current.scale.z, targetScale, 0.05);
+      ref.current.scale.setScalar(THREE.MathUtils.lerp(ref.current.scale.x, targetScale, 0.05));
       
-      // Keep a very subtle continuous ambient float
-      ref.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+      // Continuous idle spin
+      ref.current.rotation.y += delta * 0.1;
     }
   });
 
@@ -107,7 +116,7 @@ function BrainParticles() {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.03}
+        size={0.035}
         vertexColors
         transparent
         depthWrite={false}
@@ -120,9 +129,10 @@ function BrainParticles() {
 export default function Brain3D() {
   return (
     <div className="w-full h-full fixed inset-0 z-0 pointer-events-none bg-[#030408]">
-      <Canvas camera={{ position: [0, 0, 4.5], fov: 50 }}>
+      {/* We position the camera slightly looking down inside the helix */}
+      <Canvas camera={{ position: [0, -1, 3], fov: 60 }}>
         <ambientLight intensity={0.5} />
-        <BrainParticles />
+        <DNAParticles />
       </Canvas>
     </div>
   );

@@ -20,8 +20,7 @@ export default function SynapseHome({ isLoaded }: SynapseHomeProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   
   const heroRef = useRef<HTMLDivElement>(null);
-  const productsRef = useRef<HTMLDivElement>(null);
-  const historyRef = useRef<HTMLDivElement>(null);
+  const skillsRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const projectsRef = useRef<HTMLDivElement>(null);
   const socialRef = useRef<HTMLDivElement>(null);
@@ -59,7 +58,7 @@ export default function SynapseHome({ isLoaded }: SynapseHomeProps) {
     if (!isLoaded || !containerRef.current) return;
 
     // Advanced Aesthetic Entry States
-    gsap.set([productsRef.current, historyRef.current, timelineRef.current, projectsRef.current, socialRef.current], { 
+    gsap.set([skillsRef.current, timelineRef.current, projectsRef.current, socialRef.current], { 
       opacity: 0, 
       y: 150, 
       scale: 0.85,
@@ -88,16 +87,12 @@ export default function SynapseHome({ isLoaded }: SynapseHomeProps) {
       }
     });
 
-    // 7 Sections, 6 Transitions with cinematic easing
+    // 5 Sections, 4 Transitions with cinematic easing (5 times scroll narrative)
     tl.to(heroRef.current, { opacity: 0, y: -150, scale: 1.1, filter: 'blur(20px)', rotateX: -15, autoAlpha: 0, duration: 1, ease: 'power2.inOut' })
-      .to(productsRef.current, { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', rotateX: 0, autoAlpha: 1, duration: 1, ease: 'power2.out' }, "<0.5")
+      .to(skillsRef.current, { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', rotateX: 0, autoAlpha: 1, duration: 1, ease: 'power2.out' }, "<0.5")
       .to({}, { duration: 0.8 })
       
-      .to(productsRef.current, { opacity: 0, y: -150, scale: 1.1, filter: 'blur(20px)', rotateX: -15, autoAlpha: 0, duration: 1, ease: 'power2.inOut' })
-      .to(historyRef.current, { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', rotateX: 0, autoAlpha: 1, duration: 1, ease: 'power2.out' }, "<0.5")
-      .to({}, { duration: 0.8 })
-
-      .to(historyRef.current, { opacity: 0, y: -150, scale: 1.1, filter: 'blur(20px)', rotateX: -15, autoAlpha: 0, duration: 1, ease: 'power2.inOut' })
+      .to(skillsRef.current, { opacity: 0, y: -150, scale: 1.1, filter: 'blur(20px)', rotateX: -15, autoAlpha: 0, duration: 1, ease: 'power2.inOut' })
       .to(timelineRef.current, { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', rotateX: 0, autoAlpha: 1, duration: 1, ease: 'power2.out' }, "<0.5")
       .to({}, { duration: 0.8 })
 
@@ -120,7 +115,7 @@ export default function SynapseHome({ isLoaded }: SynapseHomeProps) {
 
   return (
     <div className="bg-[#030408]">
-      <div ref={containerRef} className="relative w-full h-[800vh] snap-start">
+      <div ref={containerRef} className="relative w-full h-[500vh] snap-start">
         <Brain3D />
         <div className="fixed inset-0 w-full h-screen pointer-events-none z-10 flex items-center max-w-[1600px] mx-auto overflow-hidden">
           
@@ -143,109 +138,48 @@ export default function SynapseHome({ isLoaded }: SynapseHomeProps) {
             }
           />
 
-          {/* PRODUCTS WIDGET */}
+          {/* SKILLS WIDGET */}
           <FlashCard 
-            ref={productsRef}
+            ref={skillsRef}
             align="right"
             number="001"
-            category="SYNAPSE STORE"
-            title="Services & Hardware."
+            category="CAPABILITIES"
+            title="Skills & Arsenal."
             content={
               <>
-                <p className="mb-4">Enterprise logic and physical IoT systems developed in-house.</p>
-                <div className="mt-4 space-y-3 pointer-events-auto max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
-                  <a href="/checkout?item=Custom%20Web%20App&price=₹3,000" className="flex justify-between items-center bg-white/5 border border-white/10 p-3 rounded-lg hover:border-[#00E5FF]/50 transition-all hover:-translate-y-1 hover:shadow-[0_4px_15px_rgba(0,229,255,0.15)] group cursor-pointer block">
-                    <div>
-                      <h4 className="text-white font-bold group-hover:text-[#00E5FF] transition-colors">Custom Web App</h4>
-                      <p className="text-[10px] text-slate-400 font-mono">Full-stack business logic</p>
+                <p className="mb-4">From high-level logic to bare-metal hardware repairing.</p>
+                <div className="mt-4 space-y-4 pointer-events-auto">
+                  <div className="bg-white/5 border border-white/10 p-4 rounded-xl hover:border-[#00E5FF]/50 transition-all hover:bg-white/10">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Code className="text-[#00E5FF]" size={20} />
+                      <h4 className="text-white font-bold text-lg">Coding & Architecture</h4>
                     </div>
-                    <span className="text-[#00E5FF] font-mono text-sm font-bold flex items-center gap-2">₹3,000 <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" /></span>
-                  </a>
-                  <a href="/checkout?item=Security%20VAPT%20Testing&price=₹2,500" className="flex justify-between items-center bg-white/5 border border-white/10 p-3 rounded-lg hover:border-[#00E5FF]/50 transition-all hover:-translate-y-1 hover:shadow-[0_4px_15px_rgba(0,229,255,0.15)] group cursor-pointer block">
-                    <div>
-                      <h4 className="text-white font-bold group-hover:text-[#00E5FF] transition-colors">Security VAPT Testing</h4>
-                      <p className="text-[10px] text-slate-400 font-mono">Deep vulnerability assessment</p>
+                    <p className="text-sm text-slate-400">Fullstack Web Apps, Next.js, APIs, and scalable backend logic.</p>
+                  </div>
+                  <div className="bg-white/5 border border-white/10 p-4 rounded-xl hover:border-[#EC4899]/50 transition-all hover:bg-white/10">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Cpu className="text-[#EC4899]" size={20} />
+                      <h4 className="text-white font-bold text-lg">Robotics & IoT</h4>
                     </div>
-                    <span className="text-[#00E5FF] font-mono text-sm font-bold flex items-center gap-2">₹2,500 <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" /></span>
-                  </a>
-                  <a href="/checkout?item=LifeFlow%20IV%20Monitor&price=₹1,500" className="flex justify-between items-center bg-white/5 border border-white/10 p-3 rounded-lg hover:border-[#00E5FF]/50 transition-all hover:-translate-y-1 hover:shadow-[0_4px_15px_rgba(0,229,255,0.15)] group cursor-pointer block">
-                    <div>
-                      <h4 className="text-white font-bold group-hover:text-[#00E5FF] transition-colors">LifeFlow IV Monitor</h4>
-                      <p className="text-[10px] text-slate-400 font-mono">IoT Healthcare Telemetry</p>
+                    <p className="text-sm text-slate-400">Arduino, ESP32, Sensor telemetry, and automated mechanical systems.</p>
+                  </div>
+                  <div className="bg-white/5 border border-white/10 p-4 rounded-xl hover:border-[#F7DF1E]/50 transition-all hover:bg-white/10">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Terminal className="text-[#F7DF1E]" size={20} />
+                      <h4 className="text-white font-bold text-lg">Hardware Repairing</h4>
                     </div>
-                    <span className="text-[#00E5FF] font-mono text-sm font-bold flex items-center gap-2">₹1,500 <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" /></span>
-                  </a>
-                  <a href="/checkout?item=Smart%20Home%20Hub&price=₹3,500" className="flex justify-between items-center bg-white/5 border border-white/10 p-3 rounded-lg hover:border-[#00E5FF]/50 transition-all hover:-translate-y-1 hover:shadow-[0_4px_15px_rgba(0,229,255,0.15)] group cursor-pointer block">
-                    <div>
-                      <h4 className="text-white font-bold group-hover:text-[#00E5FF] transition-colors">Smart Home Hub</h4>
-                      <p className="text-[10px] text-slate-400 font-mono">Facial recognition lock</p>
-                    </div>
-                    <span className="text-[#00E5FF] font-mono text-sm font-bold flex items-center gap-2">₹3,500 <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" /></span>
-                  </a>
-                  <a href="/checkout?item=Auto%20Plant%20Care&price=₹800" className="flex justify-between items-center bg-white/5 border border-white/10 p-3 rounded-lg hover:border-[#00E5FF]/50 transition-all hover:-translate-y-1 hover:shadow-[0_4px_15px_rgba(0,229,255,0.15)] group cursor-pointer block">
-                    <div>
-                      <h4 className="text-white font-bold group-hover:text-[#00E5FF] transition-colors">Auto Plant Care</h4>
-                      <p className="text-[10px] text-slate-400 font-mono">Irrigation & Sensors</p>
-                    </div>
-                    <span className="text-[#00E5FF] font-mono text-sm font-bold flex items-center gap-2">₹800 <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" /></span>
-                  </a>
+                    <p className="text-sm text-slate-400">Circuit debugging, micro-soldering, and physical hardware logic tracing.</p>
+                  </div>
                 </div>
               </>
-            }
-          />
-
-          {/* HISTORY WIDGET */}
-          <FlashCard 
-            ref={historyRef}
-            align="left"
-            number="002"
-            category="ORIGINS"
-            title="Dhanvanth L P"
-            content={
-              <div className="flex flex-col xl:flex-row items-center xl:items-start gap-12 mt-4">
-                <div className="w-56 h-56 xl:w-64 xl:h-64 shrink-0 relative flex justify-center items-center group">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#6a11cb] to-[#2575fc] rounded-full blur-xl opacity-40 group-hover:opacity-60 transition-opacity"></div>
-                  <div className="relative w-full h-full rounded-full border-2 border-white/20 overflow-hidden bg-black/50 backdrop-blur">
-                    <Image 
-                      src="/assets/cyber_avatar_transparent.png" 
-                      alt="Dhanvanth Avatar" 
-                      fill 
-                      className="object-cover object-top scale-[1.3] translate-y-[10%]"
-                    />
-                  </div>
-                  <div className="absolute top-[0%] left-[-10%] bg-[#030408] border-2 border-[#f7df1e] p-2.5 rounded-xl shadow-[0_0_15px_rgba(247,223,30,0.3)] animate-pulse" style={{ animationDelay: '0ms' }}>
-                    <Code className="text-[#f7df1e]" size={20} />
-                  </div>
-                  <div className="absolute top-[25%] right-[-15%] bg-[#030408] border-2 border-[#4af626] p-2.5 rounded-xl shadow-[0_0_15px_rgba(74,246,38,0.3)] animate-pulse" style={{ animationDelay: '500ms' }}>
-                    <Terminal className="text-[#4af626]" size={20} />
-                  </div>
-                  <div className="absolute bottom-[20%] left-[-15%] bg-[#030408] border-2 border-[#ff4b4b] p-2.5 rounded-xl shadow-[0_0_15px_rgba(255,75,75,0.3)] animate-pulse" style={{ animationDelay: '1000ms' }}>
-                    <Shield className="text-[#ff4b4b]" size={20} />
-                  </div>
-                  <div className="absolute bottom-[-5%] right-[0%] bg-[#030408] border-2 border-[#336791] p-2.5 rounded-xl shadow-[0_0_15px_rgba(51,103,145,0.3)] animate-pulse" style={{ animationDelay: '1500ms' }}>
-                    <Database className="text-[#336791]" size={20} />
-                  </div>
-                  <div className="absolute top-[-5%] right-[20%] bg-[#030408] border-2 border-[#ff9900] p-2.5 rounded-xl shadow-[0_0_15px_rgba(255,153,0,0.3)] animate-pulse" style={{ animationDelay: '2000ms' }}>
-                    <Cpu className="text-[#ff9900]" size={20} />
-                  </div>
-                </div>
-                <div>
-                  <p className="text-[#00E5FF] font-mono text-sm tracking-widest font-bold mb-4 uppercase">
-                    [10th Grade Founder]
-                  </p>
-                  <p className="text-white font-display text-lg md:text-xl xl:text-2xl font-semibold leading-relaxed tracking-wide">
-                    Engineering high-performance web applications, diving deep into offensive security, and hunting logic flaws across the matrix.
-                  </p>
-                </div>
-              </div>
             }
           />
 
           {/* TIMELINE WIDGET */}
           <FlashCard 
             ref={timelineRef}
-            align="right"
-            number="003"
+            align="left"
+            number="002"
             category="JOURNEY"
             title="The Timeline."
             content={
@@ -276,8 +210,8 @@ export default function SynapseHome({ isLoaded }: SynapseHomeProps) {
           {/* PROJECTS WIDGET */}
           <FlashCard 
             ref={projectsRef}
-            align="left"
-            number="004"
+            align="right"
+            number="003"
             category="SAMPLES"
             title="Active Deployments."
             content={
@@ -320,7 +254,7 @@ export default function SynapseHome({ isLoaded }: SynapseHomeProps) {
           <FlashCard 
             ref={socialRef}
             align="left"
-            number="005"
+            number="004"
             category="TRANSMISSION"
             title="Access the Network."
             content={
