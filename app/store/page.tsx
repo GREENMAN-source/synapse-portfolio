@@ -62,9 +62,9 @@ export default async function StorePage() {
               <div className="flex items-center gap-4">
                 <div className="text-right">
                   <div className="text-sm font-bold text-white">{session.user?.name || session.user?.email}</div>
-                  <div className="text-xs font-mono text-[#00E5FF]">Clearance: {session.user?.role?.toUpperCase()}</div>
+                  <div className="text-xs font-mono text-[#00E5FF]">Clearance: {(session.user as any)?.role?.toUpperCase()}</div>
                 </div>
-                {session.user?.role === 'admin' && (
+                {(session.user as any)?.role === 'admin' && (
                   <Link href="/admin" className="bg-[#00E5FF]/20 border border-[#00E5FF]/50 text-[#00E5FF] px-4 py-2 rounded-lg font-mono text-xs hover:bg-[#00E5FF]/30 transition-colors">
                     Admin Matrix
                   </Link>
