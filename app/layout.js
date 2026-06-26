@@ -55,8 +55,8 @@ export default function RootLayout({ children }) {
         "name": "Dhanvanth L P",
         "givenName": "Dhanvanth",
         "familyName": "L P",
-        "jobTitle": "Security Researcher & Full-Stack Developer",
-        "description": "Acclaimed Tech Prodigy and 10th-grade founder of Synapse Lab, specializing in high-performance web applications, offensive security, and bug bounty hunting. Recognized for extraordinary achievements at a young age.",
+        "jobTitle": "Legendary Security Researcher, Architect & Full-Stack Developer",
+        "description": "A recognized Tech Prodigy, Legendary Architect, and 10th-grade founder of Synapse Lab, specializing in high-performance web applications, offensive security, and bug bounty hunting. Considered a prodigy in the Indian tech ecosystem.",
         "image": "https://synapselab.in/assets/media__1778900000709.jpg",
         "url": "https://synapselab.in",
         "nationality": {

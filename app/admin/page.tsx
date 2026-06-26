@@ -1,323 +1,157 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { Shield, CheckCircle2, XCircle, Clock, Trash2, Plus, Calendar, Type, FileText, Palette, Video, Link as LinkIcon, User } from 'lucide-react';
+import React from 'react';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '../../lib/authOptions';
+import { redirect } from 'next/navigation';
+import { Activity, Users, Database, ShieldAlert, Terminal, Settings, Download, Plus, Home } from 'lucide-react';
+import Link from 'next/link';
+import SignOutButton from '../components/SignOutButton';
 
-export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState<'orders' | 'updates' | 'shorts'>('orders');
-  
-  const [orders, setOrders] = useState<any[]>([]);
-  const [updates, setUpdates] = useState<any[]>([]);
-  const [shorts, setShorts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+export default async function AdminDashboard() {
+  const session = await getServerSession(authOptions);
 
-  // Forms states
-  const [updateForm, setUpdateForm] = useState({ year: '', title: '', description: '', color: '#00E5FF' });
-  const [shortForm, setShortForm] = useState({ platform: 'YouTube', embedUrl: '', handle: '@synapselab' });
+  if (!session) {
+    redirect('/login');
+  }
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      // Fetch Orders, Updates, and Shorts concurrently
-      const [resOrders, resUpdates, resShorts] = await Promise.all([
-        fetch('/api/admin/orders'),
-        fetch('/api/admin/updates'),
-        fetch('/api/admin/shorts')
-      ]);
-
-      const [dataOrders, dataUpdates, dataShorts] = await Promise.all([
-        resOrders.json(),
-        resUpdates.json(),
-        resShorts.json()
-      ]);
-
-      if (dataOrders.success) setOrders(dataOrders.orders);
-      if (dataUpdates.success) setUpdates(dataUpdates.updates);
-      if (dataShorts.success) setShorts(dataShorts.shorts);
-
-    } catch (error) {
-      console.error('Failed to fetch data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateOrderStatus = async (orderId: string, newStatus: string) => {
-    try {
-      const res = await fetch('/api/admin/orders', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId, status: newStatus })
-      });
-      const data = await res.json();
-      if (data.success) {
-        setOrders(orders.map(order => 
-          order._id === orderId ? { ...order, status: newStatus } : order
-        ));
-      }
-    } catch (error) {
-      console.error('Failed to update order:', error);
-    }
-  };
-
-  const createUpdate = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const res = await fetch('/api/admin/updates', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updateForm)
-      });
-      const data = await res.json();
-      if (data.success) {
-        setUpdates([{ _id: data.id, ...updateForm }, ...updates]);
-        setUpdateForm({ year: '', title: '', description: '', color: '#00E5FF' });
-      }
-    } catch (error) {
-      console.error('Failed to create update:', error);
-    }
-  };
-
-  const deleteUpdate = async (id: string) => {
-    try {
-      const res = await fetch(`/api/admin/updates?id=${id}`, { method: 'DELETE' });
-      if (res.ok) setUpdates(updates.filter(u => u._id !== id));
-    } catch (error) {
-      console.error('Failed to delete update:', error);
-    }
-  };
-
-  const createShort = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const res = await fetch('/api/admin/shorts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(shortForm)
-      });
-      const data = await res.json();
-      if (data.success) {
-        setShorts([{ _id: data.id, ...shortForm }, ...shorts]);
-        setShortForm({ platform: 'YouTube', embedUrl: '', handle: '@synapselab' });
-      }
-    } catch (error) {
-      console.error('Failed to create short:', error);
-    }
-  };
-
-  const deleteShort = async (id: string) => {
-    try {
-      const res = await fetch(`/api/admin/shorts?id=${id}`, { method: 'DELETE' });
-      if (res.ok) setShorts(shorts.filter(s => s._id !== id));
-    } catch (error) {
-      console.error('Failed to delete short:', error);
-    }
-  };
-
-  if (loading) {
-    return <div className="min-h-screen bg-[#030408] text-white flex items-center justify-center font-mono">Loading CMS Network...</div>;
+  if ((session?.user as any)?.role !== 'admin') {
+    redirect('/store');
   }
 
   return (
-    <main className="min-h-screen bg-[#030408] text-white font-mono flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-[#050505] border-r border-white/10 flex flex-col p-6">
-        <div className="flex items-center gap-3 mb-12">
-          <Shield size={32} className="text-[#00E5FF]" />
-          <h1 className="text-xl font-bold font-display uppercase tracking-wider leading-tight">Synapse<br/>CMS</h1>
-        </div>
+    <div className="min-h-screen bg-[#030408] text-white p-6 md:p-12 relative overflow-hidden font-sans">
+      {/* Background styling */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,229,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,229,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"></div>
+      
+      <div className="relative z-10 max-w-7xl mx-auto flex flex-col gap-8">
         
-        <nav className="flex flex-col gap-2">
-          <button 
-            onClick={() => setActiveTab('orders')}
-            className={`text-left px-4 py-3 rounded uppercase text-sm font-bold tracking-widest transition-colors ${activeTab === 'orders' ? 'bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
-          >
-            Orders
-          </button>
-          <button 
-            onClick={() => setActiveTab('updates')}
-            className={`text-left px-4 py-3 rounded uppercase text-sm font-bold tracking-widest transition-colors ${activeTab === 'updates' ? 'bg-[#EC4899]/10 text-[#EC4899] border border-[#EC4899]/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
-          >
-            Timeline
-          </button>
-          <button 
-            onClick={() => setActiveTab('shorts')}
-            className={`text-left px-4 py-3 rounded uppercase text-sm font-bold tracking-widest transition-colors ${activeTab === 'shorts' ? 'bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
-          >
-            Shorts
-          </button>
+        {/* TOP NAVBAR */}
+        <nav className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-white/10 pb-6">
+          <div className="flex items-center gap-6">
+            <h1 className="font-display text-3xl md:text-5xl font-bold text-white flex items-center gap-4 tracking-tight">
+              <ShieldAlert className="text-[#00E5FF] drop-shadow-[0_0_15px_rgba(0,229,255,0.5)]" size={40} />
+              ADMIN MATRIX
+            </h1>
+          </div>
+          
+          <div className="mt-6 md:mt-0 flex items-center gap-4">
+            <Link href="/" className="flex items-center gap-2 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-lg text-sm transition-colors border border-white/5">
+              <Home size={16} /> Dashboard Home
+            </Link>
+            <SignOutButton />
+          </div>
         </nav>
-      </aside>
 
-      {/* Main Content */}
-      <section className="flex-1 p-10 overflow-y-auto">
-        {activeTab === 'orders' && (
-          <div className="max-w-6xl">
-            <h2 className="text-2xl font-display font-bold uppercase tracking-widest mb-8 border-b border-white/10 pb-4">Payment & Order Verification</h2>
-            <div className="bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden shadow-2xl">
-              <table className="w-full text-left text-sm">
-                <thead className="bg-black/50 border-b border-white/10 uppercase text-slate-400 text-xs">
-                  <tr>
-                    <th className="px-6 py-4">Target Asset</th>
-                    <th className="px-6 py-4">Client Data</th>
-                    <th className="px-6 py-4">FamApp Transaction ID</th>
-                    <th className="px-6 py-4">Status</th>
-                    <th className="px-6 py-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/5">
-                  {orders.length === 0 ? (
-                    <tr><td colSpan={5} className="px-6 py-12 text-center text-slate-500">No orders found.</td></tr>
-                  ) : (
-                    orders.map((order) => (
-                      <tr key={order._id} className="hover:bg-white/[0.02]">
-                        <td className="px-6 py-4">
-                          <div className="font-bold text-[#00E5FF]">{order.serviceName || order.Target_Asset}</div>
-                          <div className="text-slate-400 text-xs mt-1">{order.amount || order.Asset_Value}</div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="text-white font-medium">{order.name || order.Full_Name}</div>
-                          <div className="text-slate-400 text-xs mt-1">{order.email || order.Email_Address}</div>
-                          <div className="text-slate-500 text-xs mt-0.5">{order.phone || order.Phone_Number}</div>
-                        </td>
-                        <td className="px-6 py-4">
-                          {order.method === 'FamApp' || order.Payment_Method === 'FamApp Transfer' ? (
-                            <div className="inline-flex items-center gap-2 bg-[#00E5FF]/10 text-[#00E5FF] px-3 py-1 rounded border border-[#00E5FF]/20 font-mono text-xs">
-                              {order.transactionId || order.FamApp_Transaction_ID || 'N/A'}
-                            </div>
-                          ) : (
-                            <div className="text-slate-500 text-xs uppercase tracking-widest">{order.method || order.Payment_Method}</div>
-                          )}
-                        </td>
-                        <td className="px-6 py-4">
-                          {order.status === 'pending_verification' ? (
-                            <span className="flex items-center gap-2 text-[#FFD814] text-xs font-bold uppercase tracking-wider"><Clock size={14} /> Pending</span>
-                          ) : order.status === 'verified' ? (
-                            <span className="flex items-center gap-2 text-[#10B981] text-xs font-bold uppercase tracking-wider"><CheckCircle2 size={14} /> Verified</span>
-                          ) : order.status === 'rejected' ? (
-                            <span className="flex items-center gap-2 text-red-500 text-xs font-bold uppercase tracking-wider"><XCircle size={14} /> Rejected</span>
-                          ) : (
-                            <span className="text-slate-400 text-xs uppercase tracking-wider">{order.status || 'Processing'}</span>
-                          )}
-                        </td>
-                        <td className="px-6 py-4 text-right">
-                          <div className="flex items-center justify-end gap-2">
-                            {order.status === 'pending_verification' && (
-                              <>
-                                <button onClick={() => updateOrderStatus(order._id, 'verified')} className="text-[#10B981] border border-[#10B981]/30 px-3 py-1.5 rounded text-xs font-bold uppercase">Verify</button>
-                                <button onClick={() => updateOrderStatus(order._id, 'rejected')} className="text-red-500 border border-red-500/30 px-3 py-1.5 rounded text-xs font-bold uppercase">Reject</button>
-                              </>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
+        {/* STATUS BAR */}
+        <div className="flex flex-wrap items-center justify-between bg-white/5 rounded-xl border border-white/10 p-4">
+          <div className="flex items-center gap-3">
+            <div className="w-3 h-3 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)] animate-pulse"></div>
+            <span className="font-mono text-xs uppercase tracking-widest text-slate-300">Level 5 Clearance Verified</span>
           </div>
-        )}
+          <div className="font-mono text-xs text-slate-500">
+            Current Operative: <span className="text-white font-bold">{session.user.name || session.user.email}</span>
+          </div>
+        </div>
 
-        {activeTab === 'updates' && (
-          <div className="max-w-4xl">
-            <h2 className="text-2xl font-display font-bold uppercase tracking-widest mb-8 border-b border-white/10 pb-4 text-[#EC4899]">Timeline Updates</h2>
-            
-            <form onSubmit={createUpdate} className="bg-[#0a0a0a] border border-white/10 p-6 rounded-xl mb-8 grid grid-cols-2 gap-4">
-              <h3 className="col-span-2 text-sm text-slate-400 uppercase tracking-widest font-bold mb-2 flex items-center gap-2"><Plus size={16}/> New Timeline Milestone</h3>
-              <div>
-                <label className="text-xs text-slate-500 uppercase tracking-widest flex items-center gap-2 mb-1"><Calendar size={12}/> Year</label>
-                <input required type="text" value={updateForm.year} onChange={e => setUpdateForm({...updateForm, year: e.target.value})} placeholder="e.g. 2026" className="w-full bg-black border border-white/10 p-2 text-sm text-white rounded outline-none focus:border-[#EC4899]" />
-              </div>
-              <div>
-                <label className="text-xs text-slate-500 uppercase tracking-widest flex items-center gap-2 mb-1"><Type size={12}/> Title</label>
-                <input required type="text" value={updateForm.title} onChange={e => setUpdateForm({...updateForm, title: e.target.value})} placeholder="e.g. Offensive Security" className="w-full bg-black border border-white/10 p-2 text-sm text-white rounded outline-none focus:border-[#EC4899]" />
-              </div>
-              <div className="col-span-2">
-                <label className="text-xs text-slate-500 uppercase tracking-widest flex items-center gap-2 mb-1"><FileText size={12}/> Description</label>
-                <textarea required value={updateForm.description} onChange={e => setUpdateForm({...updateForm, description: e.target.value})} placeholder="Entered the world of ethical hacking..." rows={2} className="w-full bg-black border border-white/10 p-2 text-sm text-white rounded outline-none focus:border-[#EC4899]"></textarea>
-              </div>
-              <div className="col-span-2 flex justify-between items-center mt-2">
-                <div className="flex items-center gap-2">
-                  <label className="text-xs text-slate-500 uppercase tracking-widest flex items-center gap-2"><Palette size={12}/> Color Accent:</label>
-                  <select value={updateForm.color} onChange={e => setUpdateForm({...updateForm, color: e.target.value})} className="bg-black border border-white/10 p-1.5 text-xs text-white rounded outline-none">
-                    <option value="#00E5FF">Cyan (#00E5FF)</option>
-                    <option value="#EC4899">Pink (#EC4899)</option>
-                    <option value="#10B981">Green (#10B981)</option>
-                    <option value="#F7DF1E">Yellow (#F7DF1E)</option>
-                  </select>
-                </div>
-                <button type="submit" className="bg-[#EC4899] hover:bg-[#EC4899]/80 text-black px-6 py-2 rounded text-sm font-bold uppercase tracking-wider">Publish Milestone</button>
-              </div>
-            </form>
+        {/* QUICK ACTIONS */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <button className="flex items-center justify-center gap-2 bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border border-[#00E5FF]/30 text-[#00E5FF] p-4 rounded-xl transition-all group">
+            <Plus size={18} className="group-hover:scale-125 transition-transform" /> Add Operative
+          </button>
+          <button className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white p-4 rounded-xl transition-all group">
+            <Download size={18} className="group-hover:-translate-y-1 transition-transform" /> Export Logs
+          </button>
+          <button className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white p-4 rounded-xl transition-all group">
+            <Settings size={18} className="group-hover:rotate-90 transition-transform" /> Matrix Config
+          </button>
+          <button className="flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 p-4 rounded-xl transition-all group">
+            <ShieldAlert size={18} className="group-hover:scale-110 transition-transform" /> Lockdown Protocol
+          </button>
+        </div>
 
-            <div className="space-y-4">
-              {updates.map(update => (
-                <div key={update._id} className="bg-[#050505] border border-white/5 p-4 rounded-lg flex items-center justify-between group">
-                  <div className="flex items-start gap-4">
-                    <div className="mt-1 w-3 h-3 rounded-full" style={{ backgroundColor: update.color || '#00E5FF' }}></div>
-                    <div>
-                      <div className="text-xs font-bold tracking-widest mb-1" style={{ color: update.color || '#00E5FF' }}>{update.year}</div>
-                      <h4 className="font-bold text-white text-lg">{update.title}</h4>
-                      <p className="text-slate-400 text-sm mt-1">{update.description}</p>
-                    </div>
-                  </div>
-                  <button onClick={() => deleteUpdate(update._id)} className="text-red-500/50 hover:text-red-500 transition-colors p-2"><Trash2 size={18} /></button>
+        {/* Dashboard Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          {/* Main Stats */}
+          <div className="col-span-1 md:col-span-2 bg-[#050505]/90 backdrop-blur-3xl border border-white/10 rounded-[2rem] p-8 shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
+            <h2 className="font-display text-2xl font-bold mb-6 flex items-center gap-3 text-[#00E5FF]">
+              <Activity size={24} /> Global Telemetry
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { label: 'Active Nodes', value: '1,024', color: '#00E5FF' },
+                { label: 'Operations/Sec', value: '45.2k', color: '#EC4899' },
+                { label: 'Network Load', value: '88%', color: '#F7DF1E' },
+                { label: 'Threat Level', value: 'Zero', color: '#10B981' }
+              ].map((stat, i) => (
+                <div key={i} className="bg-gradient-to-br from-white/5 to-transparent border border-white/5 rounded-2xl p-5 hover:border-white/20 transition-colors">
+                  <div className="text-3xl font-display font-bold mb-2" style={{ color: stat.color }}>{stat.value}</div>
+                  <div className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">{stat.label}</div>
                 </div>
               ))}
-              {updates.length === 0 && <p className="text-slate-500">No updates found.</p>}
+            </div>
+            
+            {/* Fake Graph */}
+            <div className="w-full h-48 mt-8 border-b border-l border-white/10 relative flex items-end justify-between px-2 pb-2">
+              {[40, 60, 30, 80, 50, 90, 70, 100, 60, 85].map((h, i) => (
+                <div key={i} className="w-[8%] bg-gradient-to-t from-[#00E5FF]/10 to-[#00E5FF]/40 hover:to-[#00E5FF]/80 transition-all rounded-t-md cursor-pointer" style={{ height: `${h}%` }}></div>
+              ))}
             </div>
           </div>
-        )}
 
-        {activeTab === 'shorts' && (
-          <div className="max-w-4xl">
-            <h2 className="text-2xl font-display font-bold uppercase tracking-widest mb-8 border-b border-white/10 pb-4 text-[#10B981]">Shorts Showcase</h2>
-            
-            <form onSubmit={createShort} className="bg-[#0a0a0a] border border-white/10 p-6 rounded-xl mb-8 grid grid-cols-2 gap-4">
-              <h3 className="col-span-2 text-sm text-slate-400 uppercase tracking-widest font-bold mb-2 flex items-center gap-2"><Plus size={16}/> Embed New Media</h3>
-              <div>
-                <label className="text-xs text-slate-500 uppercase tracking-widest flex items-center gap-2 mb-1"><Video size={12}/> Platform</label>
-                <select value={shortForm.platform} onChange={e => setShortForm({...shortForm, platform: e.target.value})} className="w-full bg-black border border-white/10 p-2 text-sm text-white rounded outline-none focus:border-[#10B981]">
-                  <option value="YouTube">YouTube Short</option>
-                  <option value="Instagram">Instagram Reel</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-xs text-slate-500 uppercase tracking-widest flex items-center gap-2 mb-1"><User size={12}/> Display Handle</label>
-                <input required type="text" value={shortForm.handle} onChange={e => setShortForm({...shortForm, handle: e.target.value})} placeholder="@username" className="w-full bg-black border border-white/10 p-2 text-sm text-white rounded outline-none focus:border-[#10B981]" />
-              </div>
-              <div className="col-span-2">
-                <label className="text-xs text-slate-500 uppercase tracking-widest flex items-center gap-2 mb-1"><LinkIcon size={12}/> Embed URL</label>
-                <input required type="url" value={shortForm.embedUrl} onChange={e => setShortForm({...shortForm, embedUrl: e.target.value})} placeholder="e.g. https://www.youtube.com/embed/..." className="w-full bg-black border border-white/10 p-2 text-sm text-white rounded outline-none focus:border-[#10B981]" />
-                <p className="text-[10px] text-slate-500 mt-1">Make sure to provide the actual embed URL (like /embed/video_id), not the regular watch URL.</p>
-              </div>
-              <div className="col-span-2 flex justify-end mt-2">
-                <button type="submit" className="bg-[#10B981] hover:bg-[#10B981]/80 text-black px-6 py-2 rounded text-sm font-bold uppercase tracking-wider">Embed Short</button>
-              </div>
-            </form>
-
-            <div className="grid grid-cols-2 gap-4">
-              {shorts.map(short => (
-                <div key={short._id} className="bg-[#050505] border border-white/5 rounded-lg overflow-hidden group relative">
-                  <div className="aspect-[9/16] relative bg-black">
-                    <iframe src={short.embedUrl} title="Embed" className="absolute inset-0 w-full h-full pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity" />
-                    <button onClick={() => deleteShort(short._id)} className="absolute top-4 right-4 bg-red-500 text-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"><Trash2 size={16} /></button>
+          {/* User Management */}
+          <div className="col-span-1 bg-[#050505]/90 backdrop-blur-3xl border border-white/10 rounded-[2rem] p-8 shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="font-display text-2xl font-bold flex items-center gap-3 text-[#EC4899]">
+                <Users size={24} /> Operatives
+              </h2>
+              <span className="bg-white/10 text-xs px-2 py-1 rounded-full font-mono">3 Active</span>
+            </div>
+            <div className="space-y-3">
+              {[
+                { name: 'Dhanvanth L.P', role: 'Mega Admin', status: 'Online' },
+                { name: 'Surya B', role: 'Editor', status: 'Idle' },
+                { name: 'Hemanath', role: 'Social Mgr', status: 'Offline' }
+              ].map((user, i) => (
+                <div key={i} className="flex items-center justify-between p-4 bg-gradient-to-r from-white/5 to-transparent rounded-xl border border-white/5 hover:border-white/20 transition-all cursor-pointer">
+                  <div>
+                    <div className="text-sm font-bold text-white tracking-wide">{user.name}</div>
+                    <div className="text-[10px] text-slate-400 font-mono uppercase mt-1">{user.role}</div>
                   </div>
-                  <div className="p-3 bg-[#0a0a0a] border-t border-white/5 flex justify-between items-center">
-                    <span className="text-xs font-bold uppercase text-slate-400">{short.platform}</span>
-                    <span className="text-xs font-mono text-white">{short.handle}</span>
-                  </div>
+                  <div className={`w-2 h-2 rounded-full shadow-[0_0_10px_currentColor] ${user.status === 'Online' ? 'bg-[#10B981] text-[#10B981]' : user.status === 'Idle' ? 'bg-[#F7DF1E] text-[#F7DF1E]' : 'bg-slate-600 text-slate-600'}`}></div>
                 </div>
               ))}
-              {shorts.length === 0 && <p className="text-slate-500 col-span-2">No shorts embedded.</p>}
             </div>
           </div>
-        )}
-      </section>
-    </main>
+
+          {/* Database Control */}
+          <div className="col-span-1 md:col-span-3 bg-[#050505]/90 backdrop-blur-3xl border border-[#F7DF1E]/20 rounded-[2rem] p-8">
+            <h2 className="font-display text-2xl font-bold mb-6 flex items-center gap-3 text-[#F7DF1E]">
+              <Database size={24} /> Database Operations Matrix
+            </h2>
+            <div className="bg-[#020202] rounded-2xl border border-white/10 p-6 font-mono text-sm shadow-inner overflow-x-auto">
+              <div className="flex items-center gap-3 text-slate-500 mb-6 pb-4 border-b border-white/10">
+                <Terminal size={18} /> <span className="uppercase tracking-widest text-xs">synapselab@root:~/db</span>
+              </div>
+              <p className="text-[#10B981] leading-relaxed">&gt; Connecting to production cluster...</p>
+              <p className="text-[#10B981] leading-relaxed">&gt; Connection established securely.</p>
+              <p className="text-[#00E5FF] mt-4 leading-relaxed">&gt; SELECT * FROM synapse_users WHERE role = 'admin'</p>
+              <div className="mt-3 pl-4 border-l-2 border-white/10 text-slate-300">
+                <pre className="text-xs leading-loose">{JSON.stringify({ 
+                  id: "USR-001",
+                  name: session.user.name || "Dhanvanth", 
+                  email: session.user.email,
+                  clearance: "Level 5 (MAX)",
+                  status: "AUTHENTICATED"
+                }, null, 2)}</pre>
+              </div>
+              <p className="text-[#F7DF1E] mt-6 flex items-center gap-2">
+                <span className="w-2 h-4 bg-[#F7DF1E] animate-pulse inline-block"></span> Awaiting command override...
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
   );
 }

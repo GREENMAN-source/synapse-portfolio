@@ -1,6 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
-import SynapseApp from './components/SynapseApp';
+import SynapseHome from './components/SynapseHome';
 
 export const metadata: Metadata = {
   title: 'Synapse Lab — Robotics, AI & IoT Innovation | Chennai, India',
@@ -46,8 +46,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main className="w-full min-h-screen bg-[#030408] text-white overflow-x-hidden selection:bg-[#00E5FF]/25 selection:text-white">
-      <SynapseApp />
+    <main className="min-h-screen bg-[#030408]">
+      <SynapseHome isLoaded={true} />
     </main>
   );
 }
