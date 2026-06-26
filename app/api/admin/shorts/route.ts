@@ -1,4 +1,3 @@
-﻿export const runtime = 'edge';
 import { NextResponse } from 'next/server';
 import { MongoClient, ObjectId } from 'mongodb';
 
@@ -85,4 +84,3 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
-

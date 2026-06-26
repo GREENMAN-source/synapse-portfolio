@@ -1,4 +1,3 @@
-﻿export const runtime = 'edge';
 import { NextResponse } from 'next/server';
 import { MongoClient } from 'mongodb';
 
@@ -37,4 +36,3 @@ export async function GET() {
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
-
